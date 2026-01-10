@@ -21,6 +21,10 @@
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
+    <!-- Libraries for Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <style>
         body {
             font-family: 'Sarabun', sans-serif;
@@ -106,7 +110,7 @@
             }
         };
 
-        // --- Mock Data: รายวิชาตามที่คุณกำหนด ---
+        // --- Mock Data: รายวิชา ---
         const INITIAL_COURSES = [
             // หมวดศึกษาทั่วไป (GenEd)
             { id: 'gen001', code: '00-400-060-006', name: 'กุญแจสู่ความสำเร็จ', credits: 1, category: 'GenEd' },
@@ -190,9 +194,8 @@
         const App = () => {
             const [plan, setPlan] = useState(getInitialPlan);
             const [availableCourses, setAvailableCourses] = useState(INITIAL_COURSES);
-            
-            // เพิ่ม index เข้าไปใน State เพื่อรู้ตำแหน่งของวิชา
             const [draggedItem, setDraggedItem] = useState(null);
+            const [isExporting, setIsExporting] = useState(false);
 
             // Updated: รับ index เข้ามาด้วย
             const handleDragStart = (e, course, source, index) => {
@@ -202,7 +205,6 @@
                 e.dataTransfer.setData("application/json", JSON.stringify(item));
             };
 
-            // Case 1: Drop บนพื้นที่ว่างของเทอม (ต่อท้าย)
             const handleDropToSemesterContainer = (e, year, semester) => {
                 e.preventDefault();
                 e.currentTarget.classList.remove('drag-over');
@@ -220,19 +222,17 @@
                 const { course, source, index: sourceIndex } = item;
                 const targetKey = `${year}-${semester}`;
 
-                // ถ้าลากจากเทอมเดิม มาวางที่ว่าง -> คือการย้ายไปท้ายสุด
                 if (source === targetKey) {
                     setPlan(prev => {
                         const list = [...prev[targetKey]];
-                        list.splice(sourceIndex, 1); // เอาออก
-                        list.push(course); // ต่อท้าย
+                        list.splice(sourceIndex, 1);
+                        list.push(course);
                         return { ...prev, [targetKey]: list };
                     });
                     setDraggedItem(null);
                     return;
                 }
 
-                // ถ้าลากมาจากที่อื่น (Sidebar หรือเทอมอื่น) -> ต่อท้าย
                 if (source === 'sidebar') {
                     setAvailableCourses(prev => prev.filter(c => c.id !== course.id));
                 } else {
@@ -250,11 +250,10 @@
                 setDraggedItem(null);
             };
 
-            // Case 2: Drop บนรายวิชา (แทรก/เรียงลำดับ)
             const handleDropToItem = (e, targetYear, targetSemester, targetIndex) => {
                 e.preventDefault();
-                e.stopPropagation(); // สำคัญ! หยุดไม่ให้ Event ทะลุไปหา Container
-                e.currentTarget.classList.remove('drag-over-item'); // ลบเส้นบอกตำแหน่ง
+                e.stopPropagation();
+                e.currentTarget.classList.remove('drag-over-item');
 
                 let item = draggedItem;
                 if (!item) {
@@ -269,47 +268,18 @@
                 const { course, source, index: sourceIndex } = item;
                 const targetKey = `${targetYear}-${targetSemester}`;
 
-                // Logic การจัดการ Array
                 if (source === targetKey) {
-                    // 2.1 ย้ายภายในเทอมเดียวกัน (Reorder)
-                    if (sourceIndex === targetIndex) return; // วางที่เดิม
+                    if (sourceIndex === targetIndex) return;
 
                     setPlan(prev => {
                         const list = [...prev[targetKey]];
-                        // ลบตัวเดิมออก
                         const [removed] = list.splice(sourceIndex, 1);
-                        
-                        // คำนวณ Index ใหม่ (ถ้าลากจากบนลงล่าง Index ปลายทางจะเปลี่ยนเพราะ Array หดลง)
-                        let finalIndex = targetIndex;
-                        if (sourceIndex < targetIndex) {
-                            finalIndex -= 1; // ชดเชย index ที่หายไป
-                        }
-                        
-                        // แทรกหน้าตัวที่ Drop ใส่ (Insert Before)
-                        // แต่ถ้าลากลงล่าง การแทรกหน้า target เดิม จริงๆ คือการสลับไปหลัง
-                        // เพื่อความง่าย: ใช้ logic แทรกหน้าเสมอ
-                        list.splice(targetIndex > sourceIndex ? targetIndex - 1 : targetIndex, 0, removed);
-                        
-                        // *Logic นี้ซับซ้อนเล็กน้อย เพื่อ UX ที่ดีที่สุด:
-                        // ถ้าย้าย A(0) ไปใส่ C(2) -> [B, C, D] -> อยากได้ [B, A, C] หรือ [B, C, A]?
-                        // ปกติ Drop on item = Insert Before item นั้น
-                        
-                        // Reset แบบ Simple:
-                        // 1. Clone
-                        // 2. Remove Source
-                        // 3. Insert at Target (Adjusted)
-                        
-                        const simpleList = [...prev[targetKey]];
-                        simpleList.splice(sourceIndex, 1);
-                        // ถ้า index เป้าหมายมากกว่า index เดิม ต้องลบ 1 เพราะ index เดิมหายไปแล้ว
                         const insertAt = (targetIndex > sourceIndex) ? targetIndex - 1 : targetIndex;
-                        simpleList.splice(insertAt, 0, removed);
-                        
-                        return { ...prev, [targetKey]: simpleList };
+                        list.splice(insertAt, 0, removed);
+                        return { ...prev, [targetKey]: list };
                     });
 
                 } else {
-                    // 2.2 ย้ายข้ามเทอม หรือมาจาก Sidebar มาแทรก
                     if (source === 'sidebar') {
                         setAvailableCourses(prev => prev.filter(c => c.id !== course.id));
                     } else {
@@ -319,7 +289,6 @@
                         }));
                     }
 
-                    // แทรกที่ตำแหน่ง Target Index
                     setPlan(prev => {
                         const list = [...(prev[targetKey] || [])];
                         list.splice(targetIndex, 0, course);
@@ -329,7 +298,6 @@
                 setDraggedItem(null);
             };
 
-            // Handle Drop กลับไปที่ Sidebar
             const handleDropToSidebar = (e) => {
                 e.preventDefault();
                 e.currentTarget.classList.remove('drag-over'); 
@@ -363,8 +331,8 @@
             
             const handleDragOverItem = (e) => {
                 e.preventDefault();
-                e.stopPropagation(); // ไม่ให้ Container ติด highlight
-                e.currentTarget.classList.add('drag-over-item'); // highlight เฉพาะ Item
+                e.stopPropagation();
+                e.currentTarget.classList.add('drag-over-item');
             };
 
              const handleDragLeave = (e) => {
@@ -396,15 +364,72 @@
                  return total;
             }, [plan]);
 
+            // --- Export Functions ---
+            const exportToPNG = async () => {
+                const element = document.getElementById('planner-grid-area');
+                if (!element) return;
+                
+                setIsExporting(true);
+                try {
+                    const canvas = await html2canvas(element, {
+                        backgroundColor: '#ffffff',
+                        scale: 2 // High quality
+                    });
+                    const link = document.createElement('a');
+                    link.download = 'study-plan.png';
+                    link.href = canvas.toDataURL();
+                    link.click();
+                } catch (err) {
+                    console.error("Export failed", err);
+                    alert("เกิดข้อผิดพลาดในการบันทึกภาพ");
+                } finally {
+                    setIsExporting(false);
+                }
+            };
+
+            const exportToPDF = async () => {
+                const element = document.getElementById('planner-grid-area');
+                if (!element) return;
+
+                setIsExporting(true);
+                try {
+                    const canvas = await html2canvas(element, {
+                        backgroundColor: '#ffffff',
+                        scale: 2
+                    });
+                    const imgData = canvas.toDataURL('image/png');
+                    
+                    // A4 Landscape size
+                    const pdf = new jspdf.jsPDF({
+                        orientation: 'landscape',
+                        unit: 'mm',
+                        format: 'a4'
+                    });
+
+                    const imgProps = pdf.getImageProperties(imgData);
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                    
+                    pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
+                    pdf.save('study-plan.pdf');
+                } catch (err) {
+                    console.error("Export failed", err);
+                    alert("เกิดข้อผิดพลาดในการบันทึก PDF");
+                } finally {
+                    setIsExporting(false);
+                }
+            };
+
             return (
                 <div className="min-h-screen flex flex-col md:flex-row">
                     
                     {/* --- Sidebar: Available Courses --- */}
                     <div 
-                        className="w-full md:w-1/4 bg-white border-r border-gray-200 p-4 h-screen-md md:h-screen overflow-y-auto sticky top-0 droppable-area"
+                        className="w-full md:w-1/4 bg-white border-r border-gray-200 p-4 h-screen-md md:h-screen overflow-y-auto sticky top-0 droppable-area no-scrollbar"
                         onDragOver={handleDragOver}
                         onDragLeave={handleDragLeave}
                         onDrop={handleDropToSidebar}
+                        style={{ height: '100vh', paddingBottom: '50px' }} 
                     >
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
@@ -459,92 +484,125 @@
                     </div>
 
                     {/* --- Main Content: Planner Grid --- */}
-                    <div className="flex-1 p-4 md:p-8 overflow-y-auto">
-                        <header className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div className="flex-1 p-4 md:p-8 overflow-y-auto bg-gray-50">
+                        <header className="mb-8 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
                             <div>
                                 <h1 className="text-3xl font-bold text-gray-900">แผนการเรียน 4 ปี</h1>
-                                <p className="text-gray-500 text-sm mt-1">ลากรายวิชาจากด้านซ้ายลงในภาคการศึกษาที่ต้องการ (สามารถลากแทรกเพื่อเรียงลำดับได้)</p>
+                                <p className="text-gray-500 text-sm mt-1">
+                                    ลากรายวิชาจากด้านซ้ายลงในภาคการศึกษาที่ต้องการ (สามารถลากแทรกเพื่อเรียงลำดับได้)
+                                </p>
                             </div>
-                            <div className="bg-indigo-600 text-white px-6 py-3 rounded-xl shadow-lg flex flex-col items-center">
-                                <span className="text-xs opacity-80">หน่วยกิตรวมสะสม</span>
-                                <span className="text-2xl font-bold">{calculateTotalAll}</span>
+                            
+                            <div className="flex flex-wrap items-center gap-4">
+                                {/* Export Buttons */}
+                                <div className="flex gap-2">
+                                    <button 
+                                        onClick={exportToPNG}
+                                        disabled={isExporting}
+                                        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium transition-colors shadow-sm"
+                                    >
+                                        <i className="ph ph-image text-lg"></i>
+                                        {isExporting ? 'กำลังบันทึก...' : 'บันทึกเป็นภาพ (PNG)'}
+                                    </button>
+                                    <button 
+                                        onClick={exportToPDF}
+                                        disabled={isExporting}
+                                        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium transition-colors shadow-sm"
+                                    >
+                                        <i className="ph ph-file-pdf text-lg"></i>
+                                        {isExporting ? 'กำลังบันทึก...' : 'บันทึกเป็น PDF'}
+                                    </button>
+                                </div>
+
+                                <div className="bg-indigo-600 text-white px-6 py-2 rounded-xl shadow-lg flex flex-col items-center min-w-[120px]">
+                                    <span className="text-[10px] opacity-80 uppercase tracking-wider">หน่วยกิตรวม</span>
+                                    <span className="text-2xl font-bold">{calculateTotalAll}</span>
+                                </div>
                             </div>
                         </header>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                            {[1, 2, 3, 4].map(year => (
-                                <div key={year} className="contents">
-                                    {[1, 2].map(semester => {
-                                        const key = `${year}-${semester}`;
-                                        const courses = plan[key] || [];
-                                        const totalCredits = calculateTotalCredits(courses);
-                                        const isOverloaded = totalCredits > 22; // สมมติ max 22
+                        {/* ID for Capture */}
+                        <div id="planner-grid-area" className="p-4 bg-white rounded-2xl shadow-sm border border-gray-200">
+                            <div className="mb-4 text-center block xl:hidden">
+                                <h2 className="text-2xl font-bold text-indigo-800">แผนการเรียน 4 ปี</h2>
+                                <p className="text-sm text-gray-500">หน่วยกิตรวม: {calculateTotalAll}</p>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                                {[1, 2, 3, 4].map(year => (
+                                    <div key={year} className="contents">
+                                        {[1, 2].map(semester => {
+                                            const key = `${year}-${semester}`;
+                                            const courses = plan[key] || [];
+                                            const totalCredits = calculateTotalCredits(courses);
+                                            const isOverloaded = totalCredits > 22; 
 
-                                        return (
-                                            <div 
-                                                key={key}
-                                                className={`droppable-area bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col h-full min-h-[300px] ${isOverloaded ? 'ring-2 ring-red-300' : ''}`}
-                                                onDragOver={handleDragOver}
-                                                onDragLeave={handleDragLeave}
-                                                onDrop={(e) => handleDropToSemesterContainer(e, year, semester)}
-                                            >
-                                                {/* Header ของแต่ละเทอม */}
-                                                <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-xl">
-                                                    <div>
-                                                        <span className="text-xs font-bold text-gray-400 uppercase">ปีการศึกษาที่ {year}</span>
-                                                        <h3 className="font-bold text-gray-800">ภาคการศึกษาที่ {semester}</h3>
-                                                    </div>
-                                                    <div className={`px-2 py-1 rounded text-xs font-bold ${isOverloaded ? 'bg-red-100 text-red-600' : 'bg-indigo-50 text-indigo-600'}`}>
-                                                        {totalCredits} นก.
-                                                    </div>
-                                                </div>
-
-                                                {/* พื้นที่วางรายวิชา */}
-                                                <div className="p-3 flex-1 space-y-2">
-                                                    {courses.length === 0 ? (
-                                                        <div className="h-full flex flex-col items-center justify-center text-gray-300 pointer-events-none">
-                                                            <i className="ph ph-plus-circle text-3xl mb-2"></i>
-                                                            <span className="text-xs">ลากวิชามาวางที่นี่</span>
+                                            return (
+                                                <div 
+                                                    key={key}
+                                                    className={`droppable-area bg-gray-50 rounded-xl border border-gray-200 shadow-sm flex flex-col h-full min-h-[300px] ${isOverloaded ? 'ring-2 ring-red-300' : ''}`}
+                                                    onDragOver={handleDragOver}
+                                                    onDragLeave={handleDragLeave}
+                                                    onDrop={(e) => handleDropToSemesterContainer(e, year, semester)}
+                                                >
+                                                    {/* Header ของแต่ละเทอม */}
+                                                    <div className="p-3 border-b border-gray-200 flex justify-between items-center bg-white rounded-t-xl">
+                                                        <div>
+                                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Year {year}</span>
+                                                            <h3 className="font-bold text-gray-800 text-sm">เทอม {semester}</h3>
                                                         </div>
-                                                    ) : (
-                                                        courses.map((course, index) => (
-                                                            <div
-                                                                key={`${course.id}-${index}`}
-                                                                draggable
-                                                                onDragStart={(e) => handleDragStart(e, course, key, index)}
-                                                                onDrop={(e) => handleDropToItem(e, year, semester, index)}
-                                                                onDragOver={handleDragOverItem}
-                                                                onDragLeave={handleDragLeaveItem}
-                                                                className={`card-drag group relative p-3 rounded-lg border-l-4 shadow-sm bg-white hover:shadow hover:scale-[1.02] ${CATEGORIES[course.category] ? CATEGORIES[course.category].border.replace('border', 'border-l') : 'border-gray-200'}`}
-                                                            >
-                                                                <div className="flex justify-between items-start">
-                                                                    <div>
-                                                                        <div className="font-bold text-sm text-gray-800">{course.code}</div>
-                                                                        <div className="text-xs text-gray-600 leading-tight my-1">{course.name}</div>
-                                                                    </div>
-                                                                    <button 
-                                                                        onClick={() => removeCourse(course, key)}
-                                                                        className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-opacity p-1"
-                                                                        title="นำออก"
-                                                                    >
-                                                                        <i className="ph ph-x-circle text-lg"></i>
-                                                                    </button>
-                                                                </div>
-                                                                <div className="flex justify-between items-center mt-2">
-                                                                     <span className={`text-[10px] px-1.5 py-0.5 rounded ${CATEGORIES[course.category] ? CATEGORIES[course.category].color : 'bg-gray-100'}`}>
-                                                                        {CATEGORIES[course.category] ? CATEGORIES[course.category].label.split(' ')[1] || CATEGORIES[course.category].label : 'Unknown'}
-                                                                    </span>
-                                                                    <span className="text-xs font-semibold text-gray-400">{course.credits} นก.</span>
-                                                                </div>
+                                                        <div className={`px-2 py-0.5 rounded text-[10px] font-bold ${isOverloaded ? 'bg-red-100 text-red-600' : 'bg-indigo-50 text-indigo-600'}`}>
+                                                            {totalCredits} นก.
+                                                        </div>
+                                                    </div>
+
+                                                    {/* พื้นที่วางรายวิชา */}
+                                                    <div className="p-2 flex-1 space-y-2">
+                                                        {courses.length === 0 ? (
+                                                            <div className="h-full flex flex-col items-center justify-center text-gray-300 pointer-events-none min-h-[100px]">
+                                                                <i className="ph ph-plus-circle text-2xl mb-1"></i>
+                                                                <span className="text-[10px]">วางวิชาที่นี่</span>
                                                             </div>
-                                                        ))
-                                                    )}
+                                                        ) : (
+                                                            courses.map((course, index) => (
+                                                                <div
+                                                                    key={`${course.id}-${index}`}
+                                                                    draggable
+                                                                    onDragStart={(e) => handleDragStart(e, course, key, index)}
+                                                                    onDrop={(e) => handleDropToItem(e, year, semester, index)}
+                                                                    onDragOver={handleDragOverItem}
+                                                                    onDragLeave={handleDragLeaveItem}
+                                                                    className={`card-drag group relative p-2.5 rounded-lg border-l-4 shadow-sm bg-white hover:shadow hover:scale-[1.02] ${CATEGORIES[course.category] ? CATEGORIES[course.category].border.replace('border', 'border-l') : 'border-gray-200'}`}
+                                                                >
+                                                                    <div className="flex justify-between items-start">
+                                                                        <div className="w-full">
+                                                                            <div className="font-bold text-xs text-gray-800">{course.code}</div>
+                                                                            <div className="text-[11px] text-gray-600 leading-tight my-1 pr-4">{course.name}</div>
+                                                                        </div>
+                                                                        <button 
+                                                                            onClick={() => removeCourse(course, key)}
+                                                                            className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-opacity"
+                                                                            title="นำออก"
+                                                                        >
+                                                                            <i className="ph ph-x-circle text-lg"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div className="flex justify-between items-center mt-1">
+                                                                         <span className={`text-[9px] px-1.5 py-0.5 rounded ${CATEGORIES[course.category] ? CATEGORIES[course.category].color : 'bg-gray-100'}`}>
+                                                                            {CATEGORIES[course.category] ? CATEGORIES[course.category].label.split(' ')[1] || CATEGORIES[course.category].label : 'Unknown'}
+                                                                        </span>
+                                                                        <span className="text-[10px] font-semibold text-gray-400">{course.credits}</span>
+                                                                    </div>
+                                                                </div>
+                                                            ))
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            ))}
+                                            );
+                                        })}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
