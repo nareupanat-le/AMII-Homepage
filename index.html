@@ -197,7 +197,6 @@
             const [draggedItem, setDraggedItem] = useState(null);
             const [isExporting, setIsExporting] = useState(false);
 
-            // Updated: รับ index เข้ามาด้วย
             const handleDragStart = (e, course, source, index) => {
                 const item = { course, source, index };
                 setDraggedItem(item);
@@ -364,7 +363,7 @@
                  return total;
             }, [plan]);
 
-            // --- Export Functions ---
+            // --- Export Functions (Improved Scaling) ---
             const exportToPNG = async () => {
                 const element = document.getElementById('planner-grid-area');
                 if (!element) return;
@@ -373,7 +372,8 @@
                 try {
                     const canvas = await html2canvas(element, {
                         backgroundColor: '#ffffff',
-                        scale: 2 // High quality
+                        scale: 3, // High quality
+                        useCORS: true
                     });
                     const link = document.createElement('a');
                     link.download = 'study-plan.png';
@@ -393,24 +393,53 @@
 
                 setIsExporting(true);
                 try {
+                    // Capture high quality canvas
                     const canvas = await html2canvas(element, {
                         backgroundColor: '#ffffff',
-                        scale: 2
+                        scale: 3,
+                        useCORS: true
                     });
                     const imgData = canvas.toDataURL('image/png');
                     
-                    // A4 Landscape size
+                    // Init PDF (A4 Landscape)
                     const pdf = new jspdf.jsPDF({
                         orientation: 'landscape',
                         unit: 'mm',
                         format: 'a4'
                     });
 
-                    const imgProps = pdf.getImageProperties(imgData);
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                    // Page Dimensions (A4 Landscape: 297mm x 210mm)
+                    const pageWidth = pdf.internal.pageSize.getWidth();
+                    const pageHeight = pdf.internal.pageSize.getHeight();
                     
-                    pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
+                    // Margins
+                    const margin = 10;
+                    const maxWidth = pageWidth - (margin * 2);
+                    const maxHeight = pageHeight - (margin * 2);
+
+                    // Image Dimensions
+                    const imgProps = pdf.getImageProperties(imgData);
+                    const imgRatio = imgProps.width / imgProps.height;
+                    const pageRatio = maxWidth / maxHeight;
+
+                    let finalWidth, finalHeight;
+
+                    // Logic: Fit Entire Image into Page
+                    if (imgRatio > pageRatio) {
+                        // Image is wider than page area -> Fit to Width
+                        finalWidth = maxWidth;
+                        finalHeight = maxWidth / imgRatio;
+                    } else {
+                        // Image is taller than page area -> Fit to Height
+                        finalHeight = maxHeight;
+                        finalWidth = maxHeight * imgRatio;
+                    }
+
+                    // Centering
+                    const x = (pageWidth - finalWidth) / 2;
+                    const y = (pageHeight - finalHeight) / 2;
+                    
+                    pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
                     pdf.save('study-plan.pdf');
                 } catch (err) {
                     console.error("Export failed", err);
