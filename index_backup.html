@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หลักสูตรคณิตศาสตร์ประยุกต์สำหรับอุตสาหกรรมอัจฉริยะ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body { font-family: 'Sarabun', sans-serif; }
+        .bg-gradient-header { background: linear-gradient(135deg, #0f766e 0%, #115e59 100%); }
+        .sticky-th { position: sticky; top: 0; z-index: 30; background-color: #f8fafc; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .ylo-row:hover { background-color: #f0f9ff; }
+        .taxonomy-cell { cursor: help; }
+        .course-card { transition: all 0.2s ease; }
+        .course-card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .academic-text { text-align: justify; text-justify: inter-word; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="bg-white/95 backdrop-blur shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-teal-700 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-md">
+                        ∑
+                    </div>
+                    <div>
+                        <span class="font-bold text-lg text-teal-900 tracking-tight block leading-none">AMII</span>
+                        <span class="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Applied Math for Intelligent Industry</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-1">
+                    <button onclick="scrollToSection('home')" class="text-slate-600 hover:text-teal-700 px-3 py-2 rounded-md text-sm font-medium transition">หน้าแรก</button>
+                    <button onclick="scrollToSection('rationale')" class="text-slate-600 hover:text-teal-700 px-3 py-2 rounded-md text-sm font-medium transition">ที่มาและความสำคัญ</button>
+                    <button onclick="scrollToSection('dashboard')" class="text-slate-600 hover:text-teal-700 px-3 py-2 rounded-md text-sm font-medium transition">ภาพรวม</button>
+                    <button onclick="scrollToSection('plos')" class="text-slate-600 hover:text-teal-700 px-3 py-2 rounded-md text-sm font-medium transition">ผลลัพธ์การเรียนรู้ (YLOs)</button>
+                    <button onclick="scrollToSection('study-plan')" class="text-slate-600 hover:text-teal-700 px-3 py-2 rounded-md text-sm font-medium transition">แผนการเรียน</button>
+                    <button onclick="scrollToSection('career')" class="bg-teal-700 text-white hover:bg-teal-800 px-4 py-2 rounded-md text-sm font-medium transition ml-2 shadow-sm">อาชีพ</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative bg-gradient-header text-white overflow-hidden py-24">
+        <div class="absolute inset-0 opacity-10 pattern-grid-lg"></div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <span class="inline-block py-1 px-3 rounded-full bg-teal-800/50 border border-teal-500 text-teal-100 text-xs font-semibold tracking-wider mb-6">
+                หลักสูตรใหม่ พ.ศ. 2570
+            </span>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                วิทยาศาสตรบัณฑิต<br>
+                <span class="text-teal-200">สาขาวิชาคณิตศาสตร์ประยุกต์สำหรับอุตสาหกรรมอัจฉริยะ</span>
+            </h1>
+            <p class="text-xl sm:text-2xl text-teal-50 font-light italic max-w-4xl mx-auto leading-relaxed">
+                "สร้างนักคณิตศาสตร์สายพันธุ์ใหม่ ที่ใช้ Data และ AI ขับเคลื่อนอุตสาหกรรมแห่งอนาคต"
+            </p>
+        </div>
+    </section>
+
+    <!-- Rationale Section -->
+    <section id="rationale" class="py-16 bg-white border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12 text-center">
+                <h2 class="text-3xl font-bold text-teal-900">บริบทและแนวคิดการพัฒนาหลักสูตร</h2>
+                <p class="text-slate-500 mt-2">การวิเคราะห์สถานการณ์ภายนอกเพื่อกำหนดทิศทางหลักสูตร</p>
+            </div>
+
+                        <!-- Philosophy & Objectives -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- Philosophy -->
+                <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 h-full">
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2 mb-3">
+                        <span class="p-2 bg-emerald-100 text-emerald-600 rounded-lg">
+                            <i data-lucide="compass"></i>
+                        </span>
+                        ปรัชญาของหลักสูตร
+                    </h3>
+                    <p class="text-sm text-slate-600 leading-relaxed academic-text">
+                        หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาคณิตศาสตร์ประยุกต์สำหรับอุตสาหกรรมอัจฉริยะ
+                        มุ่งผลิต “บัณฑิตนักปฏิบัติที่เป็นนวัตกรทางคณิตศาสตร์” ผู้มีความเชี่ยวชาญในการบูรณาการหลักการคณิตศาสตร์และสถิติเข้ากับเทคโนโลยีปัญญาประดิษฐ์และวิทยาการข้อมูล
+                        เพื่อออกแบบแบบจำลองและนวัตกรรมที่ช่วยแก้ปัญหาเชิงซับซ้อนในระบบอุตสาหกรรมอัจฉริยะได้อย่างมีประสิทธิภาพ
+                        บนพื้นฐานของคุณธรรม จริยธรรม และจรรยาบรรณวิชาชีพ พร้อมทั้งมีทักษะที่จำเป็นในศตวรรษที่ 21
+                        และเจตคติของการเรียนรู้ตลอดชีวิต เพื่อสร้างคุณค่าให้กับชุมชนและสังคมอย่างยั่งยืน
+                    </p>
+                </div>
+
+                <!-- Objectives -->
+                <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 h-full">
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2 mb-3">
+                        <span class="p-2 bg-amber-100 text-amber-600 rounded-lg">
+                            <i data-lucide="target"></i>
+                        </span>
+                        วัตถุประสงค์ของหลักสูตร
+                    </h3>
+                    <ol class="list-decimal list-inside text-sm text-slate-600 space-y-2 academic-text">
+                        <li>
+                            ผลิตบัณฑิตที่มีความรู้ความเข้าใจทฤษฎีคณิตศาสตร์ประยุกต์ สถิติ วิทยาการข้อมูล
+                            และขั้นตอนวิธีของปัญญาประดิษฐ์ เพื่อเป็นรากฐานในการสร้างและพัฒนาเทคโนโลยีขั้นสูง
+                        </li>
+                        <li>
+                            พัฒนาทักษะการปฏิบัติงานจริงในการวิเคราะห์ ออกแบบ และแก้ปัญหาเชิงอุตสาหกรรม
+                            โดยบูรณาการคณิตศาสตร์กับเทคโนโลยีดิจิทัลและนวัตกรรม
+                        </li>
+                        <li>
+                            ส่งเสริมทักษะการสื่อสาร การทำงานร่วมกับทีมสหวิชาชีพ และความพร้อมสำหรับการเรียนรู้ตลอดชีวิต
+                        </li>
+                        <li>
+                            ปลูกฝังคุณธรรม จริยธรรม และความรับผิดชอบในการใช้เทคโนโลยีและข้อมูล
+                            โดยคำนึงถึงผลกระทบต่อบุคคล ชุมชน และสังคม
+                        </li>
+                        <li>
+                            สนับสนุนการสร้างนวัตกรรมหรืองานวิจัยประยุกต์ที่ตอบโจทย์อุตสาหกรรมอัจฉริยะ
+                            และการพัฒนาที่ยั่งยืนของประเทศ
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+                <!-- 10.1 Economy -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <span class="p-2 bg-blue-100 text-blue-600 rounded-lg"><i data-lucide="trending-up"></i></span>
+                        10.1 สถานการณ์ทางเศรษฐกิจ
+                    </h3>
+                    <div class="prose prose-slate text-sm text-slate-600 leading-relaxed academic-text">
+                        <p class="mb-4">จากยุทธศาสตร์ชาติ 20 ปี (พ.ศ. 2561–2580) ด้านการสร้างความสามารถในการแข่งขัน 
+                            และแผนพัฒนาเศรษฐกิจและสังคมแห่งชาติ ฉบับที่ 13 (พ.ศ. 2566–2570) โดยเฉพาะ “หมุดหมายที่ 6” 
+                            ซึ่งกำหนดเป้าหมายให้ประเทศไทยเป็นศูนย์กลางอุตสาหกรรมดิจิทัลและอิเล็กทรอนิกส์อัจฉริยะของอาเซียน 
+                            ประเทศจำเป็นต้องขับเคลื่อนเศรษฐกิจด้วยนวัตกรรม (Innovation-Driven Economy) ปัญญาประดิษฐ์ (AI) 
+                            และข้อมูล (Data-Driven Economy) อย่างจริงจัง สอดคล้องกับนโยบายของกระทรวง อว. 
+                            ที่มุ่งพัฒนากำลังคนสมรรถนะสูงเพื่อรองรับ 10 อุตสาหกรรมเป้าหมาย (S-Curve) 
+                            เช่น อุตสาหกรรมหุ่นยนต์ (Robotics), อุตสาหกรรมดิจิทัล (Digital) และยานยนต์สมัยใหม่ เป็นต้น</p>
+                        <p class="mb-4">ในบริบทดังกล่าว การพัฒนาบุคลากรที่มีทักษะเชิงลึกด้านเทคโนโลยี (Deep Technology Skills) 
+                            โดยเฉพาะความเข้าใจในรากฐานของเทคโนโลยี ได้แก่ “คณิตศาสตร์ประยุกต์” และ “การวิเคราะห์ข้อมูล” 
+                            จึงมีความสำคัญยิ่ง ทั้งในมิติของการลดการพึ่งพาเทคโนโลยีสำเร็จรูปจากต่างประเทศ 
+                            และการสร้างความสามารถในการออกแบบแบบจำลองเชิงคณิตศาสตร์และขั้นตอนวิธีปัญญาประดิษฐ์พื้นฐานที่เป็นของตนเอง 
+                            เพื่อยกระดับขีดความสามารถการแข่งขันของภาคอุตสาหกรรมไทย</p>
+                        <p class="mb-4">นอกจากนี้ โมเดลเศรษฐกิจ BCG (Bio-Circular-Green Economy) 
+                            ยังเน้นการใช้ความรู้และนวัตกรรมเพื่อลดต้นทุน เพิ่มประสิทธิภาพ และลดของเสียให้ใกล้ศูนย์ (Zero Waste) 
+                            ซึ่งล้วนเกี่ยวข้องกับการใช้คณิตศาสตร์เพื่อการวิเคราะห์ การจำลองสถานการณ์ และการหาค่าเหมาะที่สุด (Optimization) 
+                            ดังนั้น การจัดตั้งหลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาคณิตศาสตร์ประยุกต์สำหรับอุตสาหกรรมอัจฉริยะ 
+                            ซึ่งมุ่งผลิตบัณฑิตที่สามารถบูรณาการคณิตศาสตร์ สถิติ และขั้นตอนวิธีของปัญญาประดิษฐ์ 
+                            จึงเป็นกลไกสำคัญในการตอบสนองต่อทิศทางการพัฒนาเศรษฐกิจของประเทศอย่างยั่งยืน</p>
+                    </div>
+                </div>
+
+                <!-- 10.2 Social -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <span class="p-2 bg-indigo-100 text-indigo-600 rounded-lg"><i data-lucide="users"></i></span>
+                        10.2 สถานการณ์ทางสังคมและวัฒนธรรม
+                    </h3>
+                    <div class="prose prose-slate text-sm text-slate-600 leading-relaxed academic-text">
+                        <p class="mb-4">จากการที่โครงสร้างสังคมไทยก้าวเข้าสู่สังคมสูงวัยระดับสุดยอด (Super-Aged Society) 
+                            ตามที่ระบุในแผนพัฒนาเศรษฐกิจและสังคมแห่งชาติ ฉบับที่ 13 ส่งผลให้เกิดภาวะขาดแคลนกำลังแรงงานวัยทำงานอย่างต่อเนื่อง 
+                            ภาคอุตสาหกรรมจึงมีความจำเป็นเร่งด่วนในการนำเทคโนโลยีระบบอัตโนมัติ (Automation) หุ่นยนต์ 
+                            และการทำงานร่วมกันระหว่างมนุษย์กับปัญญาประดิษฐ์ (Human-AI Collaboration) 
+                            มาใช้ทดแทนแรงงานทั้งในสายการผลิตและการจัดการระบบอุตสาหกรรมอัจฉริยะ</p>
+                        <p class="mb-4">พร้อมกันนี้ นโยบายการพลิกโฉมมหาวิทยาลัย (Reinventing University) ของกระทรวง อว. 
+                            และบริบทสังคมยุคดิจิทัล ได้ก่อให้เกิดความตระหนักในเรื่อง “การรู้เท่าทันดิจิทัล” 
+                            และ “การรู้เท่าทันขั้นตอนวิธี” (Algorithmic Literacy) ตลอดจนจริยธรรมในการใช้ข้อมูล 
+                            ภายใต้กฎหมายคุ้มครองข้อมูลส่วนบุคคล (PDPA) และหลักการคุ้มครองสิทธิมนุษยชน 
+                            การผลิตบัณฑิตที่มีทั้งความรู้เชิงเทคนิคและความเข้าใจผลกระทบทางสังคมของเทคโนโลยี 
+                            จึงเป็นประเด็นสำคัญที่สถาบันอุดมศึกษาต้องคำนึงถึง</p>
+                        <p class="mb-4">หลักสูตรนี้จึงมุ่งสร้างบัณฑิตที่มีภูมิคุ้มกันทางปัญญา มีจิตสำนึกสาธารณะ 
+                            และสามารถนำคณิตศาสตร์ประยุกต์ไปใช้พัฒนาระบบอุตสาหกรรมและบริการที่ตอบโจทย์คุณภาพชีวิตของประชาชน 
+                            ภายใต้กรอบความยั่งยืน (Sustainability) และเป้าหมายการพัฒนาที่ยั่งยืน (SDGs) ทั้งในมิติสิ่งแวดล้อม 
+                            เศรษฐกิจ และสังคม ทำให้บัณฑิตสามารถทำงานร่วมกับสหวิชาชีพได้อย่างมีความรับผิดชอบต่อสังคมและวัฒนธรรมไทย</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. Impact & Concept -->
+            <div class="bg-slate-50 rounded-2xl p-8 border border-slate-200">
+                <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2 mb-6">
+                    <span class="p-2 bg-purple-100 text-purple-600 rounded-lg"><i data-lucide="lightbulb"></i></span>
+                    11. ผลกระทบและแนวคิดการพัฒนาหลักสูตร
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm text-slate-600 leading-relaxed academic-text">
+                    <div>
+                        <h4 class="font-bold text-teal-800 mb-2">11.1 การพัฒนาหลักสูตร</h4>
+                        <p class="mb-4">จากการวิเคราะห์สถานการณ์ในข้อ 10 พบว่า ประเทศไทยยังเผชิญกับ “ช่องว่างสมรรถนะ (Skill Gap)” 
+                            โดยเฉพาะการขาดแคลนบุคลากรที่ทำหน้าที่เป็น “ผู้สร้างสรรค์เทคโนโลยี (Technology Creators)” 
+                            มากกว่าผู้ใช้เทคโนโลยีสำเร็จรูป คณะกรรมการพัฒนาหลักสูตรจึงกำหนดทิศทางการออกแบบหลักสูตรภายใต้แนวคิด 
+                            “คณิตศาสตร์คือรากฐานของเทคโนโลยีขั้นสูง (Deep Tech)” มุ่งเน้นการสร้างบัณฑิตที่เข้าใจกลไกเชิงลึกของเทคโนโลยี 
+                            และสามารถต่อยอดไปสู่การพัฒนาเทคโนโลยีใหม่ได้ด้วยตนเอง</p>
+                        <p class="mb-4">หลักสูตรนี้ถูกออกแบบให้ตอบสนองต่อแผนยุทธศาสตร์การพัฒนามหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน 
+                            ระยะ 5 ปี (พ.ศ. 2565–2569) โดยเฉพาะในคลัสเตอร์ระบบราง ยานยนต์ไฟฟ้า และหุ่นยนต์ 
+                            ซึ่งล้วนต้องการบุคลากรที่มีความเข้าใจเชิงระบบและเชิงปริมาณอย่างลึกซึ้ง ในการนี้ หลักสูตรจึงบูรณาการ 3 ศาสตร์หลัก 
+                            ได้แก่ (1) คณิตศาสตร์และสถิติขั้นสูง (2) วิทยาการข้อมูล (Data Science) 
+                            และ (3) เทคโนโลยีปัญญาประดิษฐ์ (Artificial Intelligence) เข้าด้วยกันอย่างเป็นระบบ</p>
+                        <p class="mb-4">การจัดการเรียนการสอนใช้แนวทางการจัดการศึกษาแบบมุ่งเน้นผลลัพธ์การเรียนรู้ (Outcome-Based Education: OBE) 
+                            ควบคู่กับการจัดการเรียนรู้เชิงโครงงาน (Project-based Learning) 
+                            และการเรียนรู้จากปัญหาจริงในภาคอุตสาหกรรม (Industry-Oriented Problems) 
+                            เพื่อให้บัณฑิตมีโอกาสฝึกใช้คณิตศาสตร์ เครื่องมือดิจิทัล และเทคโนโลยีปัญญาประดิษฐ์ในการวิเคราะห์ ออกแบบ 
+                            และปรับปรุงระบบอุตสาหกรรมอัจฉริยะ เมื่อสำเร็จการศึกษาแล้ว 
+                            บัณฑิตจึงสามารถก้าวสู่การทำงานในอุตสาหกรรมเป้าหมายได้อย่างมั่นใจและพร้อมปฏิบัติงานจริงทันที</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-teal-800 mb-2">11.2 แนวคิดการกำหนด PLOs</h4>
+                        <p class="mb-4">หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาคณิตศาสตร์ประยุกต์สำหรับอุตสาหกรรมอัจฉริยะ 
+                            ได้รับการออกแบบให้สอดคล้องกับพันธกิจของมหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน 
+                            ที่มุ่ง “สร้างกำลังคนที่มีความรู้และสมรรถนะในแต่ละสาขาที่เป็นนักปฏิบัติ (Hands-on) 
+                            พร้อมทักษะ Innovationship \& Entrepreneurship และทักษะที่จำเป็นในอนาคต” 
+                            ตลอดจนตอบสนองต่อคุณลักษณะบัณฑิตของมหาวิทยาลัยที่กำหนดให้เป็น 
+                            “บัณฑิตนักปฏิบัติที่มีความเชี่ยวชาญด้านเทคโนโลยีและสร้างนวัตกรรม”</p>
+                        <p class="mb-4">ภายใต้กรอบคิดดังกล่าว ผลลัพธ์การเรียนรู้ของหลักสูตรจึงมุ่งให้บัณฑิตมีสมรรถนะในการใช้เครื่องมือทางคณิตศาสตร์และสถิติ 
+                            การวิเคราะห์ข้อมูล และเทคโนโลยีปัญญาประดิษฐ์ในการแก้ปัญหาและพัฒนานวัตกรรมสำหรับอุตสาหกรรมเป้าหมาย (10 อุตสาหกรรม S-Curve) 
+                            ควบคู่ไปกับการมีคุณธรรม จริยธรรม และความรับผิดชอบต่อสังคม 
+                            โดยสามารถสรุปแนวคิดการกำหนดผลลัพธ์การเรียนรู้ของหลักสูตรได้ใน 2 มิติหลัก ดังนี้</p>
+                        <p class="mb-4"><strong>การเชื่อมโยงหลักสูตรกับยุทธศาสตร์ มทร.อีสาน</strong></p>
+                        <ol class="list-decimal list-inside ml-2 space-y-1">
+                            <li>
+                                เชื่อมโยงกับยุทธศาสตร์หลักของมหาวิทยาลัย: หลักสูตรนี้สอดคล้องกับยุทธศาสตร์ที่ 1 ของมหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน
+                                “พลิกโฉมการสอน สร้างนักปฏิบัติ นวัตกรรม และการเป็นผู้ประกอบการ” โดยมีเป้าประสงค์สำคัญคือ การผลิตบัณฑิตที่มีทักษะสูง เป็น
+                                “นวัตกรทางคณิตศาสตร์ (Mathematical Innovator)” ผู้สามารถออกแบบ พัฒนา 
+                                และปรับปรุงระบบอัจฉริยะเพื่อตอบโจทย์อุตสาหกรรมดิจิทัล หุ่นยนต์ และระบบอัตโนมัติ
+                            </li>
+
+                            <li>
+                                กลยุทธ์และแนวทางที่นำมาใช้กับหลักสูตร: หลักสูตรนำกลยุทธ์สำคัญของ มทร.อีสาน มาปรับใช้ ได้แก่
+                                <ul class="list-disc list-inside ml-6">
+                                <li>
+                                    CWIE (Cooperative and Work Integrated Education): จัดสหกิจศึกษา ฝึกประสบการณ์ 
+                                    และโครงงานร่วมกับสถานประกอบการในด้านเทคโนโลยีและอุตสาหกรรมอัจฉริยะ 
+                                    เพื่อให้ผู้เรียนได้เผชิญปัญหาจริงและพัฒนาสมรรถนะตามบริบทการทำงานจริง
+                                </li>
+                                <li>
+                                    Deep Tech Foundation: เน้นการสร้างรากฐานคณิตศาสตร์และสถิติ ควบคู่กับการเรียนรู้เชิงขั้นตอนวิธีและการเขียนโปรแกรม 
+                                    เพื่อเสริมศักยภาพในการเป็นผู้สร้างนวัตกรรม (Creator) มากกว่าผู้ใช้เทคโนโลยี (User)
+                                </ul>
+                            </li>
+                            </li>
+
+                            <li>
+                                การเชื่อมโยงกับพันธกิจและอัตลักษณ์ของมหาวิทยาลัย: พันธกิจของ มทร.อีสาน 
+                                คือ การผลิตบัณฑิตที่สามารถขับเคลื่อนสังคมด้วยเทคโนโลยีและนวัตกรรม หลักสูตรนี้จึงมุ่งสร้าง
+                                “บัณฑิตนักปฏิบัติ” ที่มีความเชี่ยวชาญในการแปลงแบบจำลองและสมการคณิตศาสตร์ไปสู่การออกแบบระบบและการแก้ปัญหาจริงในอุตสาหกรรม 
+                                ตามแนวคิด “From Equation to Solution”
+                            </li>
+
+                            <li>
+                                การรองรับบทบาทของมหาวิทยาลัยด้านเทคโนโลยีและนวัตกรรม: ภายใต้การจัดกลุ่มของกระทรวงการอุดมศึกษาฯ ที่กำหนดให้ มทร.อีสาน เป็น
+                                “มหาวิทยาลัยด้านเทคโนโลยีและนวัตกรรม” หลักสูตรนี้จึงถูกออกแบบให้ผสาน 
+                                คณิตศาสตร์ – สถิติ – วิทยาการข้อมูล – ปัญญาประดิษฐ์ 
+                                เพื่อสนับสนุนระบบเศรษฐกิจฐานนวัตกรรม (Innovation-based Economy) 
+                                และยกระดับขีดความสามารถการแข่งขันของภูมิภาคตะวันออกเฉียงเหนือและของประเทศ
+                            </li>
+                            </ol>
+
+                        <p class="mb-4"><strong>การตอบสนองต่อนโยบายชาติและผู้มีส่วนได้ส่วนเสีย</strong></p>
+                        <ol class="list-decimal list-inside ml-2 space-y-1">
+                            <li>หลักสูตรมุ่งผลิตกำลังคนที่มีความเชี่ยวชาญด้านคณิตศาสตร์ประยุกต์ วิทยาการข้อมูล และปัญญาประดิษฐ์ 
+                                เพื่อรองรับอุตสาหกรรมเป้าหมาย (New S-Curve) ตามนโยบาย Thailand 4.0 
+                                โดยเฉพาะอุตสาหกรรมหุ่นยนต์ (Robotics) และอุตสาหกรรมดิจิทัล (Digital Industry) 
+                                ที่ต้องการบุคลากรด้านการสร้างแบบจำลอง การวิเคราะห์ข้อมูล และการพัฒนาระบบอัจฉริยะ</li>
+                            <li>หลักสูตรสนับสนุนเป้าหมายยุทธศาสตร์ชาติ 20 ปี และโมเดลเศรษฐกิจ BCG ในมิติของการเพิ่มประสิทธิภาพกระบวนการผลิต 
+                                การหาค่าเหมาะที่สุด (Optimization) การจัดการทรัพยากรอย่างคุ้มค่า 
+                                และการลดความสูญเสียในระบบ (Waste Minimization) โดยใช้แนวคิดและเครื่องมือทางคณิตศาสตร์เป็นฐาน</li>
+                            <li>หลักสูตรตอบสนองต่อแผนด้านการอุดมศึกษาฯ ที่มุ่งพัฒนากำลังคนสมรรถนะสูงด้าน Deep Technology 
+                                เพื่อลดการพึ่งพาเทคโนโลยีจากต่างประเทศ และยกระดับความสามารถในการพัฒนาเทคโนโลยีของไทยเอง 
+                                ตลอดจนตอบสนองความต้องการของผู้มีส่วนได้ส่วนเสียหลัก ได้แก่ ผู้เรียน ภาคอุตสาหกรรม หน่วยงานภาครัฐ 
+                                และชุมชนท้องถิ่น ที่ต้องการบัณฑิตซึ่งสามารถประยุกต์ใช้คณิตศาสตร์เพื่อแก้ปัญหาและสร้างคุณค่าร่วมกันได้อย่างยั่งยืน</li>
+                        </ol>
+                        <p class="mb-4">จากข้อมูลและการวิเคราะห์ข้างต้น 
+                            หลักสูตรได้นำมาประกอบการกำหนดผลลัพธ์การเรียนรู้ของหลักสูตร (Program Learning Outcomes: PLOs) 
+                            ให้สอดคล้องกับยุทธศาสตร์ในมิติหลัก ได้แก่ การพัฒนาบัณฑิตให้มีความรู้ความเข้าใจเชิงลึก (Cognitive) 
+                            มีทักษะปฏิบัติในการแปลงโจทย์ปัญหาจริงเป็นแบบจำลองเชิงคณิตศาสตร์และเชิงคำนวณ (Psychomotor) 
+                            มีความสามารถบูรณาการองค์ความรู้ข้ามศาสตร์เพื่อแก้ปัญหาในบริบทอุตสาหกรรมอัจฉริยะอย่างเป็นระบบ (Integration) 
+                            และมีคุณธรรม จริยธรรมในการใช้เทคโนโลยีและข้อมูล พร้อมเจตคติในการเรียนรู้ตลอดชีวิต (Affective)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="py-16 bg-slate-50 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Chart -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-slate-800">สมรรถนะบัณฑิต (Graduate Competencies)</h3>
+                        <span class="bg-slate-100 px-2 py-1 rounded text-xs text-slate-500 border border-slate-200">Skills Overview</span>
+                    </div>
+                    <div class="relative h-[320px] w-full">
+                        <canvas id="competencyChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-slate-500 mt-4">* นักศึกษามีทักษะทางธุรกิจจากการเรียนวิชาผู้ประกอบการและโครงงาน</p>
+                </div>
+
+                <!-- Highlights -->
+                <div class="space-y-8">
+                    <div>
+                        <h2 class="text-3xl font-bold text-slate-900 mb-4">จุดเด่นของหลักสูตร</h2>
+                        <p class="text-slate-600 leading-relaxed">
+                            หลักสูตรที่ผสมผสานความเข้มข้นทางทฤษฎีคณิตศาสตร์ เข้ากับเครื่องมือทางเทคโนโลยีสมัยใหม่ เพื่อผลิตบัณฑิตที่พร้อมทำงานจริงในยุคดิจิทัล
+                        </p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex gap-4 items-start">
+                            <div class="p-3 bg-blue-100 text-blue-600 rounded-lg"><i data-lucide="sigma"></i></div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Applied Mathematics Core</h4>
+                                <p class="text-sm text-slate-600">รากฐานคณิตศาสตร์ที่แข็งแกร่งเพื่อการสร้างแบบจำลอง (Modeling) ที่แม่นยำ</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="p-3 bg-teal-100 text-teal-600 rounded-lg"><i data-lucide="brain-circuit"></i></div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">AI & Data Science</h4>
+                                <p class="text-sm text-slate-600">เชี่ยวชาญ Python, Machine Learning และการวิเคราะห์ข้อมูลขนาดใหญ่</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="p-3 bg-purple-100 text-purple-600 rounded-lg"><i data-lucide="briefcase"></i></div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Business & Innovation</h4>
+                                <p class="text-sm text-slate-600">บ่มเพาะความเป็นผู้ประกอบการและการสร้างธุรกิจใหม่ (Entrepreneurship)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section PLO & YLO Only -->
+    <section id="plos" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- PLO Context -->
+            <div class="mb-10">
+                <h2 class="text-2xl font-bold text-teal-900 mb-6 border-l-4 border-teal-600 pl-3">ผลลัพธ์การเรียนรู้ระดับหลักสูตร (PLOs)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-lg shadow-sm border border-slate-200">
+                        <span class="text-teal-600 font-bold text-lg block mb-1">PLO 1 (Knowledge)</span>
+                        <p class="text-sm text-slate-600">วิเคราะห์และอธิบายหลักการและแบบจำลองทางคณิตศาสตร์และสถิติ วิทยาการข้อมูล และปัญญาประดิษฐ์สำหรับระบบอุตสาหกรรมอัจฉริยะและศาสตร์ที่เกี่ยวข้องได้อย่างเป็นระบบ</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg shadow-sm border border-slate-200">
+                        <span class="text-teal-600 font-bold text-lg block mb-1">PLO 2 (Practice)</span>
+                        <p class="text-sm text-slate-600">ประยุกต์ใช้แนวคิดทางคณิตศาสตร์และเครื่องมือดิจิทัลในการวิเคราะห์ ออกแบบ และแก้ปัญหาได้อย่างมีประสิทธิภาพ</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg shadow-sm border border-slate-200">
+                        <span class="text-teal-600 font-bold text-lg block mb-1">PLO 3 (Comm & Team)</span>
+                        <p class="text-sm text-slate-600">มีทักษะในการสื่อสารและทำงานร่วมกับทีมสหวิชาชีพในบริบทการทำงานที่หลากหลายได้อย่างมีประสิทธิผล</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg shadow-sm border border-slate-200">
+                        <span class="text-teal-600 font-bold text-lg block mb-1">PLO 4 (Ethics)</span>
+                        <p class="text-sm text-slate-600">มีจิตสำนึกทางจริยธรรมวิชาชีพ และความรับผิดชอบต่อการใช้เทคโนโลยีและข้อมูล โดยคำนึงถึงผลกระทบต่อบุคคล ชุมชน และสังคม</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg shadow-sm border border-slate-200">
+                        <span class="text-teal-600 font-bold text-lg block mb-1">PLO 5 (Technology)</span>
+                        <p class="text-sm text-slate-600">ประยุกต์ใช้เทคโนโลยีเพื่อการเรียนรู้ด้วยตนเองและพัฒนาตนอย่างต่อเนื่อง เพื่อรองรับการเรียนรู้ตลอดชีวิต</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- YLO Table with Sticky Header -->
+            <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-slate-200">
+                <div class="px-6 py-4 border-b border-slate-200 bg-slate-100 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-800">ตารางความเชื่อมโยง YLOs กับ PLOs</h3>
+                    <span class="text-xs text-slate-500 italic">* สีส้ม (ทักษะพิสัย) แสดงทักษะการปฏิบัติที่จับต้องได้</span>
+                </div>
+                
+                <div class="overflow-x-auto max-h-[600px] custom-scroll">
+                    <table class="min-w-full text-sm text-left">
+                        <thead class="text-xs text-slate-700 uppercase bg-slate-100 sticky-th">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 font-bold w-[50%] border-r border-slate-200">Year-LOs</th>
+                                <th scope="col" class="px-2 py-4 text-center border-r border-slate-200 w-[10%]">PLO1<br><span class="text-[10px] normal-case text-gray-500">Knowledge</span></th>
+                                <th scope="col" class="px-2 py-4 text-center border-r border-slate-200 w-[10%]">PLO2<br><span class="text-[10px] normal-case text-gray-500">Practice</span></th>
+                                <th scope="col" class="px-2 py-4 text-center border-r border-slate-200 w-[10%]">PLO3<br><span class="text-[10px] normal-case text-gray-500">Comm & Team</span></th>
+                                <th scope="col" class="px-2 py-4 text-center border-r border-slate-200 w-[10%]">PLO4<br><span class="text-[10px] normal-case text-gray-500">Ethics</span></th>
+                                <th scope="col" class="px-2 py-4 text-center w-[10%]">PLO5<br><span class="text-[10px] normal-case text-gray-500">Tech</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <!-- Year 1 -->
+                            <tr class="bg-teal-100 text-teal-900 font-bold">
+                                <td colspan="6" class="py-3 px-6">ชั้นปีที่ 1 (Year 1) - ปูพื้นฐานวิทยาศาสตร์และ Coding</td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 1.1 อธิบายหลักการของเซต ตรรกศาสตร์ และระบบจำนวนจริง</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Understanding (ความเข้าใจ)">U</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 1.2 คำนวณค่าลิมิต อนุพันธ์ และปริพันธ์</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Applying (การประยุกต์ใช้)">Ap</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 1.3 อธิบายปรากฏการณ์ทางฟิสิกส์พื้นฐานและทำการทดลองทางวิทยาศาสตร์ได้</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Understanding (ความเข้าใจ)">U</td>
+                                <td></td><td></td><td></td><td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 1.4 คำนวณความน่าจะเป็นและอธิบายการแจกแจงทางสถิติเบื้องต้นได้</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Applying (การประยุกต์ใช้)">Ap</td>
+                                <td></td><td></td><td></td><td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 1.5 เขียนโปรแกรมคอมพิวเตอร์พื้นฐานเพื่อแก้โจทย์ปัญหาทางคณิตศาสตร์ได้</td>
+                                <td></td>
+                                <td class="text-center font-bold text-orange-600 border-r taxonomy-cell" title="Manipulation (กระทำตามสั่งหรือเครื่องชี้แนะ)">M</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 1.6 ปรับตัวเข้ากับการเรียนรู้และสามารถสื่อสารแนวคิดทางคณิตศาสตร์และวิทยาศาสตร์เบื้องต้นได้</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center font-bold text-green-600 border-r taxonomy-cell" title="Responding (การตอบสนอง)">Res</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                            <!-- Year 2 -->
+                            <tr class="bg-indigo-100 text-indigo-900 font-bold">
+                                <td colspan="6" class="py-3 px-6">ชั้นปีที่ 2 (Year 2) - เครื่องมือคณิตศาสตร์และ AI เบื้องต้น</td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 2.1 หาผลเฉลยของระบบสมการเชิงเส้นและคำนวณค่าลักษณะเฉพาะ/เวกเตอร์ลักษณะเฉพาะได้</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Applying (การประยุกต์ใช้)">Ap</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 2.2 หาผลเฉลยของสมการเชิงอนุพันธ์สามัญและใช้วิธีการแปลงลาปลาซได้</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Applying (การประยุกต์ใช้)">Ap</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 2.3 คำนวณแคลคูลัสเวกเตอร์ (Gradient, Divergence, Curl) ในระบบพิกัดต่าง ๆ ได้</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Applying (การประยุกต์ใช้)">Ap</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 2.4 อธิบายหลักการของปัญญาประดิษฐ์เบื้องต้นและตระหนักถึงจริยธรรมข้อมูล</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center font-bold text-green-600 border-r taxonomy-cell" title="Valuing (การเห็นคุณค่า)">V</td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 2.5 ประยุกต์ใช้โปรแกรมคอมพิวเตอร์ในการจัดการฐานข้อมูล และวิเคราะห์ข้อมูลทางสถิติ เพื่อสรุปผลและสร้างภาพนิทัศน์ข้อมูลได้</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Analyzing (การวิเคราะห์)">An</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Analyzing (การวิเคราะห์)">An</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 2.6 แสดงความรับผิดชอบในการทำงานกลุ่มและยอมรับฟังความคิดเห็นของผู้อื่น</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center font-bold text-green-600 border-r taxonomy-cell" title="Valuing (การเห็นคุณค่า)">V</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                            <!-- Year 3 -->
+                            <tr class="bg-purple-100 text-purple-900 font-bold">
+                                <td colspan="6" class="py-3 px-6">ชั้นปีที่ 3 (Year 3) - การสร้างแบบจำลองและการพยากรณ์</td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 3.1 สร้างแบบจำลองทางคณิตศาสตร์เพื่อแทนปัญหาจริงในอุตสาหกรรมได้</td>
+                                <td></td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Creating (การสร้างสรรค์)">C</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 3.2 กำหนดโจทย์ปัญหาค่าเหมาะสม และหาผลเฉลยที่ดีที่สุดภายใต้เงื่อนไขจำกัดได้</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Analyzing (การวิเคราะห์)">An</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 3.3 เลือกใช้วิธีเชิงตัวเลขเพื่อหาคำตอบโดยประมาณของปัญหาทางคณิตศาสตร์ได้</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Analyzing (การวิเคราะห์)">An</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 3.4 สร้างแบบจำลองการถดถอยและวิเคราะห์อนุกรมเวลาเพื่อการพยากรณ์</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Analyzing (การวิเคราะห์)">An</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 3.5 สร้างและฝึกฝนต้นแบบการเรียนรู้ของเครื่องเพื่อจำแนกหรือพยากรณ์ข้อมูลได้</td>
+                                <td></td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Creating (การสร้างสรรค์)">C</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 3.6 สืบค้นข้อมูลวิจัยและนำเสนอรายงานทางวิชาการโดยใช้สื่อดิจิทัลได้อย่างเหมาะสม</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center font-bold text-orange-600 border-r taxonomy-cell" title="Articulation (ทำอย่างสร้างสรรค์ต่อเนื่อง)">Ar</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 3.7 วางแผนและเขียนโครงร่างโครงงานได้อย่างเป็นระบบ</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center font-bold text-green-600 border-r taxonomy-cell" title="Organizing (การจัดระบบค่านิยม)">O</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                            <!-- Year 4 -->
+                            <tr class="bg-rose-100 text-rose-900 font-bold">
+                                <td colspan="6" class="py-3 px-6">ชั้นปีที่ 4 (Year 4) - บูรณาการโครงงานและวิชาชีพ</td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 4.1 ดำเนินการทำโครงงานคณิตศาสตร์ประยุกต์หรือวิทยาการข้อมูลจนสำเร็จเป็นรูปธรรมได้</td>
+                                <td></td>
+                                <td class="text-center font-bold text-orange-600 border-r taxonomy-cell" title="Articulation (ทำอย่างสร้างสรรค์ต่อเนื่อง)">Ar</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center font-bold text-orange-600 border-r taxonomy-cell" title="Articulation (ทำอย่างสร้างสรรค์ต่อเนื่อง)">Ar</td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 4.2 ปฏิบัติงานจริงในสถานประกอบการ (สหกิจศึกษา/ฝึกงาน) ได้ตามมาตรฐานวิชาชีพ</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center font-bold text-orange-600 border-r taxonomy-cell" title="Naturalization (ทำได้เหมือนธรรมชาติ)">N</td>
+                                <td class="text-center font-bold text-orange-600 border-r taxonomy-cell" title="Naturalization (ทำได้เหมือนธรรมชาติ)">N</td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 4.3 แก้ปัญหาเฉพาะหน้าในการทำงานร่วมกับผู้อื่นได้</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center font-bold text-orange-600 border-r taxonomy-cell" title="Articulation (ทำอย่างสร้างสรรค์ต่อเนื่อง)">Ar</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 4.4 นำเสนอแผนธุรกิจหรือแนวคิดนวัตกรรม</td>
+                                <td></td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Creating (การสร้างสรรค์)">C</td>
+                                <td class="text-center font-bold text-blue-600 border-r taxonomy-cell" title="Creating (การสร้างสรรค์)">C</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="ylo-row border-b border-slate-200">
+                                <td class="py-3 px-6">YLO 4.5 ปฏิบัติตนตามกฎหมายคุ้มครองข้อมูลส่วนบุคคล และจรรยาบรรณวิชาชีพ</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center font-bold text-green-600 border-r taxonomy-cell" title="Internalizing Values (จิตพิสัยระดับการสร้างค่านิยม/สร้างลักษณะนิสัย)">IV</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="p-6 bg-white border-t border-slate-200 text-sm">
+                    <strong>หมายเหตุ (Legend):</strong>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                        <div>
+                            <div class="font-bold text-blue-700 border-b border-blue-100 pb-1 mb-2">พุทธิพิสัย (Cognitive Domain, Thinking)</div>
+                            <ul class="list-none text-xs text-slate-600 space-y-1">
+                                <li><strong>R:</strong> Remembering (ความรู้ความจำ)</li>
+                                <li><strong>U:</strong> Understanding (ความเข้าใจ)</li>
+                                <li><strong>Ap:</strong> Applying (การประยุกต์ใช้)</li>
+                                <li><strong>An:</strong> Analyzing (การวิเคราะห์)</li>
+                                <li><strong>E:</strong> Evaluating (การประเมิณ)</li>
+                                <li><strong>C:</strong> Creating (การสร้างสรรค์)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="font-bold text-orange-700 border-b border-orange-100 pb-1 mb-2">ทักษะพิสัย (Psychomotor Domain; Skill)</div>
+                            <ul class="list-none text-xs text-slate-600 space-y-1">
+                                <li><strong>Im:</strong> Imitation (การเลียนแบบ)</li>
+                                <li><strong>M:</strong> Manipulation (กระทำตามสั่งหรือเครื่องชี้แนะ)</li>
+                                <li><strong>P:</strong> Precision (การหาความถูกต้อง)</li>
+                                <li><strong>Ar:</strong> Articulation (ทำอย่างสร้างสรรค์ต่อเนื่อง)</li>
+                                <li><strong>N:</strong> Naturalization (ทำได้เหมือนธรรมชาติ)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="font-bold text-green-700 border-b border-green-100 pb-1 mb-2">จิตพิสัย (Affective Domain)</div>
+                            <ul class="list-none text-xs text-slate-600 space-y-1">
+                                <li><strong>Rec:</strong> Receiving (การรับรู้หรือการใส่ใจต่อสิ่งเร้า)</li>
+                                <li><strong>Res:</strong> Responding (การตอบสนอง)</li>
+                                <li><strong>V:</strong> Valuing (การเห็นคุณค่า)</li>
+                                <li><strong>O:</strong> Organization (การจัดระบบค่านิยม)</li>
+                                <li><strong>IV:</strong> Internalizing Values (จิตพิสัยระดับการสร้างค่านิยม/สร้างลักษณะนิสัย)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Study Plan Section -->
+    <section id="study-plan" class="py-16 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-teal-900 border-l-4 border-teal-600 pl-3">แผนการเรียน (Study Plan)</h2>
+                    <p class="text-sm text-slate-500 mt-1 ml-4">คลิกเลือกรายวิชาเพื่อดูรายละเอียด</p>
+                </div>
+                <div class="flex space-x-1 bg-slate-100 p-1 rounded-lg">
+                    <button onclick="selectYear(1)" id="btn-y1" class="px-4 py-2 rounded-md text-sm font-medium transition-all">ปีที่ 1</button>
+                    <button onclick="selectYear(2)" id="btn-y2" class="px-4 py-2 rounded-md text-sm font-medium transition-all">ปีที่ 2</button>
+                    <button onclick="selectYear(3)" id="btn-y3" class="px-4 py-2 rounded-md text-sm font-medium transition-all">ปีที่ 3</button>
+                    <button onclick="selectYear(4)" id="btn-y4" class="px-4 py-2 rounded-md text-sm font-medium transition-all">ปีที่ 4</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white rounded-xl border border-slate-200 flex flex-col h-full shadow-sm overflow-hidden">
+                        <div class="bg-teal-50 px-4 py-3 border-b border-teal-100 flex justify-between items-center">
+                            <h3 class="font-bold text-teal-800 text-sm">ภาคการศึกษาที่ 1</h3>
+                            <span class="text-xs font-mono bg-white px-2 py-0.5 rounded border border-teal-200 text-teal-600" id="sem1-credit">-</span>
+                        </div>
+                        <div id="sem1-list" class="p-2 space-y-2 overflow-y-auto custom-scroll flex-grow max-h-[500px]"></div>
+                    </div>
+                    <div class="bg-white rounded-xl border border-slate-200 flex flex-col h-full shadow-sm overflow-hidden">
+                        <div class="bg-indigo-50 px-4 py-3 border-b border-indigo-100 flex justify-between items-center">
+                            <h3 class="font-bold text-indigo-800 text-sm">ภาคการศึกษาที่ 2</h3>
+                            <span class="text-xs font-mono bg-white px-2 py-0.5 rounded border border-indigo-200 text-indigo-600" id="sem2-credit">-</span>
+                        </div>
+                        <div id="sem2-list" class="p-2 space-y-2 overflow-y-auto custom-scroll flex-grow max-h-[500px]"></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5">
+                    <div class="sticky top-24 bg-white border border-slate-200 rounded-xl shadow-lg p-6 min-h-[400px] flex flex-col">
+                        <div class="border-b border-slate-100 pb-4 mb-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="px-2 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider rounded" id="detail-cat">Category</span>
+                                <span class="font-mono text-teal-600 font-bold text-sm" id="detail-code">CODE</span>
+                            </div>
+                            <h2 class="text-xl font-bold text-slate-900 leading-tight" id="detail-name">เลือกรายวิชา</h2>
+                            <p class="text-sm text-slate-500 italic mt-1" id="detail-name-en">Select a course to view details</p>
+                        </div>
+                        
+                        <div class="flex-grow space-y-5 overflow-y-auto custom-scroll max-h-[400px]">
+                            <div>
+                                <h4 class="text-xs font-bold text-teal-700 uppercase mb-2 flex items-center gap-1">
+                                    <i data-lucide="book-open" class="w-3 h-3"></i> คำอธิบายรายวิชา
+                                </h4>
+                                <p class="text-sm text-slate-600 leading-relaxed font-light whitespace-pre-line" id="detail-desc">-</p>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-teal-700 uppercase mb-2 flex items-center gap-1">
+                                    <i data-lucide="target" class="w-3 h-3"></i> ผลลัพธ์การเรียนรู้ (CLOs)
+                                </h4>
+                                <ul class="text-sm text-slate-600 list-disc pl-5 space-y-1 font-light" id="detail-clo">
+                                    <li>-</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-400">
+                            <span>Credits: <span class="font-mono text-slate-700 font-bold" id="detail-credit">-</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Section -->
+    <section id="career" class="py-16 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-teal-900 border-l-4 border-teal-600 pl-3 mb-8">อาชีพที่รองรับ (Career Paths)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Career Item -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition hover:border-teal-300 group">
+                    <div class="w-12 h-12 bg-teal-50 text-teal-600 rounded-lg flex items-center justify-center mb-4 group-hover:bg-teal-600 group-hover:text-white transition">
+                        <i data-lucide="database" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">Data Scientist</h3>
+                    <p class="text-sm text-slate-500">นักวิทยาศาสตร์ข้อมูล วิเคราะห์ข้อมูลเชิงลึก สร้างโมเดลพยากรณ์ เพื่อสนับสนุนการตัดสินใจทางธุรกิจ</p>
+                </div>
+                <!-- Career Item -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition hover:border-blue-300 group">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition">
+                        <i data-lucide="settings" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">Industrial Analyst</h3>
+                    <p class="text-sm text-slate-500">นักวิเคราะห์ระบบอุตสาหกรรม ใช้คณิตศาสตร์วางแผนการผลิต โลจิสติกส์ และเพิ่มประสิทธิภาพทรัพยากร</p>
+                </div>
+                <!-- Career Item -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition hover:border-indigo-300 group">
+                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                        <i data-lucide="cpu" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">AI Engineer</h3>
+                    <p class="text-sm text-slate-500">วิศวกรปัญญาประดิษฐ์ พัฒนา Machine Learning Model เพื่อแก้ปัญหาซับซ้อนในภาคอุตสาหกรรม</p>
+                </div>
+                <!-- Career Item -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition hover:border-purple-300 group">
+                    <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-600 group-hover:text-white transition">
+                        <i data-lucide="lightbulb" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">Innovator / Entrepreneur</h3>
+                    <p class="text-sm text-slate-500">ผู้ประกอบการและนวัตกร สร้างสรรค์ผลิตภัณฑ์หรือบริการใหม่ด้วยเทคโนโลยีและข้อมูล</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p>&copy; 2025 สาขาวิชาคณิตศาสตร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน วิทยาเขตขอนแก่น</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        lucide.createIcons();
+
+        // Data based on user provided DOCX
+        const curriculumData = {
+            1: {
+                sem1: {
+                    title: "Foundation",
+                    credit: "18",
+                    courses: [
+                        {code:"00-400-100-008", name:"รากเหง้า มทร.อีสาน", nameEn:"Root of RMUTI", credit:"2(1-3-3)", cat:"GenEd", desc:"วัฒนธรรมพื้นถิ่นอีสาน ฮีต 12 คอง 14 ประวัติศาสตร์ บุคคลสำคัญและศิษย์เก่าของมหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน อัตลักษณ์บัณฑิต การสร้างแนวคิดจิตอาสาเพื่อท้องถิ่น เป้าหมายการพัฒนาที่ยั่งยืน (SDGs) เพื่อชุมชนท้องถิ่น การวางแผนพัฒนาชุมชนท้องถิ่น \nCultures of local Isan; 12 and traditions 14 ways of life; history; famous persons and alumni of Rajamangala University of Technology Isan; outstanding identity of graduates; conceptualization of volunteering for locals; sustainable development goals (SDGs) to develop local community; planning to develop local community", clo:["บอกวัฒนธรรมพื้นถิ่นอีสาน ฮีต 12 คอง 14", "บอกประวัติศาสตร์ของมหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน", "อธิบายแนวคิดจิตอาสาและเป้าหมายการพัฒนาที่ยั่งยืน (SDGs) เพื่อการพัฒนาชุมชนท้องถิ่น", "สรุปและนำเสนอแนวคิดจากการลงพื้นที่ เพื่อพัฒนาชุมชนท้องถิ่นโดยเชื่อมโยงอัตลักษณ์บัณฑิตมหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน", "ยึดมั่นในสิ่งที่ถูกต้อง มีความรับผิดชอบ ทำงานเป็นทีม"]},
+                        {code:"00-400-070-008", name:"ภาษาไทยในยุคดิจิทัล", nameEn:"Thai in Digital Era", credit:"3(2-2-5)", cat:"GenEd", desc:"การใช้ภาษาไทยในสื่อโซเชียล การรู้เท่าทันสื่อ จรรยาบรรณการใช้ภาษาไทยในสื่อดิจิทัล ความคิดสร้างสรรค์ในการใช้ภาษา การสร้างแนวทางเพื่อการต่อยอดการใช้ภาษาในการสื่อสารผ่านสื่อดิจิทัลสำหรับอนาคต \nUsing Thai language in social media; media literacy; digital media ethics code; creative thinking in language use, and development of a concept for future language use through digital media", clo:["ใช้ภาษาไทยในสื่อโซเชียลมีเดียอย่างเหมาะสม", "เลือกสื่อในการสื่อสารผ่านสื่อดิจิทัลอย่างเหมาะสม", "มีความคิดสร้างสรรค์ในการใช้ภาษาเพื่อสื่อสารผ่านสื่อดิจิทัล และต่อยอดการใช้ภาษาในสื่อดิจิทัลในอนาคต", "ทำงานร่วมกับผู้อื่น มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-010-101", name:"คณิตศาสตร์พื้นฐานสำหรับคณิตศาสตร์ประยุกต์", nameEn:"Fundamentals of Mathematics for Applied Mathematics", credit:"3(3-0-6)", cat:"Math", desc:"เซต ตรรกศาสตร์เบื้องต้นและการให้เหตุผล ระบบจำนวนจริง ความรู้เบื้องต้นเกี่ยวกับเรขาคณิตวิเคราะห์ ภาคตัดกรวย ความสัมพันธ์และฟังก์ชัน ฟังก์ชันเลขชี้กำลังและฟังก์ชันลอการิทึม ฟังก์ชันตรีโกณมิติและการประยุกต์\nSets; introduction to logic and reasoning; real number systems; elements of analytic geometry; conic sections; relations and functions; exponential and logarithmic functions; trigonometric functions and applications.", clo:["อธิบายหลักการของเซต ตรรกศาสตร์ ระบบจำนวนจริง และฟังก์ชันรูปแบบต่าง ๆ ได้อย่างถูกต้อง", "แก้สมการและอสมการที่เกี่ยวข้องกับฟังก์ชันพีชคณิตและฟังก์ชันอดิศัยได้", "ใช้ความรู้เรื่องเรขาคณิตวิเคราะห์และฟังก์ชันตรีโกณมิติในการแก้ปัญหาทางคณิตศาสตร์ได้", "แสดงวิธีทำและให้เหตุผลทางคณิตศาสตร์อย่างเป็นระบบ", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-010-102", name:"แคลคูลัส 1", nameEn:"Calculus 1", credit:"3(3-0-6)", cat:"Math", desc:"ลิมิตและความต่อเนื่อง อนุพันธ์ของฟังก์ชันพีชคณิตและฟังก์ชันอดิศัย การประยุกต์อนุพันธ์ ปฏิยานุพันธ์ ปริพันธ์ไม่จำกัดเขต ปริพันธ์จำกัดเขต ปริพันธ์เชิงตัวเลขเบื้องต้น\nLimits and continuity; derivatives of algebraic and transcendental functions; applications of derivatives; antiderivatives; indefinite integrals; definite integrals; introduction to numerical integration", clo:["อธิบายบทนิยามและทฤษฎีบทเกี่ยวกับลิมิต ความต่อเนื่อง อนุพันธ์ และปริพันธ์ได้", "คำนวณหาค่าลิมิต อนุพันธ์ และปริพันธ์ของฟังก์ชันที่กำหนดให้ได้อย่างถูกต้อง", "ใช้อนุพันธ์ในการหาค่าสูงสุด-ต่ำสุด อัตราสัมพัทธ์ และการร่างกราฟได้", "ใช้ปริพันธ์ในการหาพื้นที่ใต้กราฟและการแก้ปัญหาทางกายภาพเบื้องต้นได้", "ใช้ระเบียบวิธีเชิงตัวเลขเบื้องต้นในการหาค่าปริพันธ์ได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"02-005-033-105", name:"ฟิสิกส์พื้นฐาน", nameEn:"Fundamentals of Physics", credit:"3(3-0-6)", cat:"Sci", desc:"หน่วยวัดทางฟิสิกส์ กลศาสตร์ของอนุภาค โมเมนตัมและการดล งานและพลังงาน กลศาสตร์ของไหล ความร้อน คลื่นและคลื่นเสียง แม่เหล็กไฟฟ้า ทัศนศาสตร์ นิวเคลียร์ฟิสิกส์ \nUnits of physics measurement; particles mechanics; momentum and impulse; work and energy; fluid mechanics; heat; waves and sound waves; electromagnetism; optics; nuclear physics", clo:["บอกความหมายของปริมาณทางฟิสิกส์เบื้องต้น", "อธิบายการเปลี่ยนแปลงทางกลศาสตร์ พลศาสตร์ของวัตถุ สมบัติเชิงกล ของสสาร ความร้อนและอุณหพลศาสตร์ สมบัติของคลื่นแม่เหล็กไฟฟ้า ทัศนศาสตร์ และนิวเคลียร์ฟิสิกส์", "คำนวณการเปลี่ยนแปลงทางกลศาสตร์ของวัตถุ กลศาสตร์ของไหล คลื่น และคลื่นเสียง", "แปรผลและนำข้อมูลทางฟิสิกส์ในรูปแบบมาตรฐานจากตาราง กราฟ และแผนภูมิไปใช้ได้อย่างถูกต้อง", "มีวินัย ตรงต่อเวลา และเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"02-005-033-106", name:"ปฏิบัติการฟิสิกส์พื้นฐาน", nameEn:"Fundamentals of Physics Laboratory", credit:"1(0-3-1)", cat:"Sci", desc:"ปฏิบัติการทดลองเกี่ยวกับหน่วยวัดทางฟิสิกส์ กลศาสตร์ของอนุภาค โมเมนตัมและการดล งานและพลังงาน กลศาสตร์ของไหล ความร้อน คลื่นและคลื่นเสียง แม่เหล็กไฟฟ้า ทัศนศาสตร์ นิวเคลียร์ฟิสิกส์ \nExperiments on units of physics measurement; particles mechanics; momentum and impulse; work and energy; fluid mechanics; heat; waves and sound waves; electromagnetism; optics; nuclear physics", clo:["ใช้อุปกรณ์ และเครื่องมือพื้นฐานทางฟิสิกส์ได้อย่างถูกต้อง", "ทำการทดลองเกี่ยวกับหน่วยวัดทางฟิสิกส์ กลศาสตร์ของอนุภาค โมเมนตัมและการดล งานและพลังงาน กลศาสตร์ของไหล ความร้อน คลื่นและคลื่นเสียง แม่เหล็กไฟฟ้า ทัศนศาสตร์ และนิวเคลียร์ฟิสิกส์", "วิเคราะห์และอภิปรายผลการทดลองด้วยหลักการทางวิทยาศาสตร์", "นำเสนอข้อมูลทางฟิสิกส์ในรูปแบบมาตรฐานด้วยตาราง กราฟ และแผนภูมิ", "มีระเบียบวินัยและรับผิดชอบต่องานที่ได้รับมอบหมาย", "สามารถทำงานร่วมกับผู้อื่น"]},
+                        {code:"31-405-013-101", name:"ทักษะการเรียนรู้และการคิดเชิงวิเคราะห์ทางคณิตศาสตร์", nameEn:"Computational Thinking and Problem Solving", credit:"3(3-0-6)", cat:"Soft", desc:"หลักการคิดเชิงคำนวณ การแยกปัญหาและการวิเคราะห์ ขั้นตอนวิธีพื้นฐาน ความซับซ้อนในการคำนวณ การปรับปรุงประสิทธิภาพของขั้นตอนวิธี กระบวนการแก้ปัญหาตามหลักการเชิงวิทยาศาสตร์ การสื่อสารและการอธิบายวิธีการแก้ปัญหา \nComputational thinking principles; decomposition and problem breaking; pattern recognition; abstraction; algorithm design; logic and mathematical reasoning for problem solving; introduction to problem complexity analysis; application of scientific and mathematical thinking processes to solve daily life and industrial problems; communication and systematic explanation of problem-solving procedures", clo:["อธิบายองค์ประกอบของการคิดเชิงคำนวณได้อย่างถูกต้อง", "วิเคราะห์และแยกแยะโจทย์ปัญหาที่ซับซ้อนออกเป็นส่วนย่อยเพื่อหาแนวทางแก้ไขได้", "ออกแบบขั้นตอนวิธี หรือผังงานเพื่อแก้ปัญหาทางตรรกะและคณิตศาสตร์พื้นฐานได้", "สื่อสารและนำเสนอลำดับความคิดในการแก้ปัญหาให้ผู้อื่นเข้าใจได้อย่างชัดเจนและเป็นระบบ", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]}
+                    ]
+                },
+                sem2: {
+                    title: "Tools & Coding",
+                    credit: "18",
+                    courses: [
+                        {code:"00-400-070-004", name:"ภาษาอังกฤษพื้นฐาน", nameEn:"Basic English", credit:"3(2-2-5)", cat:"GenEd", desc:"คำศัพท์ สำนวนและประโยคภาษาอังกฤษพื้นฐานเพื่อการสื่อสารในระดับเริ่มต้นในสถานการณ์ต่างๆ การทักทาย การแนะนำ การถามและตอบคำถามเกี่ยวกับข้อมูลส่วนบุคคล สถานที่อยู่อาศัย คนที่รู้จักและสิ่งของ การฝึกปฏิบัติการใช้ทักษะภาษาอังกฤษในการฟัง พูด อ่าน และเขียน เพื่อการสื่อสารในระดับเริ่มต้น การใช้ภาษาอังกฤษพื้นฐานในการมีปฏิสัมพันธ์กับผู้อื่นด้วยวิธีการและภาษาที่ง่าย ถูกต้อง เหมาะสมและไม่ซับซ้อน \nBasic English vocabulary, expressions and sentences for communication at the beginner level under various situations; greetings, introductions, asking and answering questions about personal information, housing, known people and owning things; English practice in listening, speaking, reading and writing skills for communication at the beginner level; the use of basic English to interact with others in simple, accurate, appropriate and uncomplicated ways and languages", clo:["ใช้คำศัพท์ สำนวน วลีและประโยคภาษาอังกฤษพื้นฐาน เพื่อการสื่อสารในระดับเริ่มต้นตามสถานการณ์ต่าง ๆ ในชีวิตประจำวัน", "ใช้ภาษาอังกฤษในการฟัง พูด อ่าน และเขียน ด้วยคำศัพท์ สำนวน วลีและประโยคภาษาอังกฤษพื้นฐานเพื่อการสื่อสารในระดับเริ่มต้น", "มีทักษะภาษาอังกฤษตามมาตรฐาน CEFR ในระดับ A1", "ทำงานร่วมกับผู้อื่น มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-010-103", name:"แคลคูลัส 2", nameEn:"Calculus 2", credit:"3(3-0-6)", cat:"Math", desc:"เทคนิคการหาปริพันธ์ การประยุกต์ของปริพันธ์ พื้นที่ผิวและปริมาตร ลำดับและอนุกรมของจำนวนจริง ฟังก์ชันหลายตัวแปร ลิมิตและความต่อเนื่องของฟังก์ชันหลายตัวแปร อนุพันธ์ย่อย\nTechniques of integration; applications of integration; surface area and volume; sequences and series of real numbers; multivariable functions; limits and continuity of multivariable functions; partial derivatives", clo:["เลือกใช้เทคนิคการหาปริพันธ์ที่เหมาะสมกับรูปแบบของฟังก์ชันได้", "คำนวณหาพื้นที่ผิว ปริมาตร และความยาวส่วนโค้งโดยใช้ปริพันธ์ได้", "ตรวจสอบการลู่เข้าของลำดับและอนุกรมของจำนวนจริงได้", "คำนวณลิมิต ความต่อเนื่อง และอนุพันธ์ย่อยของฟังก์ชันหลายตัวแปรได้", "นำความรู้เรื่องแคลคูลัสใช้แก้โจทย์ปัญหาทางวิศวกรรมและวิทยาศาสตร์ได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-010-104", name:"วิยุตคณิต", nameEn:"Discrete Mathematics", credit:"3(3-0-6)", cat:"Math", desc:"เซตและความสัมพันธ์ หลักการนับและความน่าจะเป็นแบบไม่ต่อเนื่อง ทฤษฎีกราฟเบื้องต้น ต้นไม้ พีชคณิตบูลีน ตรรกศาสตร์สำหรับวิทยาการคอมพิวเตอร์\nSets and relations; counting principles and discrete probability; introduction to graph theory; trees; Boolean algebra; logic for computer science", clo:["ใช้หลักการนับ การจัดหมู่ และการเรียงสับเปลี่ยนในการแก้ปัญหาความน่าจะเป็นแบบไม่ต่อเนื่องได้", "อธิบายและวิเคราะห์โครงสร้างกราฟและต้นไม้ และนำไปใช้จำลองปัญหาจริงได้", "ใช้พีชคณิตบูลีนในการออกแบบวงจรตรรกะเบื้องต้นได้", "เขียนขั้นตอนวิธี (Algorithm) เพื่อแก้ปัญหาทางวิยุตคณิตได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-011-101", name:"สถิติและความน่าจะเป็นสำหรับคณิตศาสตร์ประยุกต์", nameEn:"Statistics and Probability for Applied Mathematics", credit:"3(3-0-6)", cat:"Stat", desc:"ความน่าจะเป็นพื้นฐาน ตัวแปรสุ่มและการแจกแจงความน่าจะเป็น ทฤษฎีบทลิมิตเข้าสู่ศูนย์กลาง การแจกแจงค่าตัวอย่าง การประมาณค่าช่วงความเชื่อมั่น การทดสอบสมมติฐานเบื้องต้นสำหรับค่าเฉลี่ยและสัดส่วน\nBasic probability; random variables and probability distributions; central limit theorem; sampling distributions; confidence interval estimation; introduction to hypothesis testing for means and proportions", clo:["คำนวณความน่าจะเป็นของเหตุการณ์ต่าง ๆ โดยใช้กฎพื้นฐานและทฤษฎีความน่าจะเป็นได้", "อธิบายคุณสมบัติของตัวแปรสุ่มและการแจกแจงความน่าจะเป็นแบบต่อเนื่องและไม่ต่อเนื่องได้", "ใช้ทฤษฎีบทลิมิตเข้าสู่ศูนย์กลางในการประมาณค่าการแจกแจงได้", "ประมาณค่าช่วงความเชื่อมั่นและการทดสอบสมมติฐานทางสถิติเบื้องต้นได้", "ตีความผลลัพธ์ทางสถิติเพื่อสรุปผลเกี่ยวกับประชากรจากข้อมูลตัวอย่างได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-012-101", name:"วิทยาการคอมพิวเตอร์เบื้องต้น", nameEn:"Introduction to Computer Science", credit:"3(3-0-6)", cat:"Com", desc:"โครงสร้างและสถาปัตยกรรมคอมพิวเตอร์ ระบบปฏิบัติการ เครือข่ายคอมพิวเตอร์และความปลอดภัยไซเบอร์เบื้องต้น โครงสร้างข้อมูลและขั้นตอนวิธี ฐานข้อมูล จริยธรรมและกฎหมายทางคอมพิวเตอร์\nComputer structure and architecture; operating systems; computer networks and introduction to cybersecurity; data structures and algorithms; databases; computer ethics and law", clo:["อธิบายองค์ประกอบหลักและการทำงานร่วมกันของฮาร์ดแวร์และซอฟต์แวร์คอมพิวเตอร์ได้", "อธิบายหลักการพื้นฐานของระบบปฏิบัติการและเครือข่ายคอมพิวเตอร์ได้", "จำแนกประเภทของโครงสร้างข้อมูลและเลือกใช้ขั้นตอนวิธีที่เหมาะสมกับปัญหาได้", "อธิบายแนวคิดเรื่องความปลอดภัยไซเบอร์และระบุภัยคุกคามทางคอมพิวเตอร์เบื้องต้นได้", "วิเคราะห์ประเด็นทางจริยธรรมและกฎหมายที่เกี่ยวข้องกับการใช้งานคอมพิวเตอร์และเทคโนโลยีสารสนเทศได้", "ติดตามเทคโนโลยีคอมพิวเตอร์สมัยใหม่และผลกระทบต่อสังคม", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-012-102", name:"การเขียนโปรแกรมขั้นแนะนำสำหรับคณิตศาสตร์ประยุกต์", nameEn:"Introduction to Programming for Applied Mathematics", credit:"3(3-0-6)", cat:"Com", desc:"แนวคิดพื้นฐานของการเขียนโปรแกรม โครงสร้างภาษาไวยากรณ์ ชนิดข้อมูล ตัวแปร นิพจน์ คำสั่งควบคุมการทำงาน การเขียนฟังก์ชัน การจัดการอาร์เรย์และสตริง การแก้ปัญหาพื้นฐานด้วยขั้นตอนวิธีทางคอมพิวเตอร์\nBasic concepts of programming; syntax and data types; variables and expressions; control structures; functions; array and string manipulation; solving basic problems using computer algorithms", clo:["อธิบายโครงสร้างและไวยากรณ์พื้นฐานของภาษาโปรแกรมคอมพิวเตอร์ได้", "เขียนโปรแกรมโดยใช้ตัวแปร นิพจน์ และคำสั่งควบคุม (เงื่อนไขและการทำซ้ำ) ได้", "ออกแบบและพัฒนาฟังก์ชันเพื่อแบ่งย่อยงานและเพิ่มความสามารถในการใช้ซ้ำของโค้ดได้", "ใช้โครงสร้างข้อมูลแบบอาร์เรย์และสตริงในการจัดการข้อมูลเบื้องต้นได้", "วิเคราะห์โจทย์ปัญหาและเขียนขั้นตอนวิธีหรือผังงานเพื่อแก้ปัญหาได้อย่างเป็นขั้นตอน", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]}
+                    ]
+                }
+            },
+            2: {
+                sem1: {
+                    title: "Core Math & Data 1",
+                    credit: "18",
+                    courses: [
+                        {code:"00-400-070-005", name:"ภาษาอังกฤษ 1", nameEn:"English 1", credit:"3(2-2-5)", cat:"GenEd", desc:"คำศัพท์ สำนวนและประโยคภาษาอังกฤษเพื่อการสื่อสารในระดับต้น ในสถานการณ์ต่าง ๆ ที่ใช้บ่อยในชีวิตประจำวัน การแลกเปลี่ยนข้อมูลอย่างง่ายในหัวข้อที่คุ้นเคย ข้อมูลส่วนตัว ครอบครัว การซื้อของ ภูมิศาสตร์ท้องถิ่น การจ้างงาน เรื่องที่เกี่ยวกับความต้องการเร่งด่วน การฝึกปฏิบัติการใช้ทักษะภาษาอังกฤษในการฟัง พูด อ่านและเขียน ในบริบทที่คุ้นเคยและทำเป็นประจำ การมีปฏิสัมพันธ์กับผู้อื่นด้วยวิธีการและภาษาที่ง่าย ถูกต้อง เหมาะสมและไม่ซับซ้อน \nEnglish vocabulary expressions and sentences for communication at the elementary level under frequently used situations and daily routines in everyday life; an exchange of simple information related to familiar topics, personal information, family, shopping, local geography, employment; immediate matters concerning urgent needs; English practice in listening, speaking, reading and writing skills under familiar contexts related to daily routines; interacting with others in simple, accurate, appropriate and uncomplicated ways and languages", clo:["ใช้คำศัพท์ สำนวนและประโยคภาษาอังกฤษเพื่อการสื่อสารระดับต้นในสถานการณ์ต่าง ๆ ในชีวิตประจำวัน", "ใช้ภาษาอังกฤษในการฟัง พูด อ่าน และเขียน ด้วยคำศัพท์ สำนวนและประโยคภาษาอังกฤษเพื่อการสื่อสารระดับต้น ในการมีปฏิสัมพันธ์กับผู้อื่นในสถานการณ์ต่าง ๆ ในชีวิตประจำวัน", "มีทักษะภาษาอังกฤษตามมาตรฐาน CEFR ในระดับ A2", "ทำงานร่วมกับผู้อื่น มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"00-400-080-005", name:"แนวคิดและทักษะนวัตกรรม", nameEn:"Innovation Idea and Competence", credit:"3(2-2-5)", cat:"GenEd", desc:"แนวคิดของนวัตกรรม หลักการจัดการนวัตกรรม ประเภทของนวัตกรรม ระบบนิเวศนวัตกรรม กระบวนการคิดเชิงออกแบบ ความคิดสร้างสรรค์และแรงกระตุ้นให้เกิดความคิดสร้างสรรค์ในการสร้างนวัตกรรม เครื่องมือในการคิดอย่างเป็นระบบเครื่องมือสร้างต้นแบบ เทคโนโลยีสร้างต้นแบบอย่างรวดเร็ว การสร้างและนำเสนอโครงงานต้นแบบนวัตกรรม \nConcepts of innovation; principle of innovation management; types of innovation; innovation ecosystem; design thinking process; creativity and idea-driven for creating innovations; tools for systematic thinking; prototype tooling, rapid prototype technology; innovation-driven project prototyping and presentation", clo:["อธิบายแนวคิดและหลักการนวัตกรรม กระบวนการคิดเชิงออกแบบ การคิดอย่างเป็นระบบ หลักการจัดการนวัตกรรม เทคโนโลยีสร้างต้นแบบอย่างรวดเร็ว", "เลือกเครื่องมือสร้างต้นแบบนวัตกรรมได้อย่างเหมาะสม", "สร้างต้นแบบนวัตกรรมนำไปสู่การใช้งานจริงและเชิงพาณิชย์", "ทำงานเป็นทีม รับฟังความคิดเห็นผู้อื่น เพื่อสรุปประเด็นในการพัฒนานวัตกรรม", "นำเสนอผลงานเชิงนวัตกรรมในหลากหลายรูปแบบ"]},
+                        {code:"31-405-010-205", name:"หลักการคณิตศาสตร์", nameEn:"Principles of Mathematics", credit:"3(3-0-6)", cat:"Math", desc:"ตรรกศาสตร์เชิงสัญลักษณ์ ตัวบ่งปริมาณ ระเบียบวิธีพิสูจน์ทางคณิตศาสตร์ การพิสูจน์โดยตรง การพิสูจน์โดยแย้งสลับที่ การพิสูจน์โดยข้อขัดแย้ง และการอุปนัยเชิงคณิตศาสตร์ ทฤษฎีเซตเบื้องต้น ความสัมพันธ์สมมูลและฟังก์ชัน\nSymbolic logic; quantifiers; methods of mathematical proof; direct proof, proof by contrapositive, proof by contradiction, and mathematical induction; introduction to set theory; equivalence relations and functions", clo:["อธิบายโครงสร้างของประโยคตรรกศาสตร์และรูปแบบการให้เหตุผลที่สมเหตุสมผลได้", "เขียนบทพิสูจน์ทางคณิตศาสตร์โดยใช้วิธีการพิสูจน์แบบต่าง ๆ ได้อย่างถูกต้องตามหลักตรรกศาสตร์", "ตรวจสอบความถูกต้องของข้อความคาดการณ์ทางคณิตศาสตร์ได้", "ใช้หลักการอุปนัยเชิงคณิตศาสตร์ในการพิสูจน์คุณสมบัติของจำนวนนับได้", "วิเคราะห์คุณสมบัติของเซต ความสัมพันธ์ และฟังก์ชัน ผ่านการพิสูจน์ได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-010-206", name:"พีชคณิตเชิงเส้นขั้นแนะนำ", nameEn:"Introduction to Linear Algebra", credit:"3(3-0-6)", cat:"Math", desc:"ระบบสมการเชิงเส้น เมทริกซ์และดีเทอร์มิแนนท์ ปริภูมิเวกเตอร์ การแปลงเชิงเส้น ค่าเจาะจงและเวกเตอร์เจาะจง การทำให้เป็นเมทริกซ์ทแยงมุม การประยุกต์พีชคณิตเชิงเส้นในการวิเคราะห์ข้อมูล\nSystems of linear equations; matrices and determinants; vector spaces; linear transformations; eigenvalues and eigenvectors; diagonalization; applications of linear algebra in data analysis", clo:["หาผลเฉลยของระบบสมการเชิงเส้นโดยใช้เมทริกซ์และวิธีการกำจัดแบบเกาส์ได้", "อธิบายและตรวจสอบคุณสมบัติของปริภูมิเวกเตอร์ ปริภูมิย่อย และความเป็นอิสระเชิงเส้นได้", "คำนวณหาค่าลักษณะเฉพาะและเวกเตอร์ลักษณะเฉพาะ และทำการแปลงเมทริกซ์ให้เป็นเมทริกซ์ทแยงมุมได้", "อธิบายความเชื่อมโยงแนวคิดของการแปลงเชิงเส้นกับเมทริกซ์ได้", "ใช้พีชคณิตเชิงเส้นในการแก้ปัญหาพื้นฐานด้านวิทยาการข้อมูล เช่น การลดมิติข้อมูล หรือการประมวลผลภาพเบื้องต้นได้", "ใช้งานซอฟต์แวร์คำนวณทางคณิตศาสตร์ช่วยในการแก้ปัญหาพีชคณิตเชิงเส้นได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-012-203", name:"การเขียนโปรแกรมสำหรับวิทยาการข้อมูล 1", nameEn:"Programming for Data Science 1", credit:"3(2-2-5)", cat:"Com", desc:"การเขียนโปรแกรมภาษาไพธอนสำหรับวิทยาการข้อมูล โครงสร้างข้อมูลขั้นสูง การจัดการและทำความสะอาดข้อมูลด้วยไลบรารีมาตรฐาน การแสดงผลข้อมูลด้วยกราฟและแผนภาพ การทำงานกับไฟล์ข้อมูลประเภทต่าง ๆ\nPython programming for data science; advanced data structures; data manipulation and cleaning using standard libraries; data visualization; working with various data file formats", clo:["ใช้ภาษาไพธอน และไลบรารีพื้นฐาน (เช่น NumPy, Pandas) ในการจัดการโครงสร้างข้อมูลได้", "ปฏิบัติการนำเข้าข้อมูล ทำความสะอาดข้อมูล และเตรียมข้อมูลสำหรับวิเคราะห์ได้", "สร้างภาพนิทัศน์ข้อมูลด้วยไลบรารี (เช่น Matplotlib, Seaborn) เพื่อสื่อสารข้อมูลได้", "เขียนโปรแกรมเพื่ออ่านและเขียนไฟล์ข้อมูลรูปแบบต่าง ๆ (CSV, Excel, JSON) ได้", "ใช้ทักษะการเขียนโปรแกรมในการวิเคราะห์ข้อมูลเบื้องต้นจากชุดข้อมูลจริงได้", "แสวงหาความรู้เพิ่มเติมเกี่ยวกับไลบรารีใหม่ ๆ และแบ่งปันความรู้กับเพื่อนร่วมชั้นได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-407-632-010", name:"แนะนำปัญญาประดิษฐ์", nameEn:"Introduction to Artificial Intelligent", credit:"3(3-0-6)", cat:"AI", desc:"การปฏิวัติอุตสาหกรรมยุคที่สี่ หลักการพื้นฐานของปัญญาประดิษฐ์ อุปสรรคและโอกาสของปัญญาประดิษฐ์ในงานอุตสาหกรรมอัจฉริยะ ประวัติศาสตร์และวิวัฒนาการของปัญญาประดิษฐ์ การเรียนรู้ของเครื่องขั้นพื้นฐาน การเรียนรู้เชิงลึกขั้นพื้นฐาน การเรียนรู้แบบเสริมกำลังขั้นพื้นฐาน การประยุกต์ใช้ปัญญาประดิษฐ์ในอุตสาหกรรมด้านต่าง ๆ กรณีศึกษาการใช้ปัญญาประดิษฐ์ในงานด้านวิศวกรรม\nThe fourth industrial revolution, basic artificial intelligence concepts, artificial intelligence challenges and opportunities within modern industries, history and evolution of artificial intelligence, introduction to machine learning, introduction to deep learning, introduction to reinforcement learning, applications of artificial intelligence in industry, case study of artificial intelligence in engineering", clo:["อธิบายหลักการพื้นฐาน แนวคิด และประวัติศาสตร์ของปัญญาประดิษฐ์ รวมถึงความสัมพันธ์กับการปฏิวัติอุตสาหกรรมยุคที่สี่ได้อย่างถูกต้อง", "อธิบายและเปรียบเทียบแนวทางของการเรียนรู้ของเครื่อง การเรียนรู้เชิงลึก และการเรียนรู้แบบเสริมกำลังได้อย่างเหมาะสม", "วิเคราะห์อุปสรรคและโอกาสของการประยุกต์ใช้ปัญญาประดิษฐ์ในอุตสาหกรรมอัจฉริยะ ได้อย่างมีเหตุผล", "อธิบายกรณีศึกษาการใช้ปัญญาประดิษฐ์ในงานด้านวิศวกรรมและอุตสาหกรรมต่าง ๆ ได้อย่างถูกต้อง"]}
+                    ]
+                },
+                sem2: {
+                    title: "Advanced Tools",
+                    credit: "18",
+                    courses: [
+                        {code:"00-400-070-006", name:"ภาษาอังกฤษ 2", nameEn:"English 2", credit:"3(2-2-5)", cat:"GenEd", desc:"คำศัพท์ สำนวนและประโยคภาษาอังกฤษเพื่อการสื่อสารในระดับกลางในสถานการณ์ต่าง ๆ ที่คุ้นเคยและตนเองสนใจในชีวิตประจำวัน เรื่องที่คุ้นเคยเกี่ยวกับการทำงาน โรงเรียน การใช้เวลาว่าง การเข้าใจประเด็นหลักจากภาษามาตรฐานที่ชัดเจนการบรรยายประสบการณ์ เหตุการณ์ ความฝัน ความหวัง และความใฝ่ฝัน การให้เหตุผลสั้น ๆ การอธิบายความคิดเห็น และแผนการ การใช้ภาษาอังกฤษเพื่อการสื่อสารในระดับกลางและมีปฏิสัมพันธ์กับผู้อื่นในการรับมือกับสถานการณ์ต่าง ๆ ที่มักเกิดขึ้นระหว่างการเดินทางท่องเที่ยวในสถานที่ที่ผู้คนใช้ภาษาอังกฤษ การฝึกปฏิบัติการใช้ทักษะภาษาอังกฤษในการฟัง พูด อ่าน และเขียนเพื่อการสื่อสารในระดับกลางในสถานการณ์ต่าง ๆ ที่คุ้นเคยและตนเองสนใจในชีวิตประจำวัน \nEnglish vocabulary, expressions and sentences for communication at the intermediate level under familiar and self-interested situations in everyday life; familiar stories about work, school, and leisure time; understanding the main points from clear and standard language; describing experiences, events, dreams, hopes, and aspirations; brief reasoning, explanation of opinions and plans; the use of English for intermediate communication and interaction in dealing with situations that often arise while traveling in an English-speaking place; English practice in listening, speaking, reading and writing skills for communication at the intermediate level under familiar and self-interested situations in everyday life", clo:["ใช้คำศัพท์ สำนวนและประโยคภาษาอังกฤษเพื่อการสื่อสารระดับกลางในสถานการณ์ที่ตนเองสนใจในชีวิตประจำวัน", "ใช้ภาษาอังกฤษในการฟัง พูด อ่าน และเขียน ด้วยใช้คำศัพท์ สำนวนและประโยคภาษาอังกฤษเพื่อการสื่อสารระดับกลางในสถานการณ์ที่ตนเองสนใจในชีวิตประจำวัน", "มีทักษะภาษาอังกฤษตามมาตรฐาน CEFR ในระดับ B1", "ทำงานร่วมกับผู้อื่น มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-010-207", name:"แคลคูลัสขั้นสูง", nameEn:"Advanced Calculus", credit:"3(3-0-6)", cat:"Math", desc:"เวกเตอร์ในสามมิติและเรขาคณิตวิเคราะห์ ฟังก์ชันค่าเวกเตอร์ สนามเวกเตอร์ อนุพันธ์ระบุทิศทาง เกรเดียนต์ ไดเวอร์เจนซ์ และเคิร์ล ปริพันธ์ตามเส้นและปริพันธ์ตามพื้นผิว ทฤษฎีบทของกรีน ทฤษฎีบทของสโต๊กส์ และทฤษฎีบทไดเวอร์เจนซ์ การประยุกต์ใช้แคลคูลัสขั้นสูงในงานวิศวกรรม\nVectors in three dimensions and analytic geometry; vector-valued functions; vector fields; directional derivatives; gradient, divergence, and curl; line integrals and surface integrals; Green's theorem, Stokes' theorem, and Divergence theorem; applications of advanced calculus in engineering", clo:["อธิบายและคำนวณเกี่ยวกับเวกเตอร์ในสามมิติและฟังก์ชันค่าเวกเตอร์ได้", "วิเคราะห์ตัวดำเนินการทางเวกเตอร์ ได้แก่ เกรเดียนต์ ไดเวอร์เจนซ์ และเคิร์ล ในระบบพิกัดต่าง ๆ ได้", "คำนวณปริพันธ์ตามเส้นและปริพันธ์ตามพื้นผิวของสนามเวกเตอร์ได้", "ใช้ทฤษฎีบทของกรีน ทฤษฎีบทของสโต๊กส์ และทฤษฎีบทไดเวอร์เจนซ์ในการแก้ปัญหาทางฟิสิกส์และวิศวกรรมได้", "เชื่อมโยงแนวคิดแคลคูลัสเวกเตอร์กับการไหลของของไหลหรือสนามแม่เหล็กไฟฟ้าได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-010-208", name:"สมการเชิงอนุพันธ์เบื้องต้น", nameEn:"Elementary Differential Equations", credit:"3(3-0-6)", cat:"Math", desc:"สมการเชิงอนุพันธ์สามัญอันดับหนึ่ง สมการเชิงอนุพันธ์เชิงเส้นอันดับสูงที่มีสัมประสิทธิ์เป็นค่าคงตัว การแปลงลาปลาซ ระบบสมการเชิงอนุพันธ์เชิงเส้น การประยุกต์สมการเชิงอนุพันธ์ในแบบจำลองทางกายภาพ\nFirst-order ordinary differential equations; higher-order linear differential equations with constant coefficients; Laplace transforms; systems of linear differential equations; applications of differential equations in physical models", clo:["จำแนกประเภทและอันดับของสมการเชิงอนุพันธ์ได้", "หาผลเฉลยของสมการเชิงอนุพันธ์สามัญอันดับหนึ่งและอันดับสูงด้วยวิธีการที่เหมาะสมได้", "ใช้การแปลงลาปลาซในการแก้ปัญหาค่าเริ่มต้นและระบบสมการเชิงอนุพันธ์ได้", "สร้างแบบจำลองทางคณิตศาสตร์ด้วยสมการเชิงอนุพันธ์เพื่ออธิบายปรากฏการณ์ทางฟิสิกส์หรือวิศวกรรมอย่างง่ายได้", "วิเคราะห์พฤติกรรมของผลเฉลยและตีความหมายในบริบทของการประยุกต์ใช้ได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-011-202", name:"การวิเคราะห์ข้อมูลทางสถิติสำหรับคณิตศาสตร์ประยุกต์", nameEn:"Statistical Data Analysis for Applied Mathematics", credit:"3(3-0-6)", cat:"Stat", desc:"การสำรวจและจัดกระทำข้อมูล การวิเคราะห์ความแปรปรวน (ANOVA) การทดสอบไคสแควร์ สถิติแบบไม่อิงพารามิเตอร์เบื้องต้น การใช้ซอฟต์แวร์สำเร็จรูปทางสถิติในการวิเคราะห์และแปลผลข้อมูล\nData exploration and manipulation; analysis of variance (ANOVA); Chi-square tests; introduction to non-parametric statistics; using statistical software for data analysis and interpretation", clo:["เลือกใช้วิธีการทางสถิติที่เหมาะสมกับประเภทของข้อมูลและวัตถุประสงค์การวิจัยได้", "วิเคราะห์เปรียบเทียบค่าเฉลี่ยของประชากรหลายกลุ่มด้วยการวิเคราะห์ความแปรปรวนได้", "ใช้การทดสอบไคสแควร์และการทดสอบแบบไม่อิงพารามิเตอร์กับข้อมูลได้", "ใช้ซอฟต์แวร์ทางสถิติ (เช่น R, SPSS หรือ Python) ในการประมวลผลข้อมูลจริงได้", "แปลความหมายผลลัพธ์จากซอฟต์แวร์และเขียนรายงานสรุปผลการวิเคราะห์ได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-012-204", name:"การเขียนโปรแกรมสำหรับวิทยาการข้อมูล 2", nameEn:"Programming for Data Science 2", credit:"3(2-2-5)", cat:"Com", desc:"การเขียนโปรแกรมเชิงวัตถุ การเชื่อมต่อฐานข้อมูล SQL และ NoSQL การดึงข้อมูลจากเว็บเบื้องต้น การพัฒนาเว็บแอปพลิเคชันอย่างง่ายสำหรับแสดงผลข้อมูล\nObject-oriented programming; SQL and NoSQL database connectivity; introduction to web scraping; developing simple web applications for data dashboards", clo:["ใช้หลักการเขียนโปรแกรมเชิงวัตถุในการพัฒนาระบบซอฟต์แวร์ขนาดเล็กได้", "เขียนคำสั่ง SQL เพื่อจัดการและดึงข้อมูลจากระบบฐานข้อมูลเชิงสัมพันธ์ได้", "ปฏิบัติการดึงข้อมูลจากเว็บไซต์อย่างมีจริยธรรมและถูกต้องตามกฎหมาย", "พัฒนา Web Application หรือ Dashboard อย่างง่าย (เช่น ใช้ Streamlit หรือ Flask) เพื่อนำเสนอผลการวิเคราะห์ข้อมูลได้", "บูรณาการความรู้ด้านการเขียนโปรแกรมและฐานข้อมูลเพื่อสร้างโครงงานวิทยาการข้อมูลได้", "ตระหนักถึงความปลอดภัยของข้อมูลและจริยธรรมในการเข้าถึงข้อมูลผู้อื่น", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"xx-xxx-xxx-xxx", name:"วิชาเลือกเสรี 1", nameEn:"Free Elective 1", credit:"3(x-x-x)", cat:"Free", desc:"-", clo:["-"]}
+                    ]
+                }
+            },
+            3: {
+                sem1: {
+                    title: "Applied & AI Core",
+                    credit: "18",
+                    courses: [
+                        {code:"00-400-100-009", name:"ชุมชนนวัตกรรมสร้างสรรค์", nameEn:"Creative Innovation Community", credit:"3(1-4-4)", cat:"GenEd", desc:"หลักการคิดเชิงออกแบบ องค์ประกอบหลักการคิดเชิงออกแบบ การคิดเชิงออกแบบกับชุมชน การระดมความคิด กระบวนการคิดเชิงออกแบบแบบมีส่วนร่วม การบูรณาการความรู้สิ่งแวดล้อมเพื่อชุมชน การสร้างสรรค์ผลงาน การนำเสนอผลงานอย่างมีส่วนร่วมกับชุมชน \nDesign thinking principles; design thinking elements; design thinking and community; brainstorming; participative design thinking process; environment knowledge integration to community; creating a work; presentation of works with community’s participation", clo:["อธิบายหลักการคิดเชิงออกแบบกับชุมชน องค์ประกอบหลักของการคิดเชิงออกแบบชุมชน กระบวนการคิดเชิงออกแบบแบบมีส่วนร่วม", "ใช้ความรู้การคิดเชิงออกแบบในการสร้างแนวทางหรือนวัตกรรมที่ตอบโจทย์กับชุมชนอย่างมีส่วนร่วม", "ใช้ความรู้ ทักษะ จากศาสตร์ต่าง ๆ สร้างสรรค์แนวทางแก้ไข มาทดสอบ พัฒนา เพื่อให้เกิดประโยชน์กับชุมชน", "ยึดมั่นในสิ่งที่ถูกต้อง มีความรับผิดชอบ ทำงานเป็นทีม สื่อสารและนำเสนองาน"]},
+                        {code:"31-405-010-309", name:"วิธีเชิงตัวเลขเบื้องต้น", nameEn:"Elementary Numerical Methods", credit:"3(3-0-6)", cat:"Math", desc:"ความคลาดเคลื่อนในการคำนวณ การหาซ้ำสำหรับรากของสมการ การแก้ระบบสมการเชิงเส้นและไม่เชิงเส้น การประมาณค่าในช่วงและนอกช่วง การหาอนุพันธ์และปริพันธ์เชิงตัวเลข การแก้สมการเชิงอนุพันธ์เชิงตัวเลข การเขียนโปรแกรมเพื่อการคำนวณเชิงตัวเลข\nComputational errors; iterative methods for roots of equations; solving linear and non-linear systems; interpolation and extrapolation; numerical differentiation and integration; numerical solutions to differential equations; programming for numerical computing", clo:["อธิบายแหล่งที่มาของความคลาดเคลื่อนในการคำนวณและผลกระทบต่อผลลัพธ์ได้", "เลือกใช้วิธีเชิงตัวเลขที่เหมาะสมในการหาผลเฉลยของปัญหาทางคณิตศาสตร์ที่ไม่สามารถหาผลเฉลยแม่นตรงได้", "คำนวณหาผลเฉลยของระบบสมการเชิงเส้นและไม่เชิงเส้นด้วยระเบียบวิธีทำซ้ำได้", "เขียนโปรแกรมคอมพิวเตอร์เพื่อดำเนินการตามขั้นตอนวิธีเชิงตัวเลขได้", "วิเคราะห์และเปรียบเทียบประสิทธิภาพของวิธีเชิงตัวเลขต่าง ๆ ได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-010-310", name:"การสร้างแบบจำลองทางคณิตศาสตร์ในอุตสาหกรรม", nameEn:"Mathematical Modelling in Industry", credit:"3(3-0-6)", cat:"Core", desc:"กระบวนการสร้างแบบจำลองทางคณิตศาสตร์ การแปลงปัญหาจริงเป็นปัญหาคณิตศาสตร์ แบบจำลองการเติบโตและการเสื่อมสลาย แบบจำลองการแพร่กระจาย กรณีศึกษาการแก้ปัญหาในระบบอุตสาหกรรม โลจิสติกส์ และการจัดการพลังงาน\nMathematical modelling process; translating real-world problems into mathematical problems; growth and decay models; diffusion models; case studies on problem solving in industrial systems, logistics, and energy management", clo:["อธิบายกระบวนการสร้างแบบจำลองทางคณิตศาสตร์และวงจรการแก้ปัญหาได้", "แปลงโจทย์ปัญหาจริงในอุตสาหกรรมให้เป็นสมการหรือแบบจำลองทางคณิตศาสตร์ได้", "วิเคราะห์และหาผลเฉลยจากแบบจำลองเพื่อทำนายพฤติกรรมของระบบได้", "ประเมินความสมเหตุสมผลและข้อจำกัดของแบบจำลองที่สร้างขึ้นได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-010-311", name:"การหาค่าเหมาะสมขั้นแนะนำ", nameEn:"Introduction to Optimization", credit:"3(3-0-6)", cat:"Core", desc:"การกำหนดโจทย์ปัญหาค่าเหมาะสม กำหนดการเชิงเส้น วิธีซิมเพล็กซ์ ทฤษฎีภาวะคู่กัน กำหนดการที่ไม่ใช่เชิงเส้นเบื้องต้น การหาค่าเหมาะสมแบบไม่มีเงื่อนไข การประยุกต์ใช้ในการจัดสรรทรัพยากรและการวางแผนการผลิต\nFormulating optimization problems; linear programming; simplex method; duality theory; introduction to non-linear programming; unconstrained optimization; applications in resource allocation and production planning", clo:["จำแนกประเภทของปัญหาค่าเหมาะสมได้", "สร้างแบบจำลองทางคณิตศาสตร์สำหรับปัญหากำหนดการเชิงเส้นและปัญหาค่าเหมาะสมอื่น ๆ ได้", "หาผลเฉลยที่ดีที่สุดโดยใช้วิธีคำนวณแบบต่าง ๆ ได้", "ใช้ซอฟต์แวร์คอมพิวเตอร์ช่วยในการหาผลเฉลยของปัญหาขนาดใหญ่ได้", "วิเคราะห์ความไวเพื่อดูผลกระทบของการเปลี่ยนแปลงตัวแปรได้", "ใช้เทคนิคการหาค่าเหมาะสมในการบริหารจัดการทรัพยากรหรือการผลิตในอุตสาหกรรมได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-011-303", name:"เทคนิคการพยากรณ์และการวิเคราะห์ความถดถอย", nameEn:"Forecasting and Regression Analysis Techniques", credit:"3(3-0-6)", cat:"Stat", desc:"การวิเคราะห์สหสัมพันธ์ การวิเคราะห์การถดถอยเชิงเส้นอย่างง่ายและพหุคูณ การตรวจสอบข้อสมมติของแบบจำลอง การวิเคราะห์อนุกรมเวลา เทคนิคการพยากรณ์และการวัดความแม่นยำในการพยากรณ์\nCorrelation analysis; simple and multiple linear regression analysis; model assumption checking; time series analysis; forecasting techniques and forecast accuracy measurement", clo:["สร้างและทดสอบสมการถดถอยเชิงเส้นเพื่ออธิบายความสัมพันธ์ระหว่างตัวแปรได้", "ตรวจสอบข้อสมมติเบื้องต้นของการวิเคราะห์การถดถอยและแก้ไขปัญหาเบื้องต้นได้", "วิเคราะห์องค์ประกอบของอนุกรมเวลาและเลือกวิธีพยากรณ์ที่เหมาะสมได้", "ใช้เทคนิคการพยากรณ์ (เช่น Moving Average, Exponential Smoothing) กับข้อมูลจริงได้", "ประเมินความแม่นยำของตัวแบบพยากรณ์และเลือกตัวแบบที่ดีที่สุดได้", "นำเสนอผลการพยากรณ์เพื่อสนับสนุนการตัดสินใจทางธุรกิจหรืออุตสาหกรรมได้อย่างมีเหตุผล", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-011-304", name:"การสื่อสารและการนำเสนอข้อมูลเชิงวิเคราะห์", nameEn:"Analytical Data Communication and Visualization", credit:"3(3-0-6)", cat:"Soft", desc:"-", clo:["-"]}
+                    ]
+                },
+                sem2: {
+                    title: "Advanced Systems",
+                    credit: "17",
+                    courses: [
+                        {code:"00-400-060-006", name:"กุญแจสู่ความสำเร็จ", nameEn:"Keys to Success", credit:"1(0-2-1)", cat:"GenEd", desc:"ทฤษฎีความสำเร็จในด้านการทำงาน การทำธุรกิจและการดำเนินชีวิต การประยุกต์ใช้การแก้ปัญหาจากแนวปฏิบัติที่ดี เครื่องมือ กลยุทธ์และกุญแจสู่ความสำเร็จทางธุรกิจ การวัดความสำเร็จของการประกอบธุรกิจและเรียนรู้ปรากฏการณ์ความล้มเหลว การวิเคราะห์สาเหตุหรือปัญหา วิธีป้องกันในกรณีศึกษาต่าง ๆ การใช้ชีวิตหรือการประกอบการธุรกิจ \nSuccess theory in work, business, and life; applying the best practice in problem solving; tools, strategies and keys to business success; measuring the success of business operations and learning the phenomenon of failure; analyzing the cause or problem, prevention methods in various case studies about life or business", clo:["อธิบายทฤษฎีความสำเร็จในด้านการทำงาน การทำธุรกิจ และการดำเนินชีวิต", "วิเคราะห์สาเหตุและปัญหาของความล้มเหลวจากกรณีศึกษา เพื่อสรุปความคิดรวบยอดและนำเสนอได้"]},
+                        {code:"31-405-010-312", name:"ระบบพลศาสตร์เบื้องต้น", nameEn:"Introduction to Dynamical Systems", credit:"3(3-0-6)", cat:"Math", desc:"ระบบพลวัตเวลาต่อเนื่องและเวลาไม่ต่อเนื่อง จุดสมดุลและเสถียรภาพ การวิเคราะห์ระนาบเฟส การแยกสาขา ความโกลาหลเบื้องต้น การประยุกต์ใช้ในการจำลองพฤติกรรมของระบบควบคุมและระบบอัตโนมัติ\nContinuous-time and discrete-time dynamical systems; equilibrium points and stability; phase plane analysis; bifurcations; introduction to chaos; applications in simulating control systems and automation behaviors", clo:["อธิบายความแตกต่างระหว่างระบบพลวัตเวลาต่อเนื่องและเวลาไม่ต่อเนื่องได้", "วิเคราะห์จุดสมดุลและเสถียรภาพของระบบโดยใช้วิธีการเชิงเส้นและฟังก์ชันไลยาปูนอฟได้", "สร้างและแปลความหมายของแผนภาพเฟส เพื่ออธิบายพฤติกรรมของระบบได้", "อธิบายปรากฏการณ์การแยกสาขา และความอลวนในระบบอย่างง่ายได้", "ใช้ทฤษฎีระบบพลวัตในการวิเคราะห์แบบจำลองทางประชากรศาสตร์หรือระบบควบคุมทางวิศวกรรมได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-010-313", name:"คณิตศาสตร์สำหรับการเรียนรู้ของเครื่อง", nameEn:"Mathematics for Machine Learning", credit:"3(3-0-6)", cat:"Math", desc:"พีชคณิตเชิงเส้นสำหรับการวิเคราะห์ข้อมูล การแยกค่าเอกฐาน การวิเคราะห์องค์ประกอบหลัก แคลคูลัสของการหาค่าเหมาะสม การลดระดับความชัน ทฤษฎีสารสนเทศเบื้องต้น ความน่าจะเป็นแบบเบย์\nLinear algebra for data analysis; Singular Value Decomposition; Principal Component Analysis; calculus of optimization; Gradient Descent; introduction to information theory; Bayesian probability", clo:["อธิบายทฤษฎีทางคณิตศาสตร์ที่เป็นรากฐานของขั้นตอนวิธีการเรียนรู้ของเครื่องได้", "คำนวณและประยุกต์ใช้การแยกค่าเอกฐานและการวิเคราะห์องค์ประกอบหลักในการลดมิติข้อมูลได้", "ใช้วิธีการลดระดับความชันในการหาค่าเหมาะสมของฟังก์ชันค่าสูญเสียได้", "วิเคราะห์ความสัมพันธ์ระหว่างความน่าจะเป็นแบบเบย์กับการเรียนรู้ของเครื่องได้", "เขียนโปรแกรมเพื่อจำลองกระบวนการทางคณิตศาสตร์ที่เกี่ยวข้องได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-013-302", name:"การเรียนรู้ของเครื่อง", nameEn:"Machine Learning", credit:"3(3-0-6)", cat:"AI", desc:"การเรียนรู้แบบมีผู้สอนและไม่มีผู้สอน การถดถอยและการจำแนกประเภท ต้นไม้ตัดสินใจ ซัพพอร์ตเวกเตอร์แมชชีน โครงข่ายประสาทเทียม การประเมินประสิทธิภาพโมเดล การปรับจูนพารามิเตอร์ การใช้ไลบรารีสำหรับการเรียนรู้ของเครื่อง\nSupervised and unsupervised learning; regression and classification; decision trees; support vector machines; neural networks; model performance evaluation; parameter tuning; using machine learning libraries", clo:["อธิบายหลักการทำงานและความแตกต่างของขั้นตอนวิธีการเรียนรู้ของเครื่องแบบต่าง ๆ ได้", "วิเคราะห์ปัญหาและเลือกใช้ขั้นตอนวิธีที่เหมาะสมกับประเภทของข้อมูลและโจทย์ปัญหาได้", "สร้างและฝึกโมเดลการเรียนรู้ของเครื่องโดยใช้ไลบรารีมาตรฐานได้", "ประเมินประสิทธิภาพของโมเดลด้วยตัวชี้วัดที่เหมาะสม และปรับจูนพารามิเตอร์เพื่อเพิ่มประสิทธิภาพได้", "ใช้เทคนิคการเรียนรู้ของเครื่องในการแก้ปัญหาจริงหรือโครงงานวิทยาการข้อมูลได้", "มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ", "มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย"]},
+                        {code:"31-405-013-303", name:"การสื่อสารทางคณิตศาสตร์และการใช้เครื่องมือดิจิทัล", nameEn:"Mathematical Communication and Digital Tools", credit:"2(2-0-4)", cat:"Soft", desc:"หลักการสื่อสารทางคณิตศาสตร์ การเขียนเอกสารทางวิชาการและคณิตศาสตร์ด้วยโปรแกรมเรียงพิมพ์ทางคณิตศาสตร์ การสร้างสมการและสัญลักษณ์ทางคณิตศาสตร์ การสร้างงานนำเสนอด้วยบีมเมอร์ หรือซอฟต์แวร์นำเสนอสมัยใหม่ เทคนิคการเล่าเรื่องด้วยข้อมูล การใช้เครื่องมือดิจิทัลเพื่อสร้างภาพนิทัศน์ข้อมูลทางคณิตศาสตร์ การนำเสนอผลงานวิชาการและโครงงานอย่างมีประสิทธิภาพ จรรยาบรรณในการนำเสนอข้อมูล \nPrinciples of mathematical communication; writing academic and mathematical documents using mathematical typesetting software; creating mathematical equations and symbols; creating presentations using Beamer or modern presentation software; data storytelling techniques; using digital tools for mathematical data visualization; effective presentation of academic works and projects; ethics in data presentation", clo:["อธิบายหลักการสื่อสารทางคณิตศาสตร์และการเขียนเอกสารวิชาการที่ถูกต้องตามมาตรฐานได้", "ใช้งานโปรแกรมเรียงพิมพ์ทางคณิตศาสตร์ในการพิมพ์เอกสาร บทความ และสร้างสมการทางคณิตศาสตร์ที่ซับซ้อนได้อย่างถูกต้องสวยงาม", "ออกแบบและสร้างสื่อนำเสนอโดยใช้บีมเมอร์ หรือเครื่องมือดิจิทัลอื่น ๆ ได้อย่างมืออาชีพและน่าสนใจ", "ประยุกต์ใช้เทคนิคการเล่าเรื่องเพื่ออธิบายข้อมูลหรือผลลัพธ์ทางคณิตศาสตร์ให้เข้าใจง่าย", "ตระหนักถึงจรรยาบรรณทางวิชาการ การอ้างอิง และความถูกต้องของข้อมูลที่นำเสนอ"]},
+                        {code:"31-405-014-301", name:"สัมมนา", nameEn:"Seminar", credit:"1(0-3-1)", cat:"Core", desc:"การเลือกบทความวิจัยที่ทันสมัยทางคณิตศาสตร์ การนำเสนอบทความวิจัย อภิปรายและตอบคำถาม \nThe selection of recent research articles in mathematics, research presentation, discussion, questions and answers", clo:["อธิบายหลักการและทฤษฎีพื้นฐานเกี่ยวกับคณิตศาสตร์ได้", "เลือกใช้วิธีการและเครื่องมือในการนำเสนอข้อมูลงานตามลำดับขั้นตอนด้วยภาษาที่ถูกต้องตรงความหมาย", "เชื่อมโยงความรู้สู่การวิเคราะห์ข้อมูลด้วยหลักการคณิตศาสตร์กับงานวิจัยได้", "สืบค้น ค้นคว้าข้อมูลและอ้างอิงข้อมูลได้ถูกต้องตามหลักวิชาการโดยใช้เทคโนโลยีสารสนเทศ", "รับผิดชอบทำงานที่ได้รับมอบหมายเสร็จตรงเวลา และปฏิบัติงานร่วมกับผู้อื่นได้", "ให้ความช่วยเหลือและรับฟังความคิดเห็นต่อบุคคลและทีม และยอมรับความแตกต่างในสังคม"]},
+                        {code:"31-405-014-302", name:"การเตรียมโครงงาน", nameEn:"Pre-Project", credit:"1(0-2-1)", cat:"Core", desc:"ระเบียบวิธีวิจัย เทคโนโลยีสารสนเทศและปัญญาประดิษฐ์สำหรับโครงงานวิจัย การเขียนโครงงาน การนําเสนอโครงงาน \nResearch methodology; information technology and artificial intelligence for research project; proposal writing; proposal presentation", clo:["อธิบายความรู้พื้นฐาน หลักการ และทฤษฎีทางด้านคณิตศาสตร์ที่เกี่ยวข้องกับหัวข้อวิจัยได้", "ปฏิบัติตามจรรยาบรรณทางวิชาการและวิชาชีพ", "นำความรู้ทางวิทยาศาสตร์และคณิตศาสตร์ไปประยุกต์กับสถานการณ์ต่างๆ ได้ถูกต้องและเหมาะสม", "ผู้รับผิดชอบทำงานที่ได้รับมอบหมายเสร็จตรงเวลาและปฏิบัติงานร่วมกับผู้อื่นได้", "เลือกใช้ภาษาและรูปแบบการสื่อสารได้เหมาะสม และนำเสนอหัวข้อวิจัยทางคณิตศาสตร์", "เลือกใช้เทคโนโลยีสารสนเทศและปัญญาประดิษฐ์สืบค้นงานวิจัยทางคณิตศาสตร์"]},
+                        {code:"xx-xxx-xxx-xxx", name:"วิชาเลือก 1", nameEn:"Elective 1", credit:"3(3-0-6)", cat:"Elec", desc:"-", clo:["-"]}
+                    ]
+                }
+            },
+            4: {
+                sem1: {
+                    title: "Business & Project",
+                    credit: "18",
+                    courses: [
+                        {code:"00-400-090-001", name:"การเป็นผู้ประกอบการและการนำเสนอขายงานสำหรับการสร้างธุรกิจใหม่", nameEn:"Entrepreneurship and Pitching for New Business Creation", credit:"3(2-2-5)", cat:"GenEd", desc:"แนวคิดการเป็นผู้ประกอบการ จรรยาบรรณทางธุรกิจของผู้ประกอบการ การวางแผนธุรกิจ การวางแผนการเงิน การออมเพื่อความมั่นคง การประยุกต์ใช้เทคโนโลยีสารสนเทศและเครื่องมือในการนำเสนอรูปแบบทางธุรกิจใหม่ การเขียนแผนธุรกิจและแผนกลยุทธ์เพื่อการนำเสนอขายงาน เทคนิคการเจรจาต่อรอง การพัฒนาบุคลิกภาพเพื่อการนำเสนอขายงาน \nEntrepreneurial concepts; code of ethics in business for entrepreneurs; business planning; financial planning, saving for stability; application of information technology and tools for pitching new business models; writing a business plan and strategic plan for effective pitching; negotiation techniques; personality development for pitching", clo:["อธิบายแนวคิดการเป็นผู้ประกอบการ และจรรยาบรรณทางธุรกิจของผู้ประกอบการ", "ใช้เทคโนโลยีสารสนเทศและเครื่องมือในการนำเสนอรูปแบบทางธุรกิจใหม่", "เขียนแผนธุรกิจและแผนกลยุทธ์เพื่อการนำเสนอขายงาน", "ใช้เทคนิคการเจรจาเพื่อการต่อรองทางธุรกิจ", "แสดงออกถึงบุคลิกภาพเพื่อการนำเสนอขายงานสำหรับการสร้างธุรกิจใหม่", "มีความรับผิดชอบ ทำงานเป็นทีม"]},
+                        {code:"31-405-014-403", name:"โครงงาน", nameEn:"Project", credit:"2(0-6-2)", cat:"Core", desc:"การดำเนินงานโครงงาน การเก็บรวบรวมและวิเคราะห์ข้อมูล การสรุปจัดทำรายงาน การนำเสนอผลงานโครงงาน \nProject implementation, data collection and analysis, report writing, project presentation", clo:["ใช้ความรู้พื้นฐาน หลักการ และทฤษฎีทางคณิตศาสตร์สำหรับการอธิบายหัวข้อวิจัยในศาสตร์ทางคณิตศาสตร์และศาสตร์อื่นที่เกี่ยวข้องได้", "วางแผน และปฏิบัติงานตามกระบวนการทางวิทยาศาสตร์และเลือกใช้ทฤษฎีทางคณิตศาสตร์ได้ถูกต้อง", "ทำงานร่วมกับผู้อื่นในบทบาทผู้นำและสมาชิกที่ดี สามารถปรับตัวเข้ากับสถานการณ์ต่าง ๆ ได้", "ทำงานที่ได้รับมอบหมายให้เสร็จตรงเวลา มีความซื่อสัตย์ มีระเบียบวินัย", "ปฏิบัติตามจรรยาบรรณทางวิชาการและเทคโนโลยี", "ใช้เทคโนโลยีสารสนเทศสืบค้น ค้นคว้าข้อมูลและนำเสนองานได้"]},
+                        {code:"31-405-015-401", name:"การเตรียมความพร้อมการฝึกประสบการณ์วิชาชีพ", nameEn:"Preparation for Professional Experience", credit:"1(1-0-2)", cat:"Core", desc:"หลักการและแนวคิดของการฝึกประสบการณ์วิชาชีพ การสมัครงานและการสัมภาษณ์งาน การพัฒนาบุคลิกภาพในการทำงาน การปรับตัวในองค์กร การทำงานเป็นทีม จรรยาบรรณวิชาชีพ กฎหมายแรงงาน การประกันสังคม ระบบมาตรฐานการประกันคุณภาพและความปลอดภัยในการทำงาน การสื่อสารในองค์กร การเลือกหัวข้อปัญหา การวางแผน การวิเคราะห์และการแก้ปัญหา การเขียนรายงานและการนำเสนอ \nTypes and processes of professional experience; job application and job interview; personality development, work adjustment; teamwork; professional ethics; labour law; social security; quality assurance standard system and occupational safety, communication in the workplace, choosing a topic; planning; analysis and problem-solving; writing a report and a presentation", clo:["อธิบายหลักการและแนวคิดของการฝึกประสบการณ์วิชาชีพ", "อธิบายขั้นตอนการสมัครงาน การสัมภาษณ์งาน การพัฒนาบุคลิกภาพในการทำงาน", "อธิบายหลักการในการทำงานเป็นทีมได้ ปรับตัวในองค์กร สื่อสารในองค์กรได้", "อธิบายจรรยาบรรณวิชาชีพ กฎหมายแรงงาน การประกันสังคม ระบบมาตรฐานการประกันคุณภาพและความปลอดภัยในการทำงาน", "อธิบายหลักการเลือกหัวข้อปัญหา วางแผนการวิเคราะห์และการแก้ปัญหารวมถึงการเขียนรายงานและการนำเสนอ"]},
+                        {code:"xx-xxx-xxx-xxx", name:"วิชาเลือก 2", nameEn:"Elective 2", credit:"3(3-0-6)", cat:"Elec", desc:"-", clo:["-"]},
+                        {code:"xx-xxx-xxx-xxx", name:"วิชาเลือก 3", nameEn:"Elective 3", credit:"3(3-0-6)", cat:"Elec", desc:"-", clo:["-"]},
+                        {code:"xx-xxx-xxx-xxx", name:"วิชาเลือก 4", nameEn:"Elective 4", credit:"3(3-0-6)", cat:"Elec", desc:"-", clo:["-"]},
+                        {code:"xx-xxx-xxx-xxx", name:"วิชาเลือกเสรี 2", nameEn:"Free Elective 2", credit:"3(x-x-x)", cat:"Free", desc:"-", clo:["-"]}
+                    ]
+                },
+                sem2: {
+                    title: "Professional Experience",
+                    credit: "6",
+                    courses: [
+                        {code:"xx-xxx-xxx-xxx", name:"สหกิจศึกษา / ฝึกงาน", nameEn:"Cooperative Education", credit:"6(0-40-0)", cat:"Core", desc:"-", clo:["-"]}
+                    ]
+                }
+            }
+        };
+
+        // --- Functions ---
+        let currentYear = 1;
+
+        function init() {
+            renderCharts();
+            selectYear(1);
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function selectYear(year) {
+            // Update Buttons
+            document.querySelectorAll('[id^="btn-y"]').forEach(btn => {
+                btn.className = "px-4 py-2 rounded-md text-sm font-medium transition-all text-gray-600 hover:bg-gray-100";
+            });
+            document.getElementById(`btn-y${year}`).className = "px-4 py-2 rounded-md text-sm font-medium transition-all bg-teal-700 text-white shadow-md";
+
+            const data = curriculumData[year];
+            
+            // Render Lists
+            document.getElementById('sem1-credit').innerText = data.sem1.credit + " นก.";
+            document.getElementById('sem2-credit').innerText = data.sem2.credit + " นก.";
+            
+            renderList('sem1-list', data.sem1.courses);
+            renderList('sem2-list', data.sem2.courses);
+        }
+
+        function renderList(containerId, courses) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            courses.forEach(c => {
+                const div = document.createElement('div');
+                
+                // Color coding
+                let borderColor = "border-gray-300";
+                if(c.cat === 'Math') borderColor = "border-teal-500";
+                if(c.cat === 'AI') borderColor = "border-purple-500";
+                if(c.cat === 'Com') borderColor = "border-indigo-500";
+                if(c.cat === 'GenEd') borderColor = "border-orange-500";
+                if(c.cat === 'Stat') borderColor = "border-blue-500";
+
+                div.className = `p-3 rounded-lg bg-white border-l-4 ${borderColor} shadow-sm hover:shadow-md cursor-pointer transition-all mb-2 course-card`;
+                div.onclick = () => showDetails(c);
+                
+                div.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-sm text-gray-800 line-clamp-1">${c.name}</h4>
+                            <p class="text-xs text-gray-500 line-clamp-1">${c.nameEn}</p>
+                        </div>
+                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded ml-2 whitespace-nowrap bg-gray-100 text-gray-600">${c.credit}</span>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function showDetails(c) {
+            document.getElementById('detail-code').innerText = c.code;
+            document.getElementById('detail-name').innerText = c.name;
+            document.getElementById('detail-name-en').innerText = c.nameEn;
+            document.getElementById('detail-credit').innerText = c.credit;
+            document.getElementById('detail-cat').innerText = c.cat || "Course";
+            document.getElementById('detail-desc').innerText = c.desc || "-";
+            
+            const cloList = document.getElementById('detail-clo');
+            cloList.innerHTML = '';
+            if(c.clo && c.clo.length > 0) {
+                c.clo.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerText = item;
+                    cloList.appendChild(li);
+                });
+            } else {
+                cloList.innerHTML = '<li class="italic text-gray-400">No specific outcomes data.</li>';
+            }
+        }
+
+        function renderCharts() {
+            const ctxComp = document.getElementById('competencyChart').getContext('2d');
+            new Chart(ctxComp, {
+                type: 'radar',
+                data: {
+                    labels: ['Applied Math', 'Data Science', 'AI & Programming', 'Business/Entrep.', 'Soft Skills'],
+                    datasets: [{
+                        label: 'ระดับความสามารถ (Competency Level)',
+                        data: [90, 85, 80, 75, 75],
+                        backgroundColor: 'rgba(13, 148, 136, 0.2)',
+                        borderColor: '#0f766e',
+                        pointBackgroundColor: '#115e59',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e5e7eb' },
+                            grid: { color: '#e5e7eb' },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: { display: false, stepSize: 20 },
+                            pointLabels: {
+                                font: { size: 12, family: 'Sarabun' },
+                                color: '#374151'
+                            }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
