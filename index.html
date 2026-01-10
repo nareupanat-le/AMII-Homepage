@@ -57,6 +57,12 @@
             background-color: #e0e7ff; /* indigo-100 */
             border: 2px dashed #4f46e5;
         }
+        
+        /* Style when dragging over another item (Insert indicator) */
+        .card-drag.drag-over-item {
+            border-top: 3px solid #4f46e5;
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
@@ -66,7 +72,7 @@
     <script type="text/babel">
         const { useState, useMemo, useEffect } = React;
 
-        // --- Configuration: หมวดวิชา (ปรับปรุงใหม่) ---
+        // --- Configuration: หมวดวิชา ---
         const CATEGORIES = {
             'GenEd': { 
                 label: '1. หมวดวิชาศึกษาทั่วไป', 
@@ -100,7 +106,7 @@
             }
         };
 
-        // --- Mock Data: รายวิชา (ปรับปรุง Category ให้ตรงกับ Key ใหม่) ---
+        // --- Mock Data: รายวิชาตามที่คุณกำหนด ---
         const INITIAL_COURSES = [
             // หมวดศึกษาทั่วไป (GenEd)
             { id: 'gen001', code: '00-400-060-006', name: 'กุญแจสู่ความสำเร็จ', credits: 1, category: 'GenEd' },
@@ -113,7 +119,7 @@
             { id: 'gen008', code: '00-400-100-008', name: 'รากเหง้า มทร. อีสาน', credits: 2, category: 'GenEd' },
             { id: 'gen009', code: '00-400-100-009', name: 'ชุมชนนวัตกรรมสร้างสรรค์', credits: 3, category: 'GenEd' },
             
-            // 2.1 กลุ่มวิชาพื้นฐานวิชาชีพ (CoreFund) - เช่น แคลคูลัส, ฟิสิกส์, พื้นฐานคอม
+            // 2.1 กลุ่มวิชาพื้นฐานวิชาชีพ (CoreFund)
             { id: 'cf001', code: '02-005-011-102', name: 'แคลคูลัส 1', credits: 3, category: 'CoreFund' },
             { id: 'cf002', code: '02-005-011-103', name: 'แคลคูลัส 2', credits: 3, category: 'CoreFund' },
             { id: 'cf003', code: '02-005-033-105', name: 'ฟิสิกส์พื้นฐาน', credits: 3, category: 'CoreFund' },
@@ -122,7 +128,7 @@
             { id: 'cf006', code: '02-005-055-205', name: 'สถิติ 2', credits: 3, category: 'CoreFund' },
             { id: 'cf007', code: '02-005-055-306', name: 'การออกแบบการทดลอง', credits: 3, category: 'CoreFund' },
 
-            // 2.2 กลุ่มวิชาบังคับ (CoreComp) - วิชาเอกที่ต้องเรียน
+            // 2.2 กลุ่มวิชาบังคับ (CoreComp)
             { id: 'cc001', code: 'xx-xxx-xxx-xxx', name: 'หลักการคณิคศาสตร์ (Principles of Mathematics)', credits: 3, category: 'CoreComp' },
             { id: 'cc002', code: 'xx-xxx-xxx-xxx', name: 'วิยุตคณิต (Discrete Mathematics)', credits: 3, category: 'CoreComp' },
             { id: 'cc003', code: 'xx-xxx-xxx-xxx', name: 'สมการเชิงอนุพันธ์เบื้องต้น (Elementary Differential Equations)', credits: 3, category: 'CoreComp' },
@@ -145,7 +151,7 @@
             { id: 'cc020', code: '31-405-014-302', name: 'การเตรียมโครงงาน', credits: 1, category: 'CoreComp' },
             { id: 'cc021', code: '31-405-014-402', name: 'โครงงาน', credits: 2, category: 'CoreComp' },
 
-            // 2.3 กลุ่มวิชาเลือก (CoreElec) - เลือกในสาขา
+            // 2.3 กลุ่มวิชาเลือก (CoreElec)
             { id: 'ce001', code: 'CS401', name: 'ปัญญาประดิษฐ์ (AI)', credits: 3, category: 'CoreElec' },
             { id: 'ce002', code: 'CS402', name: 'การพัฒนาเว็บขั้นสูง', credits: 3, category: 'CoreElec' },
             { id: 'ce003', code: 'CS403', name: 'ความมั่นคงไซเบอร์', credits: 3, category: 'CoreElec' },
@@ -163,7 +169,6 @@
         const YEARS = 4;
         const SEMESTERS = 2;
 
-        // Helper function to initialize plan structure immediately
         const getInitialPlan = () => {
             const plan = {};
             for (let y = 1; y <= YEARS; y++) {
@@ -175,49 +180,51 @@
         };
 
         const App = () => {
-            // State: Initialize plan immediately
             const [plan, setPlan] = useState(getInitialPlan);
-            
-            // State: เก็บวิชาที่ยังไม่ได้ถูกเลือก (อยู่ในคลัง)
             const [availableCourses, setAvailableCourses] = useState(INITIAL_COURSES);
             
-            // State: สำหรับ Dragging
+            // เพิ่ม index เข้าไปใน State เพื่อรู้ตำแหน่งของวิชา
             const [draggedItem, setDraggedItem] = useState(null);
 
-            // Handle Drag Start
-            const handleDragStart = (e, course, source) => {
-                setDraggedItem({ course, source });
+            // Updated: รับ index เข้ามาด้วย
+            const handleDragStart = (e, course, source, index) => {
+                const item = { course, source, index };
+                setDraggedItem(item);
                 e.dataTransfer.effectAllowed = "move";
-                e.dataTransfer.setData("application/json", JSON.stringify({ course, source }));
+                e.dataTransfer.setData("application/json", JSON.stringify(item));
             };
 
-            // Handle Drop ลงใน Semester
-            const handleDropToSemester = (e, year, semester) => {
+            // Case 1: Drop บนพื้นที่ว่างของเทอม (ต่อท้าย)
+            const handleDropToSemesterContainer = (e, year, semester) => {
                 e.preventDefault();
-                const targetKey = `${year}-${semester}`;
                 e.currentTarget.classList.remove('drag-over');
 
-                // Robust data retrieval
                 let item = draggedItem;
                 if (!item) {
                     try {
                         const data = e.dataTransfer.getData("application/json");
                         if (data) item = JSON.parse(data);
-                    } catch (err) {
-                        console.error("Drop Error:", err);
-                    }
+                    } catch (err) {}
                 }
 
                 if (!item) return;
 
-                const { course, source } = item;
+                const { course, source, index: sourceIndex } = item;
+                const targetKey = `${year}-${semester}`;
 
+                // ถ้าลากจากเทอมเดิม มาวางที่ว่าง -> คือการย้ายไปท้ายสุด
                 if (source === targetKey) {
+                    setPlan(prev => {
+                        const list = [...prev[targetKey]];
+                        list.splice(sourceIndex, 1); // เอาออก
+                        list.push(course); // ต่อท้าย
+                        return { ...prev, [targetKey]: list };
+                    });
                     setDraggedItem(null);
                     return;
                 }
 
-                // Remove from source
+                // ถ้าลากมาจากที่อื่น (Sidebar หรือเทอมอื่น) -> ต่อท้าย
                 if (source === 'sidebar') {
                     setAvailableCourses(prev => prev.filter(c => c.id !== course.id));
                 } else {
@@ -227,12 +234,90 @@
                     }));
                 }
 
-                // Add to target
                 setPlan(prev => ({
                     ...prev,
                     [targetKey]: [...(prev[targetKey] || []), course]
                 }));
 
+                setDraggedItem(null);
+            };
+
+            // Case 2: Drop บนรายวิชา (แทรก/เรียงลำดับ)
+            const handleDropToItem = (e, targetYear, targetSemester, targetIndex) => {
+                e.preventDefault();
+                e.stopPropagation(); // สำคัญ! หยุดไม่ให้ Event ทะลุไปหา Container
+                e.currentTarget.classList.remove('drag-over-item'); // ลบเส้นบอกตำแหน่ง
+
+                let item = draggedItem;
+                if (!item) {
+                    try {
+                        const data = e.dataTransfer.getData("application/json");
+                        if (data) item = JSON.parse(data);
+                    } catch (err) {}
+                }
+
+                if (!item) return;
+
+                const { course, source, index: sourceIndex } = item;
+                const targetKey = `${targetYear}-${targetSemester}`;
+
+                // Logic การจัดการ Array
+                if (source === targetKey) {
+                    // 2.1 ย้ายภายในเทอมเดียวกัน (Reorder)
+                    if (sourceIndex === targetIndex) return; // วางที่เดิม
+
+                    setPlan(prev => {
+                        const list = [...prev[targetKey]];
+                        // ลบตัวเดิมออก
+                        const [removed] = list.splice(sourceIndex, 1);
+                        
+                        // คำนวณ Index ใหม่ (ถ้าลากจากบนลงล่าง Index ปลายทางจะเปลี่ยนเพราะ Array หดลง)
+                        let finalIndex = targetIndex;
+                        if (sourceIndex < targetIndex) {
+                            finalIndex -= 1; // ชดเชย index ที่หายไป
+                        }
+                        
+                        // แทรกหน้าตัวที่ Drop ใส่ (Insert Before)
+                        // แต่ถ้าลากลงล่าง การแทรกหน้า target เดิม จริงๆ คือการสลับไปหลัง
+                        // เพื่อความง่าย: ใช้ logic แทรกหน้าเสมอ
+                        list.splice(targetIndex > sourceIndex ? targetIndex - 1 : targetIndex, 0, removed);
+                        
+                        // *Logic นี้ซับซ้อนเล็กน้อย เพื่อ UX ที่ดีที่สุด:
+                        // ถ้าย้าย A(0) ไปใส่ C(2) -> [B, C, D] -> อยากได้ [B, A, C] หรือ [B, C, A]?
+                        // ปกติ Drop on item = Insert Before item นั้น
+                        
+                        // Reset แบบ Simple:
+                        // 1. Clone
+                        // 2. Remove Source
+                        // 3. Insert at Target (Adjusted)
+                        
+                        const simpleList = [...prev[targetKey]];
+                        simpleList.splice(sourceIndex, 1);
+                        // ถ้า index เป้าหมายมากกว่า index เดิม ต้องลบ 1 เพราะ index เดิมหายไปแล้ว
+                        const insertAt = (targetIndex > sourceIndex) ? targetIndex - 1 : targetIndex;
+                        simpleList.splice(insertAt, 0, removed);
+                        
+                        return { ...prev, [targetKey]: simpleList };
+                    });
+
+                } else {
+                    // 2.2 ย้ายข้ามเทอม หรือมาจาก Sidebar มาแทรก
+                    if (source === 'sidebar') {
+                        setAvailableCourses(prev => prev.filter(c => c.id !== course.id));
+                    } else {
+                        setPlan(prev => ({
+                            ...prev,
+                            [source]: (prev[source] || []).filter(c => c.id !== course.id)
+                        }));
+                    }
+
+                    // แทรกที่ตำแหน่ง Target Index
+                    setPlan(prev => {
+                        const list = [...(prev[targetKey] || [])];
+                        list.splice(targetIndex, 0, course);
+                        return { ...prev, [targetKey]: list };
+                    });
+                }
                 setDraggedItem(null);
             };
 
@@ -267,9 +352,19 @@
                 e.preventDefault();
                 e.currentTarget.classList.add('drag-over');
             };
+            
+            const handleDragOverItem = (e) => {
+                e.preventDefault();
+                e.stopPropagation(); // ไม่ให้ Container ติด highlight
+                e.currentTarget.classList.add('drag-over-item'); // highlight เฉพาะ Item
+            };
 
              const handleDragLeave = (e) => {
                 e.currentTarget.classList.remove('drag-over');
+            };
+            
+            const handleDragLeaveItem = (e) => {
+                e.currentTarget.classList.remove('drag-over-item');
             };
 
             const removeCourse = (course, sourceKey) => {
@@ -330,11 +425,11 @@
                                         {CATEGORIES[catKey].label}
                                     </h3>
                                     <div className="space-y-2">
-                                        {coursesInCat.map(course => (
+                                        {coursesInCat.map((course, idx) => (
                                             <div
                                                 key={course.id}
                                                 draggable
-                                                onDragStart={(e) => handleDragStart(e, course, 'sidebar')}
+                                                onDragStart={(e) => handleDragStart(e, course, 'sidebar', idx)}
                                                 className={`card-drag p-3 rounded-lg border shadow-sm flex justify-between items-start bg-white hover:shadow-md select-none ${CATEGORIES[course.category].border}`}
                                             >
                                                 <div>
@@ -360,7 +455,7 @@
                         <header className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <div>
                                 <h1 className="text-3xl font-bold text-gray-900">แผนการเรียน 4 ปี</h1>
-                                <p className="text-gray-500 text-sm mt-1">ลากรายวิชาจากด้านซ้ายลงในภาคการศึกษาที่ต้องการ</p>
+                                <p className="text-gray-500 text-sm mt-1">ลากรายวิชาจากด้านซ้ายลงในภาคการศึกษาที่ต้องการ (สามารถลากแทรกเพื่อเรียงลำดับได้)</p>
                             </div>
                             <div className="bg-indigo-600 text-white px-6 py-3 rounded-xl shadow-lg flex flex-col items-center">
                                 <span className="text-xs opacity-80">หน่วยกิตรวมสะสม</span>
@@ -383,7 +478,7 @@
                                                 className={`droppable-area bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col h-full min-h-[300px] ${isOverloaded ? 'ring-2 ring-red-300' : ''}`}
                                                 onDragOver={handleDragOver}
                                                 onDragLeave={handleDragLeave}
-                                                onDrop={(e) => handleDropToSemester(e, year, semester)}
+                                                onDrop={(e) => handleDropToSemesterContainer(e, year, semester)}
                                             >
                                                 {/* Header ของแต่ละเทอม */}
                                                 <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-xl">
@@ -408,7 +503,10 @@
                                                             <div
                                                                 key={`${course.id}-${index}`}
                                                                 draggable
-                                                                onDragStart={(e) => handleDragStart(e, course, key)}
+                                                                onDragStart={(e) => handleDragStart(e, course, key, index)}
+                                                                onDrop={(e) => handleDropToItem(e, year, semester, index)}
+                                                                onDragOver={handleDragOverItem}
+                                                                onDragLeave={handleDragLeaveItem}
                                                                 className={`card-drag group relative p-3 rounded-lg border-l-4 shadow-sm bg-white hover:shadow hover:scale-[1.02] ${CATEGORIES[course.category] ? CATEGORIES[course.category].border.replace('border', 'border-l') : 'border-gray-200'}`}
                                                             >
                                                                 <div className="flex justify-between items-start">
