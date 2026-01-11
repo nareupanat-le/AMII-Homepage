@@ -81,32 +81,38 @@
             'GenEd': { 
                 label: '1. หมวดวิชาศึกษาทั่วไป', 
                 color: 'bg-green-100 text-green-800', 
-                border: 'border-green-200' 
+                border: 'border-green-200',
+                shortLabel: 'ศึกษาทั่วไป'
             },
             'CoreFund': { 
                 label: '2.1 กลุ่มวิชาพื้นฐานวิชาชีพ', 
                 color: 'bg-blue-100 text-blue-800', 
-                border: 'border-blue-200' 
+                border: 'border-blue-200',
+                shortLabel: 'พื้นฐานวิชาชีพ'
             },
             'CoreComp': { 
                 label: '2.2 กลุ่มวิชาบังคับ', 
                 color: 'bg-indigo-100 text-indigo-800', 
-                border: 'border-indigo-200' 
+                border: 'border-indigo-200',
+                shortLabel: 'วิชาบังคับ'
             },
             'CoreElec': { 
                 label: '2.3 กลุ่มวิชาเลือก (เฉพาะ)', 
                 color: 'bg-sky-100 text-sky-800', 
-                border: 'border-sky-200' 
+                border: 'border-sky-200',
+                shortLabel: 'วิชาเลือกเฉพาะ'
             },
             'CoreExp': { 
                 label: '2.4 กลุ่มวิชาการฝึกประสบการณ์ฯ', 
                 color: 'bg-purple-100 text-purple-800', 
-                border: 'border-purple-200' 
+                border: 'border-purple-200',
+                shortLabel: 'ฝึกประสบการณ์ฯ'
             },
             'FreeElec': { 
                 label: '3. หมวดวิชาเลือกเสรี', 
                 color: 'bg-orange-100 text-orange-800', 
-                border: 'border-orange-200' 
+                border: 'border-orange-200',
+                shortLabel: 'เลือกเสรี'
             }
         };
 
@@ -200,6 +206,27 @@
             const [availableCourses, setAvailableCourses] = useState(INITIAL_COURSES);
             const [draggedItem, setDraggedItem] = useState(null);
             const [isExporting, setIsExporting] = useState(false);
+
+            // คำนวณยอดรวมรายหมวด
+            const categoryTotals = useMemo(() => {
+                const totals = {
+                    'GenEd': 0,
+                    'CoreFund': 0,
+                    'CoreComp': 0,
+                    'CoreElec': 0,
+                    'CoreExp': 0,
+                    'FreeElec': 0
+                };
+                
+                // วนลูปทุกวิชาที่มีอยู่ใน Plan
+                Object.values(plan).flat().forEach(course => {
+                    if (totals[course.category] !== undefined) {
+                        totals[course.category] += course.credits;
+                    }
+                });
+                
+                return totals;
+            }, [plan]);
 
             const handleDragStart = (e, course, source, index) => {
                 const item = { course, source, index };
@@ -367,7 +394,7 @@
                  return total;
             }, [plan]);
 
-            // --- Export Functions (Improved Scaling) ---
+            // --- Export Functions ---
             const exportToPNG = async () => {
                 const element = document.getElementById('planner-grid-area');
                 if (!element) return;
@@ -397,7 +424,6 @@
 
                 setIsExporting(true);
                 try {
-                    // Capture high quality canvas
                     const canvas = await html2canvas(element, {
                         backgroundColor: '#ffffff',
                         scale: 3,
@@ -405,41 +431,31 @@
                     });
                     const imgData = canvas.toDataURL('image/png');
                     
-                    // Init PDF (A4 Landscape)
                     const pdf = new jspdf.jsPDF({
                         orientation: 'landscape',
                         unit: 'mm',
                         format: 'a4'
                     });
 
-                    // Page Dimensions (A4 Landscape: 297mm x 210mm)
                     const pageWidth = pdf.internal.pageSize.getWidth();
                     const pageHeight = pdf.internal.pageSize.getHeight();
-                    
-                    // Margins
                     const margin = 10;
                     const maxWidth = pageWidth - (margin * 2);
                     const maxHeight = pageHeight - (margin * 2);
 
-                    // Image Dimensions
                     const imgProps = pdf.getImageProperties(imgData);
                     const imgRatio = imgProps.width / imgProps.height;
                     const pageRatio = maxWidth / maxHeight;
 
                     let finalWidth, finalHeight;
-
-                    // Logic: Fit Entire Image into Page
                     if (imgRatio > pageRatio) {
-                        // Image is wider than page area -> Fit to Width
                         finalWidth = maxWidth;
                         finalHeight = maxWidth / imgRatio;
                     } else {
-                        // Image is taller than page area -> Fit to Height
                         finalHeight = maxHeight;
                         finalWidth = maxHeight * imgRatio;
                     }
 
-                    // Centering
                     const x = (pageWidth - finalWidth) / 2;
                     const y = (pageHeight - finalHeight) / 2;
                     
@@ -556,6 +572,30 @@
 
                         {/* ID for Capture */}
                         <div id="planner-grid-area" className="p-4 bg-white rounded-2xl shadow-sm border border-gray-200">
+                            
+                            {/* --- New Category Summary Dashboard --- */}
+                            <div className="mb-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+                                {Object.keys(CATEGORIES).map(catKey => {
+                                    const config = CATEGORIES[catKey];
+                                    const total = categoryTotals[catKey] || 0;
+                                    // Extract color names for light background
+                                    const borderColorClass = config.border;
+                                    const bgClass = config.color.split(' ')[0].replace('100', '50');
+                                    const textClass = config.color.split(' ')[1];
+
+                                    return (
+                                        <div key={catKey} className={`p-3 rounded-lg border ${borderColorClass} ${bgClass} flex flex-col items-center justify-center text-center shadow-sm`}>
+                                            <span className={`text-[10px] font-bold uppercase tracking-wider opacity-70 mb-1 ${textClass}`}>
+                                                {config.shortLabel}
+                                            </span>
+                                            <span className={`text-xl font-bold ${textClass}`}>
+                                                {total} <span className="text-[10px] font-normal opacity-70">นก.</span>
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
                             <div className="mb-4 text-center block xl:hidden">
                                 <h2 className="text-2xl font-bold text-indigo-800">แผนการเรียน 4 ปี</h2>
                                 <p className="text-sm text-gray-500">หน่วยกิตรวม: {calculateTotalAll}</p>
