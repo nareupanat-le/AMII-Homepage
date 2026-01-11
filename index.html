@@ -394,7 +394,7 @@
                  return total;
             }, [plan]);
 
-            // --- Export Functions ---
+            // --- Export Functions (Improved Scaling) ---
             const exportToPNG = async () => {
                 const element = document.getElementById('planner-grid-area');
                 if (!element) return;
@@ -424,6 +424,7 @@
 
                 setIsExporting(true);
                 try {
+                    // Capture high quality canvas
                     const canvas = await html2canvas(element, {
                         backgroundColor: '#ffffff',
                         scale: 3,
@@ -431,31 +432,41 @@
                     });
                     const imgData = canvas.toDataURL('image/png');
                     
+                    // Init PDF (A4 Landscape)
                     const pdf = new jspdf.jsPDF({
                         orientation: 'landscape',
                         unit: 'mm',
                         format: 'a4'
                     });
 
+                    // Page Dimensions (A4 Landscape: 297mm x 210mm)
                     const pageWidth = pdf.internal.pageSize.getWidth();
                     const pageHeight = pdf.internal.pageSize.getHeight();
+                    
+                    // Margins
                     const margin = 10;
                     const maxWidth = pageWidth - (margin * 2);
                     const maxHeight = pageHeight - (margin * 2);
 
+                    // Image Dimensions
                     const imgProps = pdf.getImageProperties(imgData);
                     const imgRatio = imgProps.width / imgProps.height;
                     const pageRatio = maxWidth / maxHeight;
 
                     let finalWidth, finalHeight;
+
+                    // Logic: Fit Entire Image into Page
                     if (imgRatio > pageRatio) {
+                        // Image is wider than page area -> Fit to Width
                         finalWidth = maxWidth;
                         finalHeight = maxWidth / imgRatio;
                     } else {
+                        // Image is taller than page area -> Fit to Height
                         finalHeight = maxHeight;
                         finalWidth = maxHeight * imgRatio;
                     }
 
+                    // Centering
                     const x = (pageWidth - finalWidth) / 2;
                     const y = (pageHeight - finalHeight) / 2;
                     
@@ -563,6 +574,7 @@
                                     </button>
                                 </div>
 
+                                {/* Main Total - Sticky in Header */}
                                 <div className="bg-indigo-600 text-white px-6 py-2 rounded-xl shadow-lg flex flex-col items-center min-w-[120px]">
                                     <span className="text-[10px] opacity-80 uppercase tracking-wider">หน่วยกิตรวม</span>
                                     <span className="text-2xl font-bold">{calculateTotalAll}</span>
@@ -571,14 +583,25 @@
                         </header>
 
                         {/* ID for Capture */}
-                        <div id="planner-grid-area" className="p-4 bg-white rounded-2xl shadow-sm border border-gray-200">
+                        <div id="planner-grid-area" className="p-6 bg-white rounded-2xl shadow-sm border border-gray-200">
                             
-                            {/* --- New Category Summary Dashboard --- */}
+                            {/* --- Export Header (New) --- */}
+                            <div className="flex justify-between items-end mb-6 pb-4 border-b border-gray-100">
+                                <div>
+                                    <h2 className="text-2xl font-bold text-gray-800">แผนการเรียน 4 ปี</h2>
+                                    <p className="text-sm text-gray-500">Interactive Study Plan</p>
+                                </div>
+                                <div className="text-right">
+                                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">หน่วยกิตรวมสะสม</span>
+                                    <div className="text-3xl font-bold text-indigo-600">{calculateTotalAll}</div>
+                                </div>
+                            </div>
+
+                            {/* --- Category Summary Dashboard --- */}
                             <div className="mb-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
                                 {Object.keys(CATEGORIES).map(catKey => {
                                     const config = CATEGORIES[catKey];
                                     const total = categoryTotals[catKey] || 0;
-                                    // Extract color names for light background
                                     const borderColorClass = config.border;
                                     const bgClass = config.color.split(' ')[0].replace('100', '50');
                                     const textClass = config.color.split(' ')[1];
@@ -594,11 +617,6 @@
                                         </div>
                                     );
                                 })}
-                            </div>
-
-                            <div className="mb-4 text-center block xl:hidden">
-                                <h2 className="text-2xl font-bold text-indigo-800">แผนการเรียน 4 ปี</h2>
-                                <p className="text-sm text-gray-500">หน่วยกิตรวม: {calculateTotalAll}</p>
                             </div>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
