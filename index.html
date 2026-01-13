@@ -81,6 +81,17 @@
         .modal-content {
             animation: slideUp 0.3s ease-out;
         }
+        .clo-item {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        .clo-item::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4f46e5;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -130,82 +141,120 @@
             }
         };
 
-        // --- Mock Data ---
-        // (เพิ่ม description เข้าไปในตัวอย่าง เพื่อให้เห็นภาพ)
+        // --- Mock Data: รายวิชา (Updated with sample CLOs) ---
+        // หมายเหตุ: เพื่อความกระชับ ผมใส่ CLOs ตัวอย่างให้บางวิชา ท่านสามารถแก้ไขเพิ่มได้ตามต้องการ
         const INITIAL_COURSES = [
             // หมวดศึกษาทั่วไป (GenEd)
-            { id: 'gen001', code: '00-400-060-006', name: 'กุญแจสู่ความสำเร็จ', credits: 1, category: 'GenEd', description: 'ทฤษฎีความสำเร็จในด้านการทำงาน การทำธุรกิจและการดำเนินชีวิต การประยุกต์ใช้การแก้ปัญหาจากแนวปฏิบัติที่ดี เครื่องมือ กลยุทธ์และกุญแจสู่ความสำเร็จทางธุรกิจ การวัดความสำเร็จของการประกอบธุรกิจและเรียนรู้ปรากฎการณ์ความล้มเหลว การวิเคราะห์สาเหตุหรือปัญหา วิธีป้องกันในกรณีศึกษาต่าง ๆ การใช้ชีวิตหรือการประกอบการธุรกิจ' },
-            { id: 'gen002', code: '00-400-070-008', name: 'ภาษาไทยในยุคดิจิทัล', credits: 3, category: 'GenEd', description: 'การใช้ภาษาไทยในสื่อโซเซียล การรู้เท่าทันสื่อ จรรยาบรรณการใช้ภาษาไทยในสื่อดิจิทัล ความคิดสร้างสรรค์ในการใช้ภาษา การสร้างแนวทางเพื่อการต่อยอดการใช้ภาษาในการสื่อสารผ่านสื่อดิจิทัลสำหรับอนาคต' },
-            { id: 'gen003', code: '00-400-070-004', name: 'ภาษาอังกฤษพื้นฐาน', credits: 3, category: 'GenEd', description: 'คำศัพท์ สำนวนและประโยคภาษาอังกฤษพื้นฐานเพื่อการสื่อสารในระดับเริ่มต้น ในสถานการณ์ต่างๆ การทักทาย การแนะนำ การถามและตอบคำถามเกี่ยวกับข้อมูลส่วนบุคคล สถานที่อยู่อาศัย คนที่รู้จักและสิ่งของ การฝึกปฏิบัติการใช้ทักษะภาษาอังกฤษในการฟัง พูด อ่าน และเขียน เพื่อการสื่อสารในระดับเริ่มต้น การใช้ภาษาอังกฤษพื้นฐานในการมีปฏิสัมพันธ์กับผู้อื่นด้วยวิธีการและภาษาที่ง่าย ถูกต้อง เหมาะสมและไม่ซับซ้อน' },
-            { id: 'gen004', code: '00-400-070-005', name: 'ภาษาอังกฤษ 1', credits: 3, category: 'GenEd', description: 'คำศัพท์ สำนวนและประโยคภาษาอังกฤษเพื่อการสื่อสารในระดับต้น ในสถานการณ์ต่าง ๆ ที่ใช้บ่อยในชีวิตประจำวัน การแลกเปลี่ยนข้อมูลอย่างง่ายในหัวข้อที่คุ้นเคย ข้อมูลส่วนตัว ครอบครัว การซื้อของ ภูมิศาสตร์ท้องถิ่น การจ้างงาน เรื่องที่เกี่ยวกับความต้องการเร่งด่วน การฝึกปฏิบัติการใช้ทักษะภาษาอังกฤษในการฟัง พูด อ่าน และเขียน ในบริบทที่คุ้นเคยและทำเป็นประจำ การมีปฏิสัมพันธ์กับผู้อื่นด้วยวิธีการและภาษาที่ง่าย ถูกต้อง เหมาะสมและไม่ซับซ้อน' },
-            { id: 'gen005', code: '00-400-070-006', name: 'ภาษาอังกฤษ 2', credits: 3, category: 'GenEd', description: 'คำศัพท์ สำนวนและประโยคภาษาอังกฤษเพื่อการสื่อสารในระดับกลางในสถานการณ์ต่าง ๆ ที่คุ้นเคยและตนเองสนใจในชีวิตประจำวัน เรื่องที่คุ้นเคยเกี่ยวกับการทำงาน โรงเรียน การใช้เวลาว่าง การเข้าใจประเด็นหลักจากภาษามาตรฐานที่ชัดเจนการบรรยายประสบการณ์ เหตุการณ์ ความฝัน ความหวัง และความใฝ่ฝัน การให้เหตุผลสั้น ๆ การอธิบายความคิดเห็นและแผนการ การใช้ภาษาอังกฤษเพื่อการสื่อสารในระดับกลางและมีปฏิสัมพันธ์กับผู้อื่นในการรับมือกับสถานการณ์ต่าง ๆ ที่มักเกิดขึ้นระหว่างการเดินทางท่องเที่ยวในสถานที่ที่ผู้คนใช้ภาษาอังกฤษ การฝึกปฏิบัติการใช้ทักษะภาษาอังกฤษในการฟัง พูด อ่าน และเขียน เพื่อการสื่อสารในระดับกลางในสถานการณ์ต่าง ๆ ที่คุ้นเคยและตนเองสนใจในชีวิตประจำวัน' },
-            { id: 'gen006', code: '00-400-080-005', name: 'แนวคิดและทักษะนวัตกรรม', credits: 3, category: 'GenEd', description: 'แนวคิดของนวัตกรรม หลักการจัดการนวัตกรรม ประเภทของนวัตกรรม ระบบนิเวศนวัตกรรม กระบวนการคิดเชิงออกแบบ ความคิดสร้างสรรค์และแรงกระตุ้นให้เกิดความคิดสร้างสรรค์ในการสร้างนวัตกรรม เครื่องมือในการคิดอย่างเป็นระบบ เครื่องมือสร้างต้นแบบ เทคโนโลยีสร้างต้นแบบอย่างรวดเร็ว การสร้างและนำเสนอโครงงานต้นแบบนวัตกรรม' },
-            { id: 'gen007', code: '00-400-090-001', name: 'การเป็นผู้ประกอบการและการนำเสนอขายงานสำหรับการสร้างธุรกิจใหม่', credits: 3, category: 'GenEd', description: 'แนวคิดการเป็นผู้ประกอบการ จรรยาบรรณทางธุรกิจของผู้ประกอบการ การวางแผนธุรกิจ การวางแผนการเงิน การออมเพื่อความมั่นคง การประยุกต์ใช้เทคโนโลยีสารสนเทศและเครื่องมือในการนำเสนอรูปแบบทางธุรกิจใหม่ การเขียนแผนธุรกิจและแผนกลยุทธ์เพื่อการนำเสนอขายงาน เทคนิคการเจรจาต่อรอง การพัฒนาบุคลิกภาพเพื่อการนำเสนอขายงาน' },
-            { id: 'gen008', code: '00-400-100-008', name: 'รากเหง้า มทร. อีสาน', credits: 2, category: 'GenEd', description: 'วัฒนธรรมพื้นถิ่นอีสาน ฮีต 12 คอง 14 ประวัติศาสตร์ บุคคลสำคัญและศิษย์เก่า ของมหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน อัตลักษณ์บัณฑิต การสร้างแนวคิดจิตอาสาเพื่อท้องถิ่น เป้าหมายการพัฒนาที่ยั่งยืน (SDGs) เพื่อชุมชนท้องถิ่น การวางแผนพัฒนาชุมชนท้องถิ่น' },
-            { id: 'gen009', code: '00-400-100-009', name: 'ชุมชนนวัตกรรมสร้างสรรค์', credits: 3, category: 'GenEd', description: 'หลักการคิดเชิงออกแบบ องค์ประกอบหลักการคิดเชิงออกแบบ การคิดเชิงออกแบบกับชุมชน การระดมความคิด กระบวนการคิดเชิงออกแบบแบบมีส่วนร่วม การบูรณาการความรู้สิ่งแวดล้อมเพื่อชุมชน การสร้างสรรค์ผลงาน การนำเสนอผลงานอย่างมีส่วนร่วมกับชุมชน' },
+            { 
+                id: 'gen001', code: '00-400-060-006', name: 'กุญแจสู่ความสำเร็จ', credits: 1, category: 'GenEd', 
+                description: 'ทฤษฎีความสำเร็จในด้านการทำงาน การทำธุรกิจและการดำเนินชีวิต การประยุกต์ใช้การแก้ปัญหาจากแนวปฏิบัติที่ดี เครื่องมือ กลยุทธ์และกุญแจสู่ความสำเร็จทางธุรกิจ การวัดความสำเร็จของการประกอบธุรกิจและเรียนรู้ปรากฎการณ์ความล้มเหลว การวิเคราะห์สาเหตุหรือปัญหา วิธีป้องกันในกรณีศึกษาต่าง ๆ การใช้ชีวิตหรือการประกอบการธุรกิจ\nTheories of success in work, business, and daily life; applying problem-solving from best practices; tools, strategies, and keys to business success.',
+                clos: ['สามารถอธิบายทฤษฎีความสำเร็จในการดำเนินชีวิตและการทำงานได้', 'สามารถวิเคราะห์กรณีศึกษาความสำเร็จและความล้มเหลวทางธุรกิจได้', 'สามารถวางแผนการดำเนินชีวิตอย่างมีเป้าหมาย']
+            },
+            { id: 'gen002', code: '00-400-070-008', name: 'ภาษาไทยในยุคดิจิทัล', credits: 3, category: 'GenEd', description: 'การใช้ภาษาไทยในสื่อโซเซียล การรู้เท่าทันสื่อ จรรยาบรรณการใช้ภาษาไทยในสื่อดิจิทัล ความคิดสร้างสรรค์ในการใช้ภาษา', clos: ['เลือกใช้ภาษาไทยในการสื่อสารผ่านสื่อดิจิทัลได้อย่างเหมาะสม', 'วิเคราะห์ข้อมูลข่าวสารอย่างมีวิจารณญาณ', 'สร้างสรรค์เนื้อหาภาษาไทยในรูปแบบดิจิทัลได้'] },
+            { id: 'gen003', code: '00-400-070-004', name: 'ภาษาอังกฤษพื้นฐาน', credits: 3, category: 'GenEd', description: 'คำศัพท์ สำนวนและประโยคภาษาอังกฤษพื้นฐานเพื่อการสื่อสารในระดับเริ่มต้น ในสถานการณ์ต่างๆ การทักทาย การแนะนำ', clos: ['สื่อสารภาษาอังกฤษในชีวิตประจำวันระดับพื้นฐานได้', 'อ่านและเข้าใจข้อความภาษาอังกฤษสั้นๆ ได้', 'เขียนประโยคพื้นฐานเพื่อแนะนำตัวและให้ข้อมูลได้'] },
+            { id: 'gen004', code: '00-400-070-005', name: 'ภาษาอังกฤษ 1', credits: 3, category: 'GenEd' },
+            { id: 'gen005', code: '00-400-070-006', name: 'ภาษาอังกฤษ 2', credits: 3, category: 'GenEd' },
+            { id: 'gen006', code: '00-400-080-005', name: 'แนวคิดและทักษะนวัตกรรม', credits: 3, category: 'GenEd', description: 'แนวคิดของนวัตกรรม หลักการจัดการนวัตกรรม ประเภทของนวัตกรรม ระบบนิเวศนวัตกรรม กระบวนการคิดเชิงออกแบบ', clos: ['อธิบายกระบวนการเกิดนวัตกรรมได้', 'ประยุกต์ใช้ Design Thinking ในการแก้ปัญหา', 'นำเสนอแนวคิดนวัตกรรมต้นแบบได้'] },
+            { id: 'gen007', code: '00-400-090-001', name: 'การเป็นผู้ประกอบการและการนำเสนอขายงานสำหรับการสร้างธุรกิจใหม่', credits: 3, category: 'GenEd' },
+            { id: 'gen008', code: '00-400-100-008', name: 'รากเหง้า มทร. อีสาน', credits: 2, category: 'GenEd' },
+            { id: 'gen009', code: '00-400-100-009', name: 'ชุมชนนวัตกรรมสร้างสรรค์', credits: 3, category: 'GenEd' },
             
             // 2.1 กลุ่มวิชาพื้นฐานวิชาชีพ (CoreFund)
-            { id: 'cf001', code: '02-005-011-102', name: 'แคลคูลัส 1', credits: 3, category: 'CoreFund', description: 'ฟังก์ชัน ลิมิตและภาวะต่อเนื่อง การหาอนุพันธ์และการประยุกต์ ปริพันธ์ไม่จำกัดเขต เทคนิคการหาปริพันธ์ ปริพันธ์จำกัดเขตและการประยุกต์' },
-            { id: 'cf002', code: '02-005-011-103', name: 'แคลคูลัส 2', credits: 3, category: 'CoreFund', description: 'ผิวกำลังสอง ฟังก์ชัน ลิมิตและภาวะต่อเนื่องของฟังก์ชันหลายตัวแปร อนุพันธ์ย่อยและการประยุกต์ ปริพันธ์หลายชั้นและการประยุกต์ ลำดับและอนุกรมอนันต์' },
-            { id: 'cf003', code: '02-005-011-104', name: 'แคลคูลัส 3', credits: 3, category: 'CoreFund', description: 'การวิเคราะห์เชิงเวกเตอร์ ฟังก์ชันแกมมาและบีตา อนุกรมฟูเรียร์ ผลการแปลงลาปลาซ ผลเฉลยในรูปอนุกรมกำลังของสมการเชิงอนุพันธ' },
-            { id: 'cf004', code: '02-005-022-101', name: 'เคมี 1', credits: 3, category: 'CoreFund', description: 'โครงสร้างอะตอม ตารางธาตุและสมบัติตามตารางธาตุ พันธะเคมี ปริมาณสารสัมพันธ์ แก๊ส ของเหลว สารละลาย ของแข็ง' },
-            { id: 'cf005', code: '02-005-022-102', name: 'ปฏิบัติการเคมี 1', credits: 1, category: 'CoreFund', description: 'การทดลองเกี่ยวกับเทคนิคพื้นฐานทางเคมี สมบัติของธาตุและสารประกอบ ปริมาณสารสัมพันธ์ สมบัติของแก๊ส ของเหลว สารละลาย โครงสร้างผลึกของของแข็ง' },
-            { id: 'cf006', code: '02-005-022-103', name: 'เคมี 2', credits: 3, category: 'CoreFund', description: 'อุณหพลศาสตร์ จลนศาสตร์เคมี สมดุลเคมี สมดุลไอออนในน้ำ เคมีไฟฟ้า เคมีนิวเคลียร์ เคมีอินทรีย์เบื้องต้น' },
-            { id: 'cf007', code: '02-005-022-104', name: 'ปฏิบัติการเคมี 2', credits: 1, category: 'CoreFund', description: 'การทดลองเกี่ยวกับอุณหพลศาสตร์ อัตราการเกิดปฏิกิริยาเคมี สมดุลเคมี คุณสมบัติของกรด เบส และเกลือ การไทเทรต ปฏิกิริยาเคมี เคมีไฟฟ้า เคมีอินทรีย์เบื้องต้น' },
-            { id: 'cf008', code: '02-005-033-105', name: 'ฟิสิกส์พื้นฐาน', credits: 3, category: 'CoreFund', description: 'หน่วยวัดทางฟิสิกส์ กลศาสตร์ของอนุภาค โมเมนตัมและการดล งานและพลังงาน กลศาสตร์ของไหล ความร้อน คลื่นและคลื่นเสียง แม่เหล็กไฟฟ้า ทัศนศาสตร์ นิวเคลียร์ฟิสิกส์' },
-            { id: 'cf009', code: '02-005-033-106', name: 'ปฏิบัติการฟิสิกส์พื้นฐาน', credits: 1, category: 'CoreFund', description: 'ปฏิบัติการทดลองเกี่ยวกับหน่วยวัดทางฟิสิกส์ กลศาสตร์ของอนุภาค โมเมนตัมและการดล งานและพลังงาน กลศาสตร์ของไหล ความร้อน คลื่นและคลื่นเสียง แม่เหล็กไฟฟ้า ทัศนศาสตร์ นิวเคลียร์ฟิสิกส์' },
-            { id: 'cf010', code: '02-005-055-204', name: 'สถิติ 1', credits: 3, category: 'CoreFund', description: 'สถิติเชิงพรรณนา ความน่าจะเป็น ตัวแปรสุ่มและการแจกแจง การสุ่มตัวอย่างและการแจกแจงของกลุ่มตัวอย่าง การประมาณค่า การทดสอบสมมติฐาน การทดสอบไคกำลังสอง การแปลความหมายข้อมูลจาก การใช้โปรแกรมทางด้านสถิติ' },
-            { id: 'cf011', code: '02-005-055-205', name: 'สถิติ 2', credits: 3, category: 'CoreFund', description: 'การแจกแจงกลุ่มตัวอย่าง การประมาณค่า การทดสอบสมมติฐาน การวิเคราะห์ความแปรปรวน การวิเคราะห์การถดถอยและสหสัมพันธ์ การแปลความหมายจากผลการใช้โปรแกรมทางด้านสถิติ' },
-            { id: 'cf012', code: '02-005-055-306', name: 'การออกแบบการทดลอง', credits: 3, category: 'CoreFund', description: 'หลักการในการวางแผนการทดลอง แผนการทดลองแบบสุ่มสมบูรณ์ แผนการทดลองแบบบล็อกสุ่ม การทดลอง ที่มีหลายปัจจัย การทดลองแบบแฟกทอเรียล แผนการทดลองแบบสปลิทพลอต การวิเคราะห์ความแปรปรวนร่วม การใช้โปรแกรมทางด้านสถิติและแปลความหมาย' },
+            { 
+                id: 'cf001', code: '02-005-011-102', name: 'แคลคูลัส 1', credits: 3, category: 'CoreFund', 
+                description: 'ฟังก์ชัน ลิมิตและภาวะต่อเนื่อง การหาอนุพันธ์และการประยุกต์ ปริพันธ์ไม่จำกัดเขต เทคนิคการหาปริพันธ์ ปริพันธ์จำกัดเขตและการประยุกต์\nFunctions; limits and continuity; derivatives and applications; indefinite integrals; integration techniques; definite integrals and applications.',
+                clos: ['คำนวณหาลิมิตและอนุพันธ์ของฟังก์ชันได้', 'ประยุกต์ใช้อนุพันธ์ในการแก้ปัญหาค่าสูงสุดต่ำสุด', 'คำนวณหาปริพันธ์จำกัดเขตและไม่จำกัดเขตได้']
+            },
+            { id: 'cf002', code: '02-005-011-103', name: 'แคลคูลัส 2', credits: 3, category: 'CoreFund' },
+            { id: 'cf003', code: '02-005-011-104', name: 'แคลคูลัส 3', credits: 3, category: 'CoreFund' },
+            { id: 'cf004', code: '02-005-022-101', name: 'เคมี 1', credits: 3, category: 'CoreFund' },
+            { id: 'cf005', code: '02-005-022-102', name: 'ปฏิบัติการเคมี 1', credits: 1, category: 'CoreFund' },
+            { id: 'cf006', code: '02-005-022-103', name: 'เคมี 2', credits: 3, category: 'CoreFund' },
+            { id: 'cf007', code: '02-005-022-104', name: 'ปฏิบัติการเคมี 2', credits: 1, category: 'CoreFund' },
+            { id: 'cf008', code: '02-005-033-105', name: 'ฟิสิกส์พื้นฐาน', credits: 3, category: 'CoreFund' },
+            { id: 'cf009', code: '02-005-033-106', name: 'ปฏิบัติการฟิสิกส์พื้นฐาน', credits: 1, category: 'CoreFund' },
+            { id: 'cf010', code: '02-005-055-204', name: 'สถิติ 1', credits: 3, category: 'CoreFund' },
+            { id: 'cf011', code: '02-005-055-205', name: 'สถิติ 2', credits: 3, category: 'CoreFund' },
+            { id: 'cf012', code: '02-005-055-306', name: 'การออกแบบการทดลอง', credits: 3, category: 'CoreFund' },
 
             // 2.2 กลุ่มวิชาบังคับ (CoreComp)
-            { id: 'cc001', code: 'xx-xxx-xxx-xxx', name: 'หลักการคณิตศาสตร์ (Principles of Mathematics)', credits: 3, category: 'CoreComp', description: 'ตรรกศาสตร์เชิงสัญลักษณ์ ตัวบ่งปริมาณ ระเบียบวิธีพิสูจน์ทางคณิตศาสตร์ การพิสูจน์โดยตรง การพิสูจน์โดยแย้งสลับที่ การพิสูจน์โดยข้อขัดแย้ง และการอุปนัยเชิงคณิตศาสตร์ ทฤษฎีเซตเบื้องต้น ความสัมพันธ์สมมูลและฟังก์ชัน' },
-            { id: 'cc002', code: 'xx-xxx-xxx-xxx', name: 'วิยุตคณิต (Discrete Mathematics)', credits: 3, category: 'CoreComp', description: 'เซตและความสัมพันธ์ หลักการนับและความน่าจะเป็นแบบไม่ต่อเนื่อง ทฤษฎีกราฟเบื้องต้น ต้นไม้ พีชคณิตบูลีน ตรรกศาสตร์สำหรับวิทยาการคอมพิวเตอร์' },
-            { id: 'cc003', code: 'xx-xxx-xxx-xxx', name: 'สมการเชิงอนุพันธ์เบื้องต้น (Elementary Differential Equations)', credits: 3, category: 'CoreComp', description: 'สมการเชิงอนุพันธ์สามัญอันดับหนึ่ง สมการเชิงอนุพันธ์เชิงเส้นอันดับสูงที่มีสัมประสิทธิ์เป็นค่าคงตัว การแปลงลาปลาซ ระบบสมการเชิงอนุพันธ์เชิงเส้น การประยุกต์สมการเชิงอนุพันธ์ในแบบจำลองทางกายภาพ' },
-            { id: 'cc004', code: 'xx-xxx-xxx-xxx', name: 'พีชคณิตเชิงเส้นขั้นแนะนำ (Introduction to Linear Algebra)', credits: 3, category: 'CoreComp', description: 'ระบบสมการเชิงเส้น เมทริกซ์และดีเทอร์มิแนนท์ ปริภูมิเวกเตอร์ การแปลงเชิงเส้น ค่าลักษณะเฉพาะและเวกเตอร์ลักษณะเฉพาะ การทำให้เป็นเมทริกซ์ทแยงมุม การประยุกต์พีชคณิตเชิงเส้นในการวิเคราะห์ข้อมูล' },
-            { id: 'cc005', code: 'xx-xxx-xxx-xxx', name: 'พีชคณิตนามธรรมขั้นแนะนำ (Introduction to Abstract Algebra)', credits: 3, category: 'CoreComp', description: 'กรุป  กรุปการเรียงสับเปลี่ยน กรุปวัฏจักร กรุปย่อยปรกติ กรุปผลหาร สาทิสสัณฐานของกรุป ริง อินทิกรัลโดเมน ฟิลด์ ไอดีล ริงผลหาร สาทิสสัณฐานของริง  และการประยุกต์ \nGroups; permutation groups; cyclic groups; normal subgroups; quotient groups; group homomorphisms; rings; integral domains; fields, ideals; quotient rings; ring homomorphisms and applications' },
-            { id: 'cc006', code: 'xx-xxx-xxx-xxx', name: 'การวิเคราะห์เชิงจริงขั้นแนะนำ (Introduction to Real Analysis)', credits: 3, category: 'CoreComp', description: 'ระบบจำนวนจริง  ทอพอโลยีบนเส้นจำนวนจริง  ลำดับของจำนวนจริง  ลิมิตและความต่อเนื่อง  การหาอนุพันธ์  ปริพันธ์รีมันน์ อนุกรมของจำนวนจริง \nReal number system; topology on real line; sequences of real numbers; limits and continuities; differentiation; Riemann integration; series of real numbers' },
-            { id: 'cc007', code: 'xx-xxx-xxx-xxx', name: 'วิธีเชิงตัวเลขเบื้องต้น (Elementary Numerical Methods)', credits: 3, category: 'CoreComp', description: 'การวิเคราะห์ความคลาดเคลื่อน ผลเฉลยของสมการไม่เชิงเส้น ผลเฉลยของระบบสมการเชิงเส้น การประมาณค่าในช่วง การประมาณโดยวิธีกำลังสองน้อยสุด การหาอนุพันธ์และปริพันธ์เชิงตัวเลข ผลเฉลยเชิงตัวเลขของสมการเชิงอนุพันธ์ \nError analysis, solutions of nonlinear equations, solutions of systems of linear equations, interpolation, least square approximation, numerical differentiation and integration, numerical solutions of differential equations' },
-            { id: 'cc008', code: 'xx-xxx-xxx-xxx', name: 'การสร้างแบบจำลองทางคณิตศาสตร์ (Mathematical Model)', credits: 3, category: 'CoreComp', description: 'กระบวนการสร้างแบบจำลองทางคณิตศาสตร์ การแปลงปัญหาจริงเป็นปัญหาคณิตศาสตร์ แบบจำลองการเติบโตและการเสื่อมสลาย แบบจำลองการแพร่กระจาย กรณีศึกษาการแก้ปัญหาในระบบอุตสาหกรรม โลจิสติกส์ และการจัดการพลังงาน \nMathematical modelling process; translating real-world problems into mathematical problems; growth and decay models; diffusion models; case studies on problem solving in industrial systems, logistics, and energy management' },
-            { id: 'cc009', code: 'xx-xxx-xxx-xxx', name: 'การหาค่าเหมาะสมขั้นแนะนำ (Introduction to Optimizations)', credits: 3, category: 'CoreComp', description: 'การกำหนดโจทย์ปัญหาค่าเหมาะสม กำหนดการเชิงเส้น วิธีซิมเพล็กซ์ ทฤษฎีภาวะคู่กัน กำหนดการที่ไม่ใช่เชิงเส้นเบื้องต้น การหาค่าเหมาะสมแบบไม่มีเงื่อนไข การประยุกต์ใช้ในการจัดสรรทรัพยากรและการวางแผนการผลิต \nFormulating optimization problems; linear programming; simplex method; duality theory; introduction to non-linear programming; unconstrained optimization; applications in resource allocation and production planning' },
-            { id: 'cc010', code: 'xx-xxx-xxx-xxx', name: 'คณิตศาสตร์สำหรับการเรียนรู้ของเครื่อง (Mathematics for Machine Learning)', credits: 3, category: 'CoreComp', description: 'พีชคณิตเชิงเส้นและเรขาคณิตวิเคราะห์สำหรับการวิเคราะห์ข้อมูล การแยกตัวประกอบเมทริกซ์ แคลคูลัสของเวกเตอร์และการหาอนุพันธ์ย่อย ทฤษฎีความน่าจะเป็นและการแจกแจงแบบต่อเนื่อง การหาค่าเหมาะสมที่สุดแบบต่อเนื่อง ทฤษฎีเบื้องหลังอัลกอริทึมการเรียนรู้ของเครื่อง \nLinear algebra and analytic geometry for data analysis; matrix decompositions; vector calculus and partial derivatives; probability theory and continuous distributions; continuous optimization; theoretical foundations of machine learning algorithms' },
-            { id: 'cc011', code: 'xx-xxx-xxx-xxx', name: 'การสื่อสารทางคณิตศาสตร์และการใช้เครื่องมือดิจิทัล (Mathematical Communication and Digital Tools)', credits: 2, category: 'CoreComp', description: 'หลักการสื่อสารทางคณิตศาสตร์ การเขียนเอกสารทางวิชาการและคณิตศาสตร์ด้วยโปรแกรมเรียงพิมพ์ทางคณิตศาสตร์ การสร้างสมการและสัญลักษณ์ทางคณิตศาสตร์ การสร้างงานนำเสนอด้วยบีมเมอร์ หรือซอฟต์แวร์นำเสนอสมัยใหม่ เทคนิคการเล่าเรื่องด้วยข้อมูล การใช้เครื่องมือดิจิทัลเพื่อสร้างภาพนิทัศน์ข้อมูลทางคณิตศาสตร์ การนำเสนอผลงานวิชาการและโครงงานอย่างมีประสิทธิภาพ จรรยาบรรณในการนำเสนอข้อมูล \nPrinciples of mathematical communication; writing academic and mathematical documents using mathematical typesetting software; creating mathematical equations and symbols; creating presentations using Beamer or modern presentation software; data storytelling techniques; using digital tools for mathematical data visualization; effective presentation of academic works and projects; ethics in data presentation' },
-            { id: 'cc012', code: 'xx-xxx-xxx-xxx', name: 'วิทยาการคอมพิวเตอร์เบื้องต้นสำหรับคณิตศาสตร์ประยุกต์ (Foundation of Computer Science for Applied Mathematics)', credits: 3, category: 'CoreComp', description: 'โครงสร้างและสถาปัตยกรรมคอมพิวเตอร์ ระบบปฏิบัติการ เครือข่ายคอมพิวเตอร์และความปลอดภัยไซเบอร์เบื้องต้น โครงสร้างข้อมูลและอัลกอริทึม ฐานข้อมูล จริยธรรมและกฎหมายทางคอมพิวเตอร์ \nComputer structure and architecture; operating systems; computer networks and introduction to cybersecurity; data structures and algorithms; databases; computer ethics and law' },
-            { id: 'cc013', code: 'xx-xxx-xxx-xxx', name: 'การเขียนโปรแกรมขั้นแนะนำสำหรับคณิตศาสตร์ประยุกต์ (Introduction to Programming for Applied Mathematics)', credits: 3, category: 'CoreComp', description: 'แนวคิดพื้นฐานของการเขียนโปรแกรม โครงสร้างภาษาไวยากรณ์ ชนิดข้อมูล ตัวแปร นิพจน์ คำสั่งควบคุมการทำงาน การเขียนฟังก์ชัน การจัดการอาร์เรย์และสตริง การแก้ปัญหาพื้นฐานด้วยอัลกอริทึมทางคอมพิวเตอร์ \nBasic concepts of programming; syntax and data types; variables and expressions; control structures; functions; array and string manipulation; solving basic problems using computer algorithms' },
-            { id: 'cc014', code: 'xx-xxx-xxx-xxx', name: 'การเขียนโปรแกรมสำหรับคณิตศาสตร์ประยุกต์ 1 (Programming for Applied Mathematics 1)', credits: 3, category: 'CoreComp', description: 'การเขียนโปรแกรมภาษาไพธอนสำหรับคณิตศาสตร์ประยุกต์ โครงสร้างข้อมูลขั้นสูง การจัดการและทำความสะอาดข้อมูลด้วยไลบรารีมาตรฐาน การแสดงผลข้อมูลด้วยกราฟและแผนภาพ การทำงานกับไฟล์ข้อมูลประเภทต่าง ๆ \nPython programming for applied mathematics; advanced data structures; data manipulation and cleaning using standard libraries; data visualization; working with various data file formats' },
-            { id: 'cc015', code: 'xx-xxx-xxx-xxx', name: 'การเขียนโปรแกรมสำหรับคณิตศาสตร์ประยุกต์ 2 (Programming for Applied Mathematics 2)', credits: 3, category: 'CoreComp', description: 'การเขียนโปรแกรมเชิงวัตถุ การเชื่อมต่อฐานข้อมูล SQL และ NoSQL การดึงข้อมูลจากเว็บเบื้องต้น การพัฒนาเว็บแอปพลิเคชันอย่างง่ายสำหรับแสดงผลข้อมูล \nObject-oriented programming; SQL and NoSQL database connectivity; introduction to web scraping; developing simple web applications for data dashboards' },
-            { id: 'cc016', code: 'xx-xxx-xxx-xxx', name: 'การเรียนรู้ของเครื่อง (Machine Learning)', credits: 3, category: 'CoreComp', description: 'การเรียนรู้แบบมีผู้สอนและไม่มีผู้สอน การถดถอยและการจำแนกประเภท ต้นไม้ตัดสินใจ ซัพพอร์ตเวกเตอร์แมชชีน โครงข่ายประสาทเทียม การประเมินประสิทธิภาพโมเดล การปรับจูนพารามิเตอร์ การใช้ไลบรารีสำหรับการเรียนรู้ของเครื่อง \nSupervised and unsupervised learning; regression and classification; decision trees; support vector machines; neural networks; model performance evaluation; parameter tuning; using machine learning libraries' },
-            { id: 'cc017', code: '31-407-632-010', name: 'แนะนำปัญญาประดิษฐ์', credits: 3, category: 'CoreComp', description: 'การปฏิวัติอุตสาหกรรมยุคที่สี่ หลักการพื้นฐานของปัญญาประดิษฐ์ อุปสรรคและโอกาสของปัญญาประดิษฐ์ในงานอุตสาหกรรมอัจฉริยะ ประวัติศาสตร์และวิวัฒนาการของปัญญาประดิษฐ์ การเรียนรู้ของเครื่องขั้นพื้นฐาน การเรียนรู้เชิงลึกขั้นพื้นฐาน การเรียนรู้แบบเสริมกำลังขั้นพื้นฐาน การประยุกต์ใช้ปัญญาประดิษฐ์ในอุตสาหกรรมด้านต่าง ๆ กรณีศึกษาการใช้ปัญญาประดิษฐ์ในงานด้านวิศวกรรม \nThe fourth industrial revolution; basic artificial intelligence concepts; artificial intelligence challenges and opportunities within modern industries; history and evolution of artificial intelligence; introduction to machine learning; introduction to deep learning; introduction to reinforcement learning; applications of artificial intelligence in industry; case study of artificial intelligence in engineering' },
-            { id: 'cc018', code: 'xx-xxx-xxx-xxx', name: 'จริยธรรมในการใช้ปัญญาประดิษฐ์', credits: 3, category: 'CoreComp', description: 'ยังไม่มีคำอธิยายรายวิชา' },
-            { id: 'cc019', code: '31-405-014-301', name: 'สัมมนา', credits: 1, category: 'CoreComp', description: 'การเลือกบทความวิจัยที่ทันสมัยทางคณิตศาสตร์ การนำเสนอบทความวิจัย อภิปรายและตอบคำถาม \nThe selection of recent research articles in mathematics, research presentation, discussion, questions and answers' },
-            { id: 'cc020', code: '31-405-014-302', name: 'การเตรียมโครงงาน', credits: 1, category: 'CoreComp', description: 'ระเบียบวิธีวิจัย เทคโนโลยีสารสนเทศและปัญญาประดิษฐ์สำหรับโครงงานวิจัย การเขียนโครงงาน การนําเสนอโครงงาน \nResearch methodology; information technology and artificial intelligence for research project; proposal writing; proposal presentation' },
-            { id: 'cc021', code: '31-405-014-402', name: 'โครงงาน', credits: 2, category: 'CoreComp', description: 'การดำเนินงานโครงงาน การเก็บรวบรวมและวิเคราะห์ข้อมูล การสรุปจัดทำรายงาน การนำเสนอผลงานโครงงาน \nProject implementation, data collection and analysis, report writing, project presentation' },
+            { 
+                id: 'cc001', code: 'xx-xxx-xxx-xxx', name: 'หลักการคณิตศาสตร์ (Principles of Mathematics)', credits: 3, category: 'CoreComp', 
+                description: 'ตรรกศาสตร์เชิงสัญลักษณ์ ตัวบ่งปริมาณ ระเบียบวิธีพิสูจน์ทางคณิตศาสตร์ การพิสูจน์โดยตรง การพิสูจน์โดยแย้งสลับที่ การพิสูจน์โดยข้อขัดแย้ง และการอุปนัยเชิงคณิตศาสตร์ ทฤษฎีเซตเบื้องต้น ความสัมพันธ์สมมูลและฟังก์ชัน\nSymbolic logic; quantifiers; methods of mathematical proof: direct proof, contrapositive, contradiction, and induction; basic set theory; equivalence relations and functions.',
+                clos: ['ใช้ตรรกศาสตร์สัญลักษณ์ในการวิเคราะห์ข้อความทางคณิตศาสตร์ได้', 'แสดงการพิสูจน์ทางคณิตศาสตร์ด้วยวิธีต่างๆ ได้อย่างถูกต้อง', 'อธิบายคุณสมบัติของเซต ความสัมพันธ์ และฟังก์ชันได้']
+            },
+            { id: 'cc002', code: 'xx-xxx-xxx-xxx', name: 'วิยุตคณิต (Discrete Mathematics)', credits: 3, category: 'CoreComp', description: 'เซตและความสัมพันธ์ หลักการนับและความน่าจะเป็นแบบไม่ต่อเนื่อง ทฤษฎีการกราฟเบื้องต้น ต้นไม้ พีชคณิตบูลีน' },
+            { id: 'cc003', code: 'xx-xxx-xxx-xxx', name: 'สมการเชิงอนุพันธ์เบื้องต้น (Elementary Differential Equations)', credits: 3, category: 'CoreComp' },
+            { id: 'cc004', code: 'xx-xxx-xxx-xxx', name: 'พีชคณิตเชิงเส้นขั้นแนะนำ (Introduction to Linear Algebra)', credits: 3, category: 'CoreComp' },
+            { 
+                id: 'cc005', code: 'xx-xxx-xxx-xxx', name: 'พีชคณิตนามธรรมขั้นแนะนำ (Introduction to Abstract Algebra)', credits: 3, category: 'CoreComp', 
+                description: 'กรุป กรุปการเรียงสับเปลี่ยน กรุปวัฏจักร กรุปย่อยปรกติ กรุปผลหาร สาทิสสัณฐานของกรุป ริง อินทิกรัลโดเมน ฟิลด์ ไอดีล ริงผลหาร สาทิสสัณฐานของริง และการประยุกต์\nGroups; permutation groups; cyclic groups; normal subgroups; quotient groups; group homomorphisms; rings; integral domains; fields; ideals; quotient rings; ring homomorphisms and applications.',
+                clos: ['อธิบายโครงสร้างทางพีชคณิตของกรุปและริงได้', 'พิสูจน์ทฤษฎีบทพื้นฐานเกี่ยวกับกรุปและริงได้', 'ประยุกต์ใช้แนวคิดเรื่องสาทิสสัณฐานในการเชื่อมโยงโครงสร้างทางพีชคณิต']
+            },
+            { id: 'cc006', code: 'xx-xxx-xxx-xxx', name: 'การวิเคราะห์เชิงจริงขั้นแนะนำ (Introduction to Real Analysis)', credits: 3, category: 'CoreComp', description: 'ระบบจำนวนจริง ทอพอโลยีบนเส้นจำนวนจริง ลำดับของจำนวนจริง ลิมิตและความต่อเนื่อง การหาอนุพันธ์ ปริพันธ์รีมันน์ อนุกรมของจำนวนจริง\nReal number system; topology on real line; sequences; limits and continuity; differentiation; Riemann integration; series.' },
+            { id: 'cc007', code: 'xx-xxx-xxx-xxx', name: 'วิธีเชิงตัวเลขเบื้องต้น (Elementary Numerical Methods)', credits: 3, category: 'CoreComp' },
+            { id: 'cc008', code: 'xx-xxx-xxx-xxx', name: 'การสร้างแบบจำลองทางคณิตศาสตร์ (Mathematical Model)', credits: 3, category: 'CoreComp' },
+            { id: 'cc009', code: 'xx-xxx-xxx-xxx', name: 'การหาค่าเหมาะสมขั้นแนะนำ (Introduction to Optimizations)', credits: 3, category: 'CoreComp' },
+            { id: 'cc010', code: 'xx-xxx-xxx-xxx', name: 'คณิตศาสตร์สำหรับการเรียนรู้ของเครื่อง (Mathematics for Machine Learning)', credits: 3, category: 'CoreComp' },
+            { id: 'cc011', code: 'xx-xxx-xxx-xxx', name: 'การสื่อสารทางคณิตศาสตร์และการใช้เครื่องมือดิจิทัล', credits: 2, category: 'CoreComp' },
+            { id: 'cc012', code: 'xx-xxx-xxx-xxx', name: 'วิทยาการคอมพิวเตอร์เบื้องต้นสำหรับคณิตศาสตร์ประยุกต์', credits: 3, category: 'CoreComp' },
+            { id: 'cc013', code: 'xx-xxx-xxx-xxx', name: 'การเขียนโปรแกรมเบื้องต้นสำหรับคณิตศาสตร์ประยุกต์', credits: 3, category: 'CoreComp' },
+            { id: 'cc014', code: 'xx-xxx-xxx-xxx', name: 'การเขียนโปรแกรมสำหรับคณิตศาสตร์ประยุกต์ 1', credits: 3, category: 'CoreComp' },
+            { id: 'cc015', code: 'xx-xxx-xxx-xxx', name: 'การเขียนโปรแกรมสำหรับคณิตศาสตร์ประยุกต์ 2', credits: 3, category: 'CoreComp' },
+            { id: 'cc016', code: 'xx-xxx-xxx-xxx', name: 'การเรียนรู้ของเครื่อง (Machine Learning)', credits: 3, category: 'CoreComp' },
+            { id: 'cc017', code: '31-407-632-010', name: 'แนะนำปัญญาประดิษฐ์', credits: 3, category: 'CoreComp' },
+            { id: 'cc018', code: 'xx-xxx-xxx-xxx', name: 'จริยธรรมในการใช้ปัญญาประดิษฐ์', credits: 3, category: 'CoreComp' },
+            { id: 'cc019', code: '31-405-014-301', name: 'สัมมนา', credits: 1, category: 'CoreComp' },
+            { id: 'cc020', code: '31-405-014-302', name: 'การเตรียมโครงงาน', credits: 1, category: 'CoreComp' },
+            { id: 'cc021', code: '31-405-014-402', name: 'โครงงาน', credits: 2, category: 'CoreComp' },
 
             // 2.3 กลุ่มวิชาเลือก (CoreElec)
-            { id: 'ce001', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีจำนวนเบื้องต้น', credits: 3, category: 'CoreElec', description: 'การหารลงตัว สมภาค ฟังก์ชันในทฤษฎีจำนวน สามจำนวนของพีทาโกรัสและทฤษฎีบทสุดท้ายของแฟร์มา เศษส่วนต่อเนื่องและการประยุกต์ วิทยาการรหัสลับขั้นแนะนำ \nDivisibility; congruences; functions in number theory; Pythagorean triples and Fermat’s last theorem; continued fractions and applications; introduction to cryptography' },
-            { id: 'ce002', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีของสมการ (Theory of Equations)', credits: 3, category: 'CoreElec',description: 'พหุนาม รากของสมการพหุนาม ขอบเขตของราก ความสัมพันธ์ระหว่างรากกับสัมประสิทธิ์ สมการกำลังสาม สมการกำลังสี่ การแยกกันได้ของราก การประเมินค่าประมาณของราก ฟังก์ชันสมมาตร \nPolynomials; roots of polynomial equations; bounds of roots;  relation between the roots and the coefficients; cubic equations; biquadratic equations; separation of roots; evaluation of approximated roots; symmetric functions' },
-            { id: 'ce003', code: 'xx-xxx-xxx-xxx', name: 'การวิเคราะห์เชิงตัวเลข', credits: 3, category: 'CoreElec', description: 'ยังไม่มีคำอธิบายรายวิชา' },
-            { id: 'ce004', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีกราฟเชิงขั้นตอนวิธี (Algorithmic Graph Theory)', credits: 3, category: 'CoreElec',description: 'แนวคิดพื้นฐานของกราฟและไดกราฟ กราฟต้นไม้และการประยุกต์ ขั้นตอนวิธีการค้น การให้สีกราฟข่ายงานและการไหล ปัญหาระยะทาง \nBasic concepts of graphs and digraphs; trees and applications; search algorithms; graph coloring; networks and flows; distance problems' },
-            { id: 'ce005', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีกรุป (Group Theory)', credits: 3, category: 'CoreElec', description: 'ทบทวนเรื่องกรุป อาบีเลียนกรุปเสรี อาบีเลียนกรุปที่ก่อกำเนิดจากเซตจำกัด กรุปแอกชั่น ทฤษฎีบทซิโล กรุปนิรพลและกรุปโซลเอเบิล \nReview of groups; free abelian groups; finitely generated abelian groups; group actions; the Sylow theorems; nilpotent and solvable groups' },
-            { id: 'ce006', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีริง (Ring Theory)', credits: 3, category: 'CoreElec', description: 'ผลบวกตรงของริง ริงแบบบูลีน ริงแบบปรกติ ริงของเมทริกซ์ \nDirect sums of rings; Boolean rings; regular rings; rings of matrices' },
-            { id: 'ce007', code: 'xx-xxx-xxx-xxx', name: 'โทโพโลยีขั้นแนะนำ (Introduction to Topology)', credits: 3, category: 'CoreElec', description: 'ปริภูมิอิงระยะทาง แนวคิดพื้นฐานสำหรับทอพอโลยี ทอพอโลยีสำหรับเส้นจำนวนจริง ปริภูมิเชิง   ทอพอโลยี ฟังก์ชันต่อเนื่อง ฐานและฐานย่อย ทอพอโลยีสำหรับเซตย่อย ความกระชับ ความเชื่อมโยง \nMetric spaces; basic concepts for topology; topology of real line; topological spaces; continuous functions; bases and subbases; topology for a subset; compactness; connectedness' },
-            { id: 'ce008', code: 'xx-xxx-xxx-xxx', name: 'ตัวแปรเชิงซ้อน (Complex Variables)', credits: 3, category: 'CoreElec', description: 'ระบบจำนวนเชิงซ้อน ฟังก์ชันมูลฐาน การหาอนุพันธ์ การหาปริพันธ์ อนุกรมลอเรนต์ ทฤษฎีบทส่วนตกค้างและการประยุกต์ การส่งคงแบบ \nComplex number system; elementary functions; differentiation; integration; Laurent  series; residues theorem and applications; conformal mapping' },
-            { id: 'ce009', code: 'xx-xxx-xxx-xxx', name: 'การวิเคราะห์ข้อมูลสำหรับอุตสาหกรรมและอินเทอร์เนตทุกสรรพสิ่ง (Industrial Data Analytics and IoT)', credits: 3, category: 'CoreElec', description: 'โครงสร้างและลักษณะข้อมูลจากอุปกรณ์ไอโอทีและระบบอุตสาหกรรม การจัดการข้อมูลขนาดใหญ่และข้อมูลแบบสตรีมมิง การวิเคราะห์อนุกรมเวลาจากเซนเซอร์ เทคนิคการตรวจจับความผิดปกติ การพยากรณ์เพื่อการบำรุงรักษาเชิงคาดการณ์ การใช้ภาษาโปรแกรมและเครื่องมือจัดการฐานข้อมูลสำหรับการวิเคราะห์ข้อมูลจริงในบริบทอุตสาหกรรมอัจฉริยะ \nStructure and characteristics of data from IoT devices and industrial systems; big data and streaming data management; time series analysis from sensors; anomaly detection techniques; forecasting for predictive maintenance; using programming languages and database management tools for analyzing real-world data in the context of smart industry' },
-            { id: 'ce010', code: 'xx-xxx-xxx-xxx', name: 'สถิติคณิตศาสตร์ (Mathematical Statistics)', credits: 3, category: 'CoreElec', description: 'ทฤษฎีความน่าจะเป็นและตัวแปรสุ่ม ฟังก์ชันการแจกแจงร่วมและการแปลงตัวแปร ทฤษฎีการแจกแจงของตัวสถิติ ทฤษฎีการประมาณค่าแบบจุดและแบบช่วง คุณสมบัติของตัวประมาณค่าและขีดจำกัดคราเมอร์-ราโอ ทฤษฎีการทดสอบสมมติฐาน เลมมาของเนย์แมน-เพียร์สัน และการทดสอบอัตราส่วนภาวะน่าจะเป็น ทฤษฎีบทลิมิตและการลู่เข้าของตัวแปรสุ่ม \nProbability theory and random variables; joint distribution functions and variable transformations; distribution theory of statistics; point and interval estimation theory; properties of estimators and Cramér–Rao bound; hypothesis testing theory; Neyman–Pearson lemma and Likelihood Ratio Test; limit theorems and convergence of random variables' },
-            { id: 'ce011', code: 'xx-xxx-xxx-xxx', name: 'การวิเคราะห์พหุตัวแปร (Multivariate Analysis)', credits: 3, category: 'CoreElec', description: 'หลักการวิเคราะห์ข้อมูลที่มีตัวแปรจำนวนมาก การวิเคราะห์องค์ประกอบหลัก การวิเคราะห์ปัจจัย การวิเคราะห์การจัดกลุ่ม การวิเคราะห์การจำแนกกลุ่ม การใช้โปรแกรมสำเร็จรูปทางสถิติหรือภาษาโปรแกรมสำหรับการประมวลผลและวิเคราะห์ข้อมูลพหุตัวแปร การแปลผลและการนำไปประยุกต์ใช้กับข้อมูลจริง \nPrinciples of multivariate data analysis; Principal Component Analysis; Factor Analysis; Cluster Analysis; Discriminant Analysis; using statistical software packages or programming languages for multivariate data processing and analysis; interpretation and application to real-world data' },
-            { id: 'ce012', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีค่าขีดสุด (Extreme Value Theory)', credits: 3, category: 'CoreElec', description: 'ทฤษฎีและแบบจำลองทางสถิติสำหรับเหตุการณ์สุดขีด การแจกแจงค่าสุดขีดทั่วไป การแจกแจงพาเรโตทั่วไป การเลือกเกณฑ์แบ่งกั้นและขนาดบล็อก การประมาณค่าพารามิเตอร์ด้วยวิธีภาวะน่าจะเป็นสูงสุดและวิธีแบบเบย์ การประยุกต์ใช้สถิติแบบเบย์และการประมาณค่าด้วยวิธีมาร์คอฟเชนจ์มอนติคาร์โล การใช้โปรแกรมคอมพิวเตอร์สำหรับการวิเคราะห์ข้อมูลที่มีความไม่แน่นอนสูง \nTheory and statistical models for extreme events; Generalized Extreme Value distribution (GEV); Generalized Pareto Distribution (GPD); threshold selection and block size; parameter estimation using Maximum Likelihood and Bayesian methods; application of Bayesian statistics and Markov Chain Monte Carlo estimation; using computer software for analyzing high-uncertainty data' },
+            { id: 'ce001', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีจำนวนเบื้องต้น', credits: 3, category: 'CoreElec', description: 'การหารลงตัว สมภาค ฟังก์ชันในทฤษฎีจำนวน สามจำนวนของพีทาโกรัสและทฤษฎีบทสุดท้ายของแฟร์มา เศษส่วนต่อเนื่องและการประยุกต์ วิทยาการรหัสลับขั้นแนะนำ\nDivisibility; congruences; functions in number theory; Pythagorean triples; Fermat’s last theorem; continued fractions; introduction to cryptography.' },
+            { id: 'ce002', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีของสมการ (Theory of Equations)', credits: 3, category: 'CoreElec' },
+            { id: 'ce003', code: 'xx-xxx-xxx-xxx', name: 'การวิเคราะห์เชิงตัวเลข', credits: 3, category: 'CoreElec' },
+            { id: 'ce004', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีกราฟเชิงขั้นตอนวิธี', credits: 3, category: 'CoreElec' },
+            { id: 'ce005', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีกรุป (Group Theory)', credits: 3, category: 'CoreElec' },
+            { id: 'ce006', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีริง (Ring Theory)', credits: 3, category: 'CoreElec' },
+            { id: 'ce007', code: 'xx-xxx-xxx-xxx', name: 'โทโพโลยีขั้นแนะนำ (Introduction to Topology)', credits: 3, category: 'CoreElec' },
+            { id: 'ce008', code: 'xx-xxx-xxx-xxx', name: 'ตัวแปรเชิงซ้อน (Complex Variables)', credits: 3, category: 'CoreElec' },
+            { id: 'ce009', code: 'xx-xxx-xxx-xxx', name: 'การวิเคราะห์ข้อมูลสำหรับอุตสาหกรรมและ IoT', credits: 3, category: 'CoreElec' },
+            { id: 'ce010', code: 'xx-xxx-xxx-xxx', name: 'สถิติคณิตศาสตร์ (Mathematical Statistics)', credits: 3, category: 'CoreElec' },
+            { id: 'ce011', code: 'xx-xxx-xxx-xxx', name: 'การวิเคราะห์พหุตัวแปร', credits: 3, category: 'CoreElec' },
+            { id: 'ce012', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีค่าขีดสุด (Extreme Value Theory)', credits: 3, category: 'CoreElec' },
 
-            // 2.4 กลุ่มวิชาการฝึกประสบการณ์วิชาชีพ (CoreExp)
-            { id: 'cx001', code: '31-405-015-401', name: 'การเตรียมความพร้อมการฝึกประสบการณ์วิชาชีพ (Preparation for Professional Experience)', credits: 1, category: 'CoreExp', description: 'หลักการและแนวคิดของการฝึกประสบการณ์วิชาชีพ การสมัครงานและการสัมภาษณ์งาน การพัฒนาบุคลิกภาพในการทำงาน การปรับตัวในองค์กร การทำงานเป็นทีม จรรยาบรรณวิชาชีพ กฎหมายแรงงาน การประกันสังคม ระบบมาตรฐานการประกันคุณภาพและความปลอดภัยในการทำงาน การสื่อสารในองค์กร การเลือกหัวข้อปัญหา การวางแผน การวิเคราะห์และการแก้ปัญหา การเขียนรายงานและการนำเสนอ \nTypes and processes of professional experience; job application and job interview; personality development, work adjustment; teamwork; professional ethics; labour law; social security; quality assurance standard system and occupational safety, communication in the workplace, choosing a topic; planning; analysis and problem-solving; writing a report and a presentation' },
-            { id: 'cx002', code: '31-405-015-402', name: 'สหกิจศึกษา 1 (Cooperative Education 1)', credits: 6, category: 'CoreExp', description: 'การปฏิบัติงานเสมือนเป็นพนักงานในสถานประกอบการที่ตรงกับสาขา วิชาชีพและเหมาะสมกับความรู้ความสามารถ กระบวนการทำงานและหน้าที่ ของตำแหน่งงานที่ได้รับมอบหมาย และการประยุกต์ใช้ความรู้ทางทฤษฎีที่ เกี่ยวข้อง การจัดทำโครงงาน จากกรณีศึกษาหรือการเรียนรู้โดยใช้การ แก้ปัญหาเป็นฐาน จรรยาบรรณทางวิชาชีพในการปฏิบัติงาน \nPracticing in a workplace as an employee in a relevant position of the student’s field of study and abilities; understanding working processes and functions of the assigned job; applying the principle of knowledge and theory relevant to the duties or assigned job; preparing a project report by using the problem or case-based learning method; professional ethics' },
+            // 2.4 กลุ่มวิชาการฝึกประสบการณ์ฯ
+            { id: 'cx001', code: '31-405-015-401', name: 'การเตรียมความพร้อมการฝึกประสบการณ์วิชาชีพ', credits: 1, category: 'CoreExp' },
+            { id: 'cx002', code: '31-405-015-402', name: 'สหกิจศึกษา 1', credits: 6, category: 'CoreExp' },
 
-            // 3. หมวดวิชาเลือกเสรี (FreeElec)
+            // 3. หมวดวิชาเลือกเสรี
             { id: 'fe001', code: 'xx-xxx-xxx-xxx', name: 'วิชาเลือกเสรี 1', credits: 3, category: 'FreeElec' },
             { id: 'fe002', code: 'xx-xxx-xxx-xxx', name: 'วิชาเลือกเสรี 2', credits: 3, category: 'FreeElec' },
         ];
 
         const YEARS = 4;
         const SEMESTERS = 2;
+
+        // Helper function to split Description into TH/EN
+        const parseDescription = (desc) => {
+            if (!desc) return { th: 'ยังไม่มีข้อมูลคำอธิบายรายวิชา', en: 'No description available.' };
+            
+            // Check for newline which separates TH and EN (based on user data format)
+            const parts = desc.split('\n');
+            if (parts.length > 1) {
+                return { th: parts[0], en: parts.slice(1).join('\n') };
+            }
+            return { th: desc, en: 'No English description provided.' };
+        };
+
+        // Helper to get CLOs (mocking if not present)
+        const getCLOs = (course) => {
+            if (course.clos && course.clos.length > 0) return course.clos;
+            return [
+                `เข้าใจหลักการพื้นฐานของรายวิชา ${course.name}`,
+                'สามารถนำความรู้ไปประยุกต์ใช้แก้ปัญหาที่เกี่ยวข้องได้',
+                'มีทักษะในการวิเคราะห์และสังเคราะห์องค์ความรู้ในหัวข้อนี้'
+            ];
+        };
 
         const getInitialPlan = () => {
             const plan = {};
@@ -222,21 +271,17 @@
             const [availableCourses, setAvailableCourses] = useState(INITIAL_COURSES);
             const [draggedItem, setDraggedItem] = useState(null);
             const [isExporting, setIsExporting] = useState(false);
-            
-            // New State for Modal
             const [viewingCourse, setViewingCourse] = useState(null);
 
-            // คำนวณยอดรวมรายหมวด
             const categoryTotals = useMemo(() => {
-                const totals = {
-                    'GenEd': 0, 'CoreFund': 0, 'CoreComp': 0, 'CoreElec': 0, 'CoreExp': 0, 'FreeElec': 0
-                };
+                const totals = { 'GenEd': 0, 'CoreFund': 0, 'CoreComp': 0, 'CoreElec': 0, 'CoreExp': 0, 'FreeElec': 0 };
                 Object.values(plan).flat().forEach(course => {
                     if (totals[course.category] !== undefined) totals[course.category] += course.credits;
                 });
                 return totals;
             }, [plan]);
 
+            // ... Drag & Drop Handlers (Keep existing logic) ...
             const handleDragStart = (e, course, source, index) => {
                 const item = { course, source, index };
                 setDraggedItem(item);
@@ -245,15 +290,9 @@
             };
 
             const handleDropToSemesterContainer = (e, year, semester) => {
-                e.preventDefault();
-                e.currentTarget.classList.remove('drag-over');
+                e.preventDefault(); e.currentTarget.classList.remove('drag-over');
                 let item = draggedItem;
-                if (!item) {
-                    try {
-                        const data = e.dataTransfer.getData("application/json");
-                        if (data) item = JSON.parse(data);
-                    } catch (err) {}
-                }
+                if (!item) { try { item = JSON.parse(e.dataTransfer.getData("application/json")); } catch (err) {} }
                 if (!item) return;
                 const { course, source, index: sourceIndex } = item;
                 const targetKey = `${year}-${semester}`;
@@ -265,35 +304,18 @@
                         list.push(course);
                         return { ...prev, [targetKey]: list };
                     });
-                    setDraggedItem(null);
-                    return;
-                }
-                if (source === 'sidebar') {
-                    setAvailableCourses(prev => prev.filter(c => c.id !== course.id));
                 } else {
-                    setPlan(prev => ({
-                        ...prev,
-                        [source]: (prev[source] || []).filter(c => c.id !== course.id)
-                    }));
+                    if (source === 'sidebar') setAvailableCourses(prev => prev.filter(c => c.id !== course.id));
+                    else setPlan(prev => ({ ...prev, [source]: (prev[source] || []).filter(c => c.id !== course.id) }));
+                    setPlan(prev => ({ ...prev, [targetKey]: [...(prev[targetKey] || []), course] }));
                 }
-                setPlan(prev => ({
-                    ...prev,
-                    [targetKey]: [...(prev[targetKey] || []), course]
-                }));
                 setDraggedItem(null);
             };
 
             const handleDropToItem = (e, targetYear, targetSemester, targetIndex) => {
-                e.preventDefault();
-                e.stopPropagation();
-                e.currentTarget.classList.remove('drag-over-item');
+                e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.remove('drag-over-item');
                 let item = draggedItem;
-                if (!item) {
-                    try {
-                        const data = e.dataTransfer.getData("application/json");
-                        if (data) item = JSON.parse(data);
-                    } catch (err) {}
-                }
+                if (!item) { try { item = JSON.parse(e.dataTransfer.getData("application/json")); } catch (err) {} }
                 if (!item) return;
                 const { course, source, index: sourceIndex } = item;
                 const targetKey = `${targetYear}-${targetSemester}`;
@@ -308,14 +330,8 @@
                         return { ...prev, [targetKey]: list };
                     });
                 } else {
-                    if (source === 'sidebar') {
-                        setAvailableCourses(prev => prev.filter(c => c.id !== course.id));
-                    } else {
-                        setPlan(prev => ({
-                            ...prev,
-                            [source]: (prev[source] || []).filter(c => c.id !== course.id)
-                        }));
-                    }
+                    if (source === 'sidebar') setAvailableCourses(prev => prev.filter(c => c.id !== course.id));
+                    else setPlan(prev => ({ ...prev, [source]: (prev[source] || []).filter(c => c.id !== course.id) }));
                     setPlan(prev => {
                         const list = [...(prev[targetKey] || [])];
                         list.splice(targetIndex, 0, course);
@@ -326,64 +342,31 @@
             };
 
             const handleDropToSidebar = (e) => {
-                e.preventDefault();
-                e.currentTarget.classList.remove('drag-over'); 
+                e.preventDefault(); e.currentTarget.classList.remove('drag-over'); 
                 let item = draggedItem;
-                if (!item) {
-                    try {
-                         const data = e.dataTransfer.getData("application/json");
-                         if (data) item = JSON.parse(data);
-                    } catch (err) {}
-                }
+                if (!item) { try { item = JSON.parse(e.dataTransfer.getData("application/json")); } catch (err) {} }
                 if (!item) return;
                 const { course, source } = item;
                 if (source === 'sidebar') return; 
-                setPlan(prev => ({
-                    ...prev,
-                    [source]: (prev[source] || []).filter(c => c.id !== course.id)
-                }));
+                setPlan(prev => ({ ...prev, [source]: (prev[source] || []).filter(c => c.id !== course.id) }));
                 setAvailableCourses(prev => [...prev, course]);
                 setDraggedItem(null);
             };
 
-            const handleDragOver = (e) => {
-                e.preventDefault();
-                e.currentTarget.classList.add('drag-over');
-            };
-            const handleDragOverItem = (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                e.currentTarget.classList.add('drag-over-item');
-            };
-             const handleDragLeave = (e) => {
-                e.currentTarget.classList.remove('drag-over');
-            };
-            const handleDragLeaveItem = (e) => {
-                e.currentTarget.classList.remove('drag-over-item');
-            };
+            const handleDragOver = (e) => { e.preventDefault(); e.currentTarget.classList.add('drag-over'); };
+            const handleDragOverItem = (e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.add('drag-over-item'); };
+            const handleDragLeave = (e) => { e.currentTarget.classList.remove('drag-over'); };
+            const handleDragLeaveItem = (e) => { e.currentTarget.classList.remove('drag-over-item'); };
 
             const removeCourse = (course, sourceKey) => {
-                setPlan(prev => ({
-                    ...prev,
-                    [sourceKey]: (prev[sourceKey] || []).filter(c => c.id !== course.id)
-                }));
+                setPlan(prev => ({ ...prev, [sourceKey]: (prev[sourceKey] || []).filter(c => c.id !== course.id) }));
                 setAvailableCourses(prev => [...prev, course]);
             };
 
-            const calculateTotalCredits = (courses) => {
-                if (!courses) return 0;
-                return courses.reduce((sum, c) => sum + c.credits, 0);
-            };
-            
-            const calculateTotalAll = useMemo(() => {
-                 let total = 0;
-                 Object.values(plan).forEach(courses => {
-                     total += calculateTotalCredits(courses);
-                 });
-                 return total;
-            }, [plan]);
+            const calculateTotalCredits = (courses) => courses.reduce((sum, c) => sum + c.credits, 0);
+            const calculateTotalAll = useMemo(() => Object.values(plan).flat().reduce((sum, c) => sum + c.credits, 0), [plan]);
 
-            // --- Export Functions ---
+            // --- Export ---
             const exportToPNG = async () => {
                 const element = document.getElementById('planner-grid-area');
                 if (!element) return;
@@ -394,8 +377,7 @@
                     link.download = 'study-plan.png';
                     link.href = canvas.toDataURL();
                     link.click();
-                } catch (err) { alert("เกิดข้อผิดพลาดในการบันทึกภาพ"); } 
-                finally { setIsExporting(false); }
+                } catch (err) { alert("เกิดข้อผิดพลาดในการบันทึกภาพ"); } finally { setIsExporting(false); }
             };
 
             const exportToPDF = async () => {
@@ -415,60 +397,86 @@
                     const imgRatio = imgProps.width / imgProps.height;
                     const pageRatio = maxWidth / maxHeight;
                     let finalWidth, finalHeight;
-                    if (imgRatio > pageRatio) {
-                        finalWidth = maxWidth;
-                        finalHeight = maxWidth / imgRatio;
-                    } else {
-                        finalHeight = maxHeight;
-                        finalWidth = maxHeight * imgRatio;
-                    }
+                    if (imgRatio > pageRatio) { finalWidth = maxWidth; finalHeight = maxWidth / imgRatio; } 
+                    else { finalHeight = maxHeight; finalWidth = maxHeight * imgRatio; }
                     const x = (pageWidth - finalWidth) / 2;
                     const y = (pageHeight - finalHeight) / 2;
                     pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
                     pdf.save('study-plan.pdf');
-                } catch (err) { alert("เกิดข้อผิดพลาดในการบันทึก PDF"); } 
-                finally { setIsExporting(false); }
+                } catch (err) { alert("เกิดข้อผิดพลาดในการบันทึก PDF"); } finally { setIsExporting(false); }
             };
 
+            // --- UI ---
             return (
                 <div className="min-h-screen flex flex-col md:flex-row">
                     
-                    {/* --- Modal Overlay --- */}
+                    {/* --- Improved Modal with 2 Columns --- */}
                     {viewingCourse && (
                         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-overlay" onClick={() => setViewingCourse(null)}>
-                            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden modal-content" onClick={e => e.stopPropagation()}>
-                                <div className={`p-6 border-b-4 ${CATEGORIES[viewingCourse.category].border.replace('border', 'border-b')}`}>
+                            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col modal-content" onClick={e => e.stopPropagation()}>
+                                {/* Header */}
+                                <div className={`p-6 border-b-4 flex-shrink-0 ${CATEGORIES[viewingCourse.category].border.replace('border', 'border-b')}`}>
                                     <div className="flex justify-between items-start">
-                                        <span className={`inline-block px-2 py-1 rounded text-xs font-bold mb-2 ${CATEGORIES[viewingCourse.category].color}`}>
-                                            {CATEGORIES[viewingCourse.category].label}
-                                        </span>
-                                        <button onClick={() => setViewingCourse(null)} className="text-gray-400 hover:text-gray-600">
+                                        <div>
+                                            <span className={`inline-block px-2 py-1 rounded text-xs font-bold mb-2 ${CATEGORIES[viewingCourse.category].color}`}>
+                                                {CATEGORIES[viewingCourse.category].label}
+                                            </span>
+                                            <div className="flex items-center gap-3">
+                                                <h3 className="text-2xl font-bold text-gray-900">{viewingCourse.code}</h3>
+                                                <span className="text-sm font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-md">{viewingCourse.credits} หน่วยกิต</span>
+                                            </div>
+                                            <h4 className="text-xl font-medium text-gray-700 mt-1">{viewingCourse.name}</h4>
+                                        </div>
+                                        <button onClick={() => setViewingCourse(null)} className="text-gray-400 hover:text-gray-600 bg-gray-100 rounded-full p-1 transition-colors">
                                             <i className="ph ph-x text-2xl"></i>
                                         </button>
                                     </div>
-                                    <h3 className="text-2xl font-bold text-gray-900 mb-1">{viewingCourse.code}</h3>
-                                    <h4 className="text-lg font-medium text-gray-700">{viewingCourse.name}</h4>
                                 </div>
-                                <div className="p-6">
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <i className="ph ph-exam text-indigo-500 text-xl"></i>
-                                        <span className="font-bold text-gray-700">หน่วยกิต: {viewingCourse.credits}</span>
-                                    </div>
-                                    
-                                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                                        <h5 className="font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                            <i className="ph ph-book-open-text text-gray-500"></i>
-                                            คำอธิบายรายวิชา
-                                        </h5>
-                                        <p className="text-gray-600 text-sm leading-relaxed">
-                                            {viewingCourse.description || `ยังไม่มีข้อมูลคำอธิบายรายวิชาสำหรับ ${viewingCourse.name} อย่างเป็นทางการ แต่โดยสังเขปวิชานี้จะศึกษาเกี่ยวกับหลักการและทฤษฎีพื้นฐานที่เกี่ยวข้อง เพื่อนำไปประยุกต์ใช้ในการแก้ปัญหาทางคณิตศาสตร์และวิทยาศาสตร์`}
-                                        </p>
+
+                                {/* Body - Scrollable */}
+                                <div className="p-0 overflow-y-auto flex-1">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-0 h-full">
+                                        {/* Left Column: Description */}
+                                        <div className="p-6 space-y-6 border-r border-gray-100">
+                                            <div>
+                                                <h5 className="font-bold text-gray-800 mb-3 flex items-center gap-2 text-sm uppercase tracking-wide">
+                                                    <i className="ph ph-translate text-indigo-600"></i> คำอธิบายรายวิชา (TH)
+                                                </h5>
+                                                <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line text-justify">
+                                                    {parseDescription(viewingCourse.description).th}
+                                                </p>
+                                            </div>
+                                            <div className="pt-4 border-t border-gray-100">
+                                                <h5 className="font-bold text-gray-800 mb-3 flex items-center gap-2 text-sm uppercase tracking-wide">
+                                                    <i className="ph ph-globe text-indigo-600"></i> Course Description (EN)
+                                                </h5>
+                                                <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line text-justify italic">
+                                                    {parseDescription(viewingCourse.description).en}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* Right Column: CLOs */}
+                                        <div className="p-6 bg-gray-50">
+                                            <h5 className="font-bold text-gray-800 mb-4 flex items-center gap-2 text-sm uppercase tracking-wide">
+                                                <i className="ph ph-target text-indigo-600"></i> ผลลัพธ์การเรียนรู้ (CLOs)
+                                            </h5>
+                                            <ul className="space-y-3">
+                                                {getCLOs(viewingCourse).map((clo, idx) => (
+                                                    <li key={idx} className="clo-item text-sm text-gray-700 leading-normal pl-6 relative">
+                                                        {clo}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-end">
+
+                                {/* Footer */}
+                                <div className="p-4 bg-white border-t border-gray-100 flex justify-end flex-shrink-0">
                                     <button 
                                         onClick={() => setViewingCourse(null)}
-                                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium transition-colors"
+                                        className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium transition-colors shadow-sm"
                                     >
                                         ปิดหน้าต่าง
                                     </button>
@@ -503,7 +511,10 @@
                                                     </div>
                                                     <div className="text-xs text-gray-600 mt-1 line-clamp-1">{course.name}</div>
                                                 </div>
-                                                <i className="ph ph-dots-six-vertical text-gray-300 cursor-move"></i>
+                                                <div className="flex flex-col items-center gap-2">
+                                                    <i className="ph ph-dots-six-vertical text-gray-300 cursor-move"></i>
+                                                    <button onClick={(e) => { e.stopPropagation(); setViewingCourse(course); }} className="text-gray-300 hover:text-indigo-500 transition-colors" title="ดูรายละเอียด"><i className="ph ph-info text-lg"></i></button>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
@@ -580,8 +591,7 @@
                                                                         </div>
                                                                         <div className="flex flex-col gap-1 items-center absolute top-1 right-1">
                                                                             <button onClick={() => removeCourse(course, key)} className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-opacity" title="นำออก"><i className="ph ph-x-circle text-lg"></i></button>
-                                                                            {/* Info Button Added Here */}
-                                                                            <button onClick={() => setViewingCourse(course)} className="text-gray-300 hover:text-indigo-500 transition-colors" title="ดูคำอธิบายรายวิชา"><i className="ph ph-info text-lg"></i></button>
+                                                                            <button onClick={(e) => { e.stopPropagation(); setViewingCourse(course); }} className="text-gray-300 hover:text-indigo-500 transition-colors" title="ดูคำอธิบาย"><i className="ph ph-info text-lg"></i></button>
                                                                         </div>
                                                                     </div>
                                                                     <div className="flex justify-between items-center mt-1">
