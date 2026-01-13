@@ -61,11 +61,25 @@
             background-color: #e0e7ff; /* indigo-100 */
             border: 2px dashed #4f46e5;
         }
-        
-        /* Style when dragging over another item (Insert indicator) */
         .card-drag.drag-over-item {
             border-top: 3px solid #4f46e5;
             margin-top: 4px;
+        }
+        
+        /* Modal Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-overlay {
+            animation: fadeIn 0.2s ease-out;
+        }
+        .modal-content {
+            animation: slideUp 0.3s ease-out;
         }
     </style>
 </head>
@@ -116,12 +130,13 @@
             }
         };
 
-        // --- Mock Data: รายวิชา ---
+        // --- Mock Data ---
+        // (เพิ่ม description เข้าไปในตัวอย่าง เพื่อให้เห็นภาพ)
         const INITIAL_COURSES = [
             // หมวดศึกษาทั่วไป (GenEd)
-            { id: 'gen001', code: '00-400-060-006', name: 'กุญแจสู่ความสำเร็จ', credits: 1, category: 'GenEd' },
-            { id: 'gen002', code: '00-400-070-008', name: 'ภาษาไทยในยุคดิจิทัล', credits: 3, category: 'GenEd' },
-            { id: 'gen003', code: '00-400-070-004', name: 'ภาษาอังกฤษพื้นฐาน', credits: 3, category: 'GenEd' },
+            { id: 'gen001', code: '00-400-060-006', name: 'กุญแจสู่ความสำเร็จ', credits: 1, category: 'GenEd', description: 'ศึกษาหลักการวางแผนชีวิตและการทำงาน การพัฒนาบุคลิกภาพ และทักษะที่จำเป็นสำหรับศตวรรษที่ 21' },
+            { id: 'gen002', code: '00-400-070-008', name: 'ภาษาไทยในยุคดิจิทัล', credits: 3, category: 'GenEd', description: 'การใช้ภาษาไทยเพื่อการสื่อสารในสื่อสังคมออนไลน์ การรู้เท่าทันสื่อดิจิทัล และการเขียนเชิงสร้างสรรค์' },
+            { id: 'gen003', code: '00-400-070-004', name: 'ภาษาอังกฤษพื้นฐาน', credits: 3, category: 'GenEd', description: 'ทักษะภาษาอังกฤษพื้นฐานเพื่อการสื่อสาร ฟัง พูด อ่าน เขียน ในชีวิตประจำวัน' },
             { id: 'gen004', code: '00-400-070-005', name: 'ภาษาอังกฤษ 1', credits: 3, category: 'GenEd' },
             { id: 'gen005', code: '00-400-070-006', name: 'ภาษาอังกฤษ 2', credits: 3, category: 'GenEd' },
             { id: 'gen006', code: '00-400-080-005', name: 'แนวคิดและทักษะนวัตกรรม', credits: 3, category: 'GenEd' },
@@ -130,18 +145,17 @@
             { id: 'gen009', code: '00-400-100-009', name: 'ชุมชนนวัตกรรมสร้างสรรค์', credits: 3, category: 'GenEd' },
             
             // 2.1 กลุ่มวิชาพื้นฐานวิชาชีพ (CoreFund)
-            { id: 'cf001', code: '02-005-011-102', name: 'แคลคูลัส 1', credits: 3, category: 'CoreFund' },
+            { id: 'cf001', code: '02-005-011-102', name: 'แคลคูลัส 1', credits: 3, category: 'CoreFund', description: 'ลิมิตและความต่อเนื่อง อนุพันธ์ของฟังก์ชัน การประยุกต์อนุพันธ์ อินทิกรัลจำกัดเขตและไม่จำกัดเขต' },
             { id: 'cf002', code: '02-005-011-103', name: 'แคลคูลัส 2', credits: 3, category: 'CoreFund' },
-            { id: 'cf003', code: '02-005-011-104', name: 'แคลคูลัส 3', credits: 3, category: 'CoreFund' },
-            { id: 'cf004', code: '02-005-022-101', name: 'เคมี 1', credits: 3, category: 'CoreFund' },
-            { id: 'cf005', code: '02-005-022-102', name: 'ปฏิบัติการเคมี 1', credits: 1, category: 'CoreFund' },
-            { id: 'cf006', code: '02-005-022-103', name: 'เคมี 2', credits: 3, category: 'CoreFund' },
-            { id: 'cf007', code: '02-005-022-104', name: 'ปฏิบัติการเคมี 2', credits: 1, category: 'CoreFund' },
-            { id: 'cf008', code: '02-005-033-105', name: 'ฟิสิกส์พื้นฐาน', credits: 3, category: 'CoreFund' },
-            { id: 'cf009', code: '02-005-033-106', name: 'ปฏิบัติการฟิสิกส์พื้นฐาน', credits: 1, category: 'CoreFund' },
-            { id: 'cf010', code: '02-005-055-204', name: 'สถิติ 1', credits: 3, category: 'CoreFund' },
-            { id: 'cf011', code: '02-005-055-205', name: 'สถิติ 2', credits: 3, category: 'CoreFund' },
-            { id: 'cf012', code: '02-005-055-306', name: 'การออกแบบการทดลอง', credits: 3, category: 'CoreFund' },
+            { id: 'cf003', code: '02-005-022-101', name: 'เคมี 1', credits: 3, category: 'CoreFund' },
+            { id: 'cf004', code: '02-005-022-102', name: 'ปฏิบัติการเคมี 1', credits: 1, category: 'CoreFund' },
+            { id: 'cf005', code: '02-005-022-103', name: 'เคมี 2', credits: 3, category: 'CoreFund' },
+            { id: 'cf006', code: '02-005-022-104', name: 'ปฏิบัติการเคมี 2', credits: 1, category: 'CoreFund' },
+            { id: 'cf007', code: '02-005-033-105', name: 'ฟิสิกส์พื้นฐาน', credits: 3, category: 'CoreFund' },
+            { id: 'cf008', code: '02-005-033-106', name: 'ปฏิบัติการฟิสิกส์พื้นฐาน', credits: 1, category: 'CoreFund' },
+            { id: 'cf009', code: '02-005-055-204', name: 'สถิติ 1', credits: 3, category: 'CoreFund' },
+            { id: 'cf010', code: '02-005-055-205', name: 'สถิติ 2', credits: 3, category: 'CoreFund' },
+            { id: 'cf011', code: '02-005-055-306', name: 'การออกแบบการทดลอง', credits: 3, category: 'CoreFund' },
 
             // 2.2 กลุ่มวิชาบังคับ (CoreComp)
             { id: 'cc001', code: 'xx-xxx-xxx-xxx', name: 'หลักการคณิตศาสตร์ (Principles of Mathematics)', credits: 3, category: 'CoreComp' },
@@ -161,7 +175,7 @@
             { id: 'cc015', code: 'xx-xxx-xxx-xxx', name: 'การเขียนโปรแกรมสำหรับคณิตศาสตร์ประยุกต์ 2 (Programming for Applied Mathematics 2)', credits: 3, category: 'CoreComp' },
             { id: 'cc016', code: 'xx-xxx-xxx-xxx', name: 'การเรียนรู้ของเครื่อง (Machine Learning)', credits: 3, category: 'CoreComp' },
             { id: 'cc017', code: '31-407-632-010', name: 'แนะนำปัญญาประดิษฐ์', credits: 3, category: 'CoreComp' },
-            { id: 'cc018', code: 'xx-xxx-xxx-xxx', name: 'จริยธรรมในการใช้ปัญญาประดิษฐ์', credits: 3, category: 'CoreComp' },
+            { id: 'cc018', code: 'xx-xxx-xxx-xxx', name: 'การใช้ปัญญาประดิษฐ์สำหรับคณิตศาสตร์ประยุกต์', credits: 3, category: 'CoreComp' },
             { id: 'cc019', code: '31-405-014-301', name: 'สัมมนา', credits: 1, category: 'CoreComp' },
             { id: 'cc020', code: '31-405-014-302', name: 'การเตรียมโครงงาน', credits: 1, category: 'CoreComp' },
             { id: 'cc021', code: '31-405-014-402', name: 'โครงงาน', credits: 2, category: 'CoreComp' },
@@ -207,25 +221,18 @@
             const [availableCourses, setAvailableCourses] = useState(INITIAL_COURSES);
             const [draggedItem, setDraggedItem] = useState(null);
             const [isExporting, setIsExporting] = useState(false);
+            
+            // New State for Modal
+            const [viewingCourse, setViewingCourse] = useState(null);
 
             // คำนวณยอดรวมรายหมวด
             const categoryTotals = useMemo(() => {
                 const totals = {
-                    'GenEd': 0,
-                    'CoreFund': 0,
-                    'CoreComp': 0,
-                    'CoreElec': 0,
-                    'CoreExp': 0,
-                    'FreeElec': 0
+                    'GenEd': 0, 'CoreFund': 0, 'CoreComp': 0, 'CoreElec': 0, 'CoreExp': 0, 'FreeElec': 0
                 };
-                
-                // วนลูปทุกวิชาที่มีอยู่ใน Plan
                 Object.values(plan).flat().forEach(course => {
-                    if (totals[course.category] !== undefined) {
-                        totals[course.category] += course.credits;
-                    }
+                    if (totals[course.category] !== undefined) totals[course.category] += course.credits;
                 });
-                
                 return totals;
             }, [plan]);
 
@@ -239,7 +246,6 @@
             const handleDropToSemesterContainer = (e, year, semester) => {
                 e.preventDefault();
                 e.currentTarget.classList.remove('drag-over');
-
                 let item = draggedItem;
                 if (!item) {
                     try {
@@ -247,9 +253,7 @@
                         if (data) item = JSON.parse(data);
                     } catch (err) {}
                 }
-
                 if (!item) return;
-
                 const { course, source, index: sourceIndex } = item;
                 const targetKey = `${year}-${semester}`;
 
@@ -263,7 +267,6 @@
                     setDraggedItem(null);
                     return;
                 }
-
                 if (source === 'sidebar') {
                     setAvailableCourses(prev => prev.filter(c => c.id !== course.id));
                 } else {
@@ -272,12 +275,10 @@
                         [source]: (prev[source] || []).filter(c => c.id !== course.id)
                     }));
                 }
-
                 setPlan(prev => ({
                     ...prev,
                     [targetKey]: [...(prev[targetKey] || []), course]
                 }));
-
                 setDraggedItem(null);
             };
 
@@ -285,7 +286,6 @@
                 e.preventDefault();
                 e.stopPropagation();
                 e.currentTarget.classList.remove('drag-over-item');
-
                 let item = draggedItem;
                 if (!item) {
                     try {
@@ -293,15 +293,12 @@
                         if (data) item = JSON.parse(data);
                     } catch (err) {}
                 }
-
                 if (!item) return;
-
                 const { course, source, index: sourceIndex } = item;
                 const targetKey = `${targetYear}-${targetSemester}`;
 
                 if (source === targetKey) {
                     if (sourceIndex === targetIndex) return;
-
                     setPlan(prev => {
                         const list = [...prev[targetKey]];
                         const [removed] = list.splice(sourceIndex, 1);
@@ -309,7 +306,6 @@
                         list.splice(insertAt, 0, removed);
                         return { ...prev, [targetKey]: list };
                     });
-
                 } else {
                     if (source === 'sidebar') {
                         setAvailableCourses(prev => prev.filter(c => c.id !== course.id));
@@ -319,7 +315,6 @@
                             [source]: (prev[source] || []).filter(c => c.id !== course.id)
                         }));
                     }
-
                     setPlan(prev => {
                         const list = [...(prev[targetKey] || [])];
                         list.splice(targetIndex, 0, course);
@@ -332,7 +327,6 @@
             const handleDropToSidebar = (e) => {
                 e.preventDefault();
                 e.currentTarget.classList.remove('drag-over'); 
-
                 let item = draggedItem;
                 if (!item) {
                     try {
@@ -340,17 +334,13 @@
                          if (data) item = JSON.parse(data);
                     } catch (err) {}
                 }
-
                 if (!item) return;
                 const { course, source } = item;
-
                 if (source === 'sidebar') return; 
-
                 setPlan(prev => ({
                     ...prev,
                     [source]: (prev[source] || []).filter(c => c.id !== course.id)
                 }));
-
                 setAvailableCourses(prev => [...prev, course]);
                 setDraggedItem(null);
             };
@@ -359,17 +349,14 @@
                 e.preventDefault();
                 e.currentTarget.classList.add('drag-over');
             };
-            
             const handleDragOverItem = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 e.currentTarget.classList.add('drag-over-item');
             };
-
              const handleDragLeave = (e) => {
                 e.currentTarget.classList.remove('drag-over');
             };
-            
             const handleDragLeaveItem = (e) => {
                 e.currentTarget.classList.remove('drag-over-item');
             };
@@ -395,143 +382,123 @@
                  return total;
             }, [plan]);
 
-            // --- Export Functions (Improved Scaling) ---
+            // --- Export Functions ---
             const exportToPNG = async () => {
                 const element = document.getElementById('planner-grid-area');
                 if (!element) return;
-                
                 setIsExporting(true);
                 try {
-                    const canvas = await html2canvas(element, {
-                        backgroundColor: '#ffffff',
-                        scale: 3, // High quality
-                        useCORS: true
-                    });
+                    const canvas = await html2canvas(element, { backgroundColor: '#ffffff', scale: 3, useCORS: true });
                     const link = document.createElement('a');
                     link.download = 'study-plan.png';
                     link.href = canvas.toDataURL();
                     link.click();
-                } catch (err) {
-                    console.error("Export failed", err);
-                    alert("เกิดข้อผิดพลาดในการบันทึกภาพ");
-                } finally {
-                    setIsExporting(false);
-                }
+                } catch (err) { alert("เกิดข้อผิดพลาดในการบันทึกภาพ"); } 
+                finally { setIsExporting(false); }
             };
 
             const exportToPDF = async () => {
                 const element = document.getElementById('planner-grid-area');
                 if (!element) return;
-
                 setIsExporting(true);
                 try {
-                    // Capture high quality canvas
-                    const canvas = await html2canvas(element, {
-                        backgroundColor: '#ffffff',
-                        scale: 3,
-                        useCORS: true
-                    });
+                    const canvas = await html2canvas(element, { backgroundColor: '#ffffff', scale: 3, useCORS: true });
                     const imgData = canvas.toDataURL('image/png');
-                    
-                    // Init PDF (A4 Landscape)
-                    const pdf = new jspdf.jsPDF({
-                        orientation: 'landscape',
-                        unit: 'mm',
-                        format: 'a4'
-                    });
-
-                    // Page Dimensions (A4 Landscape: 297mm x 210mm)
+                    const pdf = new jspdf.jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
                     const pageWidth = pdf.internal.pageSize.getWidth();
                     const pageHeight = pdf.internal.pageSize.getHeight();
-                    
-                    // Margins
                     const margin = 10;
                     const maxWidth = pageWidth - (margin * 2);
                     const maxHeight = pageHeight - (margin * 2);
-
-                    // Image Dimensions
                     const imgProps = pdf.getImageProperties(imgData);
                     const imgRatio = imgProps.width / imgProps.height;
                     const pageRatio = maxWidth / maxHeight;
-
                     let finalWidth, finalHeight;
-
-                    // Logic: Fit Entire Image into Page
                     if (imgRatio > pageRatio) {
-                        // Image is wider than page area -> Fit to Width
                         finalWidth = maxWidth;
                         finalHeight = maxWidth / imgRatio;
                     } else {
-                        // Image is taller than page area -> Fit to Height
                         finalHeight = maxHeight;
                         finalWidth = maxHeight * imgRatio;
                     }
-
-                    // Centering
                     const x = (pageWidth - finalWidth) / 2;
                     const y = (pageHeight - finalHeight) / 2;
-                    
                     pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
                     pdf.save('study-plan.pdf');
-                } catch (err) {
-                    console.error("Export failed", err);
-                    alert("เกิดข้อผิดพลาดในการบันทึก PDF");
-                } finally {
-                    setIsExporting(false);
-                }
+                } catch (err) { alert("เกิดข้อผิดพลาดในการบันทึก PDF"); } 
+                finally { setIsExporting(false); }
             };
 
             return (
                 <div className="min-h-screen flex flex-col md:flex-row">
                     
-                    {/* --- Sidebar: Available Courses --- */}
-                    <div 
-                        className="w-full md:w-1/4 bg-white border-r border-gray-200 p-4 h-screen-md md:h-screen overflow-y-auto sticky top-0 droppable-area no-scrollbar"
-                        onDragOver={handleDragOver}
-                        onDragLeave={handleDragLeave}
-                        onDrop={handleDropToSidebar}
-                        style={{ height: '100vh', paddingBottom: '50px' }} 
-                    >
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                                <i className="ph ph-books text-indigo-600"></i>
-                                รายวิชาคงเหลือ
-                            </h2>
-                            <span className="text-xs bg-gray-100 px-2 py-1 rounded-full text-gray-500">
-                                {availableCourses.length} วิชา
-                            </span>
-                        </div>
-
-                        {availableCourses.length === 0 && (
-                            <div className="text-center p-8 text-gray-400 border-2 border-dashed border-gray-200 rounded-lg">
-                                <p>เลือกรายวิชาครบแล้ว</p>
-                                <p className="text-xs mt-1">ลากจากตารางกลับมาคืนได้</p>
+                    {/* --- Modal Overlay --- */}
+                    {viewingCourse && (
+                        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 modal-overlay" onClick={() => setViewingCourse(null)}>
+                            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden modal-content" onClick={e => e.stopPropagation()}>
+                                <div className={`p-6 border-b-4 ${CATEGORIES[viewingCourse.category].border.replace('border', 'border-b')}`}>
+                                    <div className="flex justify-between items-start">
+                                        <span className={`inline-block px-2 py-1 rounded text-xs font-bold mb-2 ${CATEGORIES[viewingCourse.category].color}`}>
+                                            {CATEGORIES[viewingCourse.category].label}
+                                        </span>
+                                        <button onClick={() => setViewingCourse(null)} className="text-gray-400 hover:text-gray-600">
+                                            <i className="ph ph-x text-2xl"></i>
+                                        </button>
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-1">{viewingCourse.code}</h3>
+                                    <h4 className="text-lg font-medium text-gray-700">{viewingCourse.name}</h4>
+                                </div>
+                                <div className="p-6">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <i className="ph ph-exam text-indigo-500 text-xl"></i>
+                                        <span className="font-bold text-gray-700">หน่วยกิต: {viewingCourse.credits}</span>
+                                    </div>
+                                    
+                                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                        <h5 className="font-bold text-gray-700 mb-2 flex items-center gap-2">
+                                            <i className="ph ph-book-open-text text-gray-500"></i>
+                                            คำอธิบายรายวิชา
+                                        </h5>
+                                        <p className="text-gray-600 text-sm leading-relaxed">
+                                            {viewingCourse.description || `ยังไม่มีข้อมูลคำอธิบายรายวิชาสำหรับ ${viewingCourse.name} อย่างเป็นทางการ แต่โดยสังเขปวิชานี้จะศึกษาเกี่ยวกับหลักการและทฤษฎีพื้นฐานที่เกี่ยวข้อง เพื่อนำไปประยุกต์ใช้ในการแก้ปัญหาทางคณิตศาสตร์และวิทยาศาสตร์`}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-end">
+                                    <button 
+                                        onClick={() => setViewingCourse(null)}
+                                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium transition-colors"
+                                    >
+                                        ปิดหน้าต่าง
+                                    </button>
+                                </div>
                             </div>
-                        )}
+                        </div>
+                    )}
 
+                    {/* --- Sidebar --- */}
+                    <div className="w-full md:w-1/4 bg-white border-r border-gray-200 p-4 h-screen-md md:h-screen overflow-y-auto sticky top-0 droppable-area no-scrollbar"
+                        onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDropToSidebar}
+                        style={{ height: '100vh', paddingBottom: '50px' }}>
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2"><i className="ph ph-books text-indigo-600"></i> รายวิชาคงเหลือ</h2>
+                            <span className="text-xs bg-gray-100 px-2 py-1 rounded-full text-gray-500">{availableCourses.length} วิชา</span>
+                        </div>
+                        {availableCourses.length === 0 && <div className="text-center p-8 text-gray-400 border-2 border-dashed border-gray-200 rounded-lg"><p>เลือกรายวิชาครบแล้ว</p></div>}
                         {Object.keys(CATEGORIES).map(catKey => {
                             const coursesInCat = availableCourses.filter(c => c.category === catKey);
                             if (coursesInCat.length === 0) return null;
-
                             return (
                                 <div key={catKey} className="mb-6">
-                                    <h3 className="text-sm font-bold text-gray-700 mb-2 pb-1 border-b border-gray-100">
-                                        {CATEGORIES[catKey].label}
-                                    </h3>
+                                    <h3 className="text-sm font-bold text-gray-700 mb-2 pb-1 border-b border-gray-100">{CATEGORIES[catKey].label}</h3>
                                     <div className="space-y-2">
                                         {coursesInCat.map((course, idx) => (
-                                            <div
-                                                key={course.id}
-                                                draggable
-                                                onDragStart={(e) => handleDragStart(e, course, 'sidebar', idx)}
-                                                className={`card-drag p-3 rounded-lg border shadow-sm flex justify-between items-start bg-white hover:shadow-md select-none ${CATEGORIES[course.category].border}`}
-                                            >
+                                            <div key={course.id} draggable onDragStart={(e) => handleDragStart(e, course, 'sidebar', idx)}
+                                                className={`card-drag p-3 rounded-lg border shadow-sm flex justify-between items-start bg-white hover:shadow-md select-none ${CATEGORIES[course.category].border}`}>
                                                 <div>
                                                     <div className="flex items-center gap-2">
                                                         <span className="font-bold text-sm text-gray-800">{course.code}</span>
-                                                        <span className={`text-[10px] px-1.5 py-0.5 rounded ${CATEGORIES[course.category].color}`}>
-                                                            {course.credits} นก.
-                                                        </span>
+                                                        <span className={`text-[10px] px-1.5 py-0.5 rounded ${CATEGORIES[course.category].color}`}>{course.credits} นก.</span>
                                                     </div>
                                                     <div className="text-xs text-gray-600 mt-1 line-clamp-1">{course.name}</div>
                                                 </div>
@@ -544,38 +511,18 @@
                         })}
                     </div>
 
-                    {/* --- Main Content: Planner Grid --- */}
+                    {/* --- Main Content --- */}
                     <div className="flex-1 p-4 md:p-8 overflow-y-auto bg-gray-50">
                         <header className="mb-8 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
                             <div>
                                 <h1 className="text-3xl font-bold text-gray-900">แผนการเรียน 4 ปี</h1>
-                                <p className="text-gray-500 text-sm mt-1">
-                                    ลากรายวิชาจากด้านซ้ายลงในภาคการศึกษาที่ต้องการ (สามารถลากแทรกเพื่อเรียงลำดับได้)
-                                </p>
+                                <p className="text-gray-500 text-sm mt-1">ลากรายวิชาจากด้านซ้ายลงในภาคการศึกษาที่ต้องการ</p>
                             </div>
-                            
                             <div className="flex flex-wrap items-center gap-4">
-                                {/* Export Buttons */}
                                 <div className="flex gap-2">
-                                    <button 
-                                        onClick={exportToPNG}
-                                        disabled={isExporting}
-                                        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium transition-colors shadow-sm"
-                                    >
-                                        <i className="ph ph-image text-lg"></i>
-                                        {isExporting ? 'กำลังบันทึก...' : 'บันทึกเป็นภาพ (PNG)'}
-                                    </button>
-                                    <button 
-                                        onClick={exportToPDF}
-                                        disabled={isExporting}
-                                        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium transition-colors shadow-sm"
-                                    >
-                                        <i className="ph ph-file-pdf text-lg"></i>
-                                        {isExporting ? 'กำลังบันทึก...' : 'บันทึกเป็น PDF'}
-                                    </button>
+                                    <button onClick={exportToPNG} disabled={isExporting} className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium transition-colors shadow-sm"><i className="ph ph-image text-lg"></i>{isExporting ? 'กำลังบันทึก...' : 'บันทึกเป็นภาพ (PNG)'}</button>
+                                    <button onClick={exportToPDF} disabled={isExporting} className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 text-sm font-medium transition-colors shadow-sm"><i className="ph ph-file-pdf text-lg"></i>{isExporting ? 'กำลังบันทึก...' : 'บันทึกเป็น PDF'}</button>
                                 </div>
-
-                                {/* Main Total - Sticky in Header */}
                                 <div className="bg-indigo-600 text-white px-6 py-2 rounded-xl shadow-lg flex flex-col items-center min-w-[120px]">
                                     <span className="text-[10px] opacity-80 uppercase tracking-wider">หน่วยกิตรวม</span>
                                     <span className="text-2xl font-bold">{calculateTotalAll}</span>
@@ -583,22 +530,11 @@
                             </div>
                         </header>
 
-                        {/* ID for Capture */}
                         <div id="planner-grid-area" className="p-6 bg-white rounded-2xl shadow-sm border border-gray-200">
-                            
-                            {/* --- Export Header (New) --- */}
                             <div className="flex justify-between items-end mb-6 pb-4 border-b border-gray-100">
-                                <div>
-                                    <h2 className="text-2xl font-bold text-gray-800">แผนการเรียน 4 ปี</h2>
-                                    <p className="text-sm text-gray-500">Interactive Study Plan</p>
-                                </div>
-                                <div className="text-right">
-                                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">หน่วยกิตรวมสะสม</span>
-                                    <div className="text-3xl font-bold text-indigo-600">{calculateTotalAll}</div>
-                                </div>
+                                <div><h2 className="text-2xl font-bold text-gray-800">แผนการเรียน 4 ปี</h2><p className="text-sm text-gray-500">Interactive Study Plan</p></div>
+                                <div className="text-right"><span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">หน่วยกิตรวมสะสม</span><div className="text-3xl font-bold text-indigo-600">{calculateTotalAll}</div></div>
                             </div>
-
-                            {/* --- Category Summary Dashboard --- */}
                             <div className="mb-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
                                 {Object.keys(CATEGORIES).map(catKey => {
                                     const config = CATEGORIES[catKey];
@@ -606,15 +542,10 @@
                                     const borderColorClass = config.border;
                                     const bgClass = config.color.split(' ')[0].replace('100', '50');
                                     const textClass = config.color.split(' ')[1];
-
                                     return (
                                         <div key={catKey} className={`p-3 rounded-lg border ${borderColorClass} ${bgClass} flex flex-col items-center justify-center text-center shadow-sm`}>
-                                            <span className={`text-[10px] font-bold uppercase tracking-wider opacity-70 mb-1 ${textClass}`}>
-                                                {config.shortLabel}
-                                            </span>
-                                            <span className={`text-xl font-bold ${textClass}`}>
-                                                {total} <span className="text-[10px] font-normal opacity-70">นก.</span>
-                                            </span>
+                                            <span className={`text-[10px] font-bold uppercase tracking-wider opacity-70 mb-1 ${textClass}`}>{config.shortLabel}</span>
+                                            <span className={`text-xl font-bold ${textClass}`}>{total} <span className="text-[10px] font-normal opacity-70">นก.</span></span>
                                         </div>
                                     );
                                 })}
@@ -628,66 +559,37 @@
                                             const courses = plan[key] || [];
                                             const totalCredits = calculateTotalCredits(courses);
                                             const isOverloaded = totalCredits > 22; 
-
                                             return (
-                                                <div 
-                                                    key={key}
-                                                    className={`droppable-area bg-gray-50 rounded-xl border border-gray-200 shadow-sm flex flex-col h-full min-h-[300px] ${isOverloaded ? 'ring-2 ring-red-300' : ''}`}
-                                                    onDragOver={handleDragOver}
-                                                    onDragLeave={handleDragLeave}
-                                                    onDrop={(e) => handleDropToSemesterContainer(e, year, semester)}
-                                                >
-                                                    {/* Header ของแต่ละเทอม */}
+                                                <div key={key} className={`droppable-area bg-gray-50 rounded-xl border border-gray-200 shadow-sm flex flex-col h-full min-h-[300px] ${isOverloaded ? 'ring-2 ring-red-300' : ''}`}
+                                                    onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={(e) => handleDropToSemesterContainer(e, year, semester)}>
                                                     <div className="p-3 border-b border-gray-200 flex justify-between items-center bg-white rounded-t-xl">
-                                                        <div>
-                                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Year {year}</span>
-                                                            <h3 className="font-bold text-gray-800 text-sm">เทอม {semester}</h3>
-                                                        </div>
-                                                        <div className={`px-2 py-0.5 rounded text-[10px] font-bold ${isOverloaded ? 'bg-red-100 text-red-600' : 'bg-indigo-50 text-indigo-600'}`}>
-                                                            {totalCredits} นก.
-                                                        </div>
+                                                        <div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Year {year}</span><h3 className="font-bold text-gray-800 text-sm">เทอม {semester}</h3></div>
+                                                        <div className={`px-2 py-0.5 rounded text-[10px] font-bold ${isOverloaded ? 'bg-red-100 text-red-600' : 'bg-indigo-50 text-indigo-600'}`}>{totalCredits} นก.</div>
                                                     </div>
-
-                                                    {/* พื้นที่วางรายวิชา */}
                                                     <div className="p-2 flex-1 space-y-2">
-                                                        {courses.length === 0 ? (
-                                                            <div className="h-full flex flex-col items-center justify-center text-gray-300 pointer-events-none min-h-[100px]">
-                                                                <i className="ph ph-plus-circle text-2xl mb-1"></i>
-                                                                <span className="text-[10px]">วางวิชาที่นี่</span>
-                                                            </div>
-                                                        ) : (
+                                                        {courses.length === 0 ? <div className="h-full flex flex-col items-center justify-center text-gray-300 pointer-events-none min-h-[100px]"><i className="ph ph-plus-circle text-2xl mb-1"></i><span className="text-[10px]">วางวิชาที่นี่</span></div> : 
                                                             courses.map((course, index) => (
-                                                                <div
-                                                                    key={`${course.id}-${index}`}
-                                                                    draggable
-                                                                    onDragStart={(e) => handleDragStart(e, course, key, index)}
-                                                                    onDrop={(e) => handleDropToItem(e, year, semester, index)}
-                                                                    onDragOver={handleDragOverItem}
-                                                                    onDragLeave={handleDragLeaveItem}
-                                                                    className={`card-drag group relative p-2.5 rounded-lg border-l-4 shadow-sm bg-white hover:shadow hover:scale-[1.02] ${CATEGORIES[course.category] ? CATEGORIES[course.category].border.replace('border', 'border-l') : 'border-gray-200'}`}
-                                                                >
+                                                                <div key={`${course.id}-${index}`} draggable onDragStart={(e) => handleDragStart(e, course, key, index)} onDrop={(e) => handleDropToItem(e, year, semester, index)}
+                                                                    onDragOver={handleDragOverItem} onDragLeave={handleDragLeaveItem}
+                                                                    className={`card-drag group relative p-2.5 rounded-lg border-l-4 shadow-sm bg-white hover:shadow hover:scale-[1.02] ${CATEGORIES[course.category] ? CATEGORIES[course.category].border.replace('border', 'border-l') : 'border-gray-200'}`}>
                                                                     <div className="flex justify-between items-start">
                                                                         <div className="w-full">
                                                                             <div className="font-bold text-xs text-gray-800">{course.code}</div>
                                                                             <div className="text-[11px] text-gray-600 leading-tight my-1 pr-4">{course.name}</div>
                                                                         </div>
-                                                                        <button 
-                                                                            onClick={() => removeCourse(course, key)}
-                                                                            className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-opacity"
-                                                                            title="นำออก"
-                                                                        >
-                                                                            <i className="ph ph-x-circle text-lg"></i>
-                                                                        </button>
+                                                                        <div className="flex flex-col gap-1 items-center absolute top-1 right-1">
+                                                                            <button onClick={() => removeCourse(course, key)} className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-opacity" title="นำออก"><i className="ph ph-x-circle text-lg"></i></button>
+                                                                            {/* Info Button Added Here */}
+                                                                            <button onClick={() => setViewingCourse(course)} className="text-gray-300 hover:text-indigo-500 transition-colors" title="ดูคำอธิบายรายวิชา"><i className="ph ph-info text-lg"></i></button>
+                                                                        </div>
                                                                     </div>
                                                                     <div className="flex justify-between items-center mt-1">
-                                                                         <span className={`text-[9px] px-1.5 py-0.5 rounded ${CATEGORIES[course.category] ? CATEGORIES[course.category].color : 'bg-gray-100'}`}>
-                                                                            {CATEGORIES[course.category] ? CATEGORIES[course.category].label.split(' ')[1] || CATEGORIES[course.category].label : 'Unknown'}
-                                                                        </span>
+                                                                         <span className={`text-[9px] px-1.5 py-0.5 rounded ${CATEGORIES[course.category] ? CATEGORIES[course.category].color : 'bg-gray-100'}`}>{CATEGORIES[course.category] ? CATEGORIES[course.category].label.split(' ')[1] || CATEGORIES[course.category].label : 'Unknown'}</span>
                                                                         <span className="text-[10px] font-semibold text-gray-400">{course.credits}</span>
                                                                     </div>
                                                                 </div>
                                                             ))
-                                                        )}
+                                                        }
                                                     </div>
                                                 </div>
                                             );
