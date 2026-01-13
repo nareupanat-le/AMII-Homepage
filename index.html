@@ -130,8 +130,7 @@
             }
         };
 
-        // --- Mock Data: รายวิชา (Updated with sample CLOs) ---
-        // หมายเหตุ: เพื่อความกระชับ ผมใส่ CLOs ตัวอย่างให้บางวิชา ท่านสามารถแก้ไขเพิ่มได้ตามต้องการ
+        // --- Mock Data: รายวิชา (Merged Data) ---
         const INITIAL_COURSES = [
             // หมวดศึกษาทั่วไป (GenEd)
             { 
@@ -141,12 +140,12 @@
             },
             { 
                 id: 'gen002', code: '00-400-070-008', name: 'ภาษาไทยในยุคดิจิทัล (Thai in the Digital Age)', credits: 3, category: 'GenEd', 
-                description: 'การใช้ภาษาไทยในสื่อโซเซียล การรู้เท่าทันสื่อ จรรยาบรรณการใช้ภาษาไทยในสื่อดิจิทัล ความคิดสร้างสรรค์ในการใช้ภาษา การสร้างแนวทางเพื่อการต่อยอดการใช้ภาษาในการสื่อสารผ่านสื่อดิจิทัลสำหรับอนาคต', clos: ['เลือกใช้ภาษาไทยในการสื่อสารผ่านสื่อดิจิทัลได้อย่างเหมาะสม', 'วิเคราะห์ข้อมูลข่าวสารอย่างมีวิจารณญาณ', 'สร้างสรรค์เนื้อหาภาษาไทยในรูปแบบดิจิทัลได้'], 
+                description: 'การใช้ภาษาไทยในสื่อโซเซียล การรู้เท่าทันสื่อ จรรยาบรรณการใช้ภาษาไทยในสื่อดิจิทัล ความคิดสร้างสรรค์ในการใช้ภาษา การสร้างแนวทางเพื่อการต่อยอดการใช้ภาษาในการสื่อสารผ่านสื่อดิจิทัลสำหรับอนาคต', 
                 clos: ['ใช้ภาษาไทยในสื่อโซเชียลมีเดียอย่างเหมาะสม', 'เลือกสื่อในการสื่อสารผ่านสื่อดิจิทัลอย่างเหมาะสม', 'มีความคิดสร้างสรรค์ในการใช้ภาษาเพื่อสื่อสารผ่านสื่อดิจิทัล และต่อยอดการใช้ภาษาในสื่อดิจิทัลในอนาคต', 'ทำงานร่วมกับผู้อื่น มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย']
             },
             { 
                 id: 'gen003', code: '00-400-070-004', name: 'ภาษาอังกฤษพื้นฐาน (Basic English)', credits: 3, category: 'GenEd', 
-                description: 'คำศัพท์ สำนวนและประโยคภาษาอังกฤษพื้นฐานเพื่อการสื่อสารในระดับเริ่มต้น ในสถานการณ์ต่างๆ การทักทาย การแนะนำ การถามและตอบคำถามเกี่ยวกับข้อมูลส่วนบุคคล สถานที่อยู่อาศัย คนที่รู้จักและสิ่งของ การฝึกปฏิบัติการใช้ทักษะภาษาอังกฤษในการฟัง พูด อ่าน และเขียน เพื่อการสื่อสารในระดับเริ่มต้น การใช้ภาษาอังกฤษพื้นฐานในการมีปฏิสัมพันธ์กับผู้อื่นด้วยวิธีการและภาษาที่ง่าย ถูกต้อง เหมาะสมและไม่ซับซ้อน', clos: ['สื่อสารภาษาอังกฤษในชีวิตประจำวันระดับพื้นฐานได้', 'อ่านและเข้าใจข้อความภาษาอังกฤษสั้นๆ ได้', 'เขียนประโยคพื้นฐานเพื่อแนะนำตัวและให้ข้อมูลได้'], 
+                description: 'คำศัพท์ สำนวนและประโยคภาษาอังกฤษพื้นฐานเพื่อการสื่อสารในระดับเริ่มต้น ในสถานการณ์ต่างๆ การทักทาย การแนะนำ การถามและตอบคำถามเกี่ยวกับข้อมูลส่วนบุคคล สถานที่อยู่อาศัย คนที่รู้จักและสิ่งของ การฝึกปฏิบัติการใช้ทักษะภาษาอังกฤษในการฟัง พูด อ่าน และเขียน เพื่อการสื่อสารในระดับเริ่มต้น การใช้ภาษาอังกฤษพื้นฐานในการมีปฏิสัมพันธ์กับผู้อื่นด้วยวิธีการและภาษาที่ง่าย ถูกต้อง เหมาะสมและไม่ซับซ้อน', 
                 clos: ['ใช้คำศัพท์ สำนวน วลีและประโยคภาษาอังกฤษพื้นฐาน เพื่อการสื่อสารในระดับเริ่มต้นตามสถานการณ์ต่างๆ ในชีวิตประจำวัน', 'ใช้ภาษาอังกฤษในการฟัง พูด อ่าน และเขียน ด้วยคำศัพท์ สำนวน วลีและประโยคภาษาอังกฤษพื้นฐานเพื่อการสื่อสารในระดับเริ่มต้น', 'มีทักษะภาษาอังกฤษตามมาตรฐาน CEFR ในระดับ A1', 'ทำงานร่วมกับผู้อื่น มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย']
             },
             { 
@@ -161,7 +160,7 @@
             },
             { 
                 id: 'gen006', code: '00-400-080-005', name: 'แนวคิดและทักษะนวัตกรรม (Innovation Idea and Competence)', credits: 3, category: 'GenEd', 
-                description: 'แนวคิดของนวัตกรรม หลักการจัดการนวัตกรรม ประเภทของนวัตกรรม ระบบนิเวศนวัตกรรม กระบวนการคิดเชิงออกแบบ ความคิดสร้างสรรค์และแรงกระตุ้นให้เกิดความคิดสร้างสรรค์ในการสร้างนวัตกรรม เครื่องมือในการคิดอย่างเป็นระบบ เครื่องมือสร้างต้นแบบ เทคโนโลยีสร้างต้นแบบอย่างรวดเร็ว การสร้างและนำเสนอโครงงานต้นแบบนวัตกรรม', clos: ['อธิบายกระบวนการเกิดนวัตกรรมได้', 'ประยุกต์ใช้ Design Thinking ในการแก้ปัญหา', 'นำเสนอแนวคิดนวัตกรรมต้นแบบได้'], 
+                description: 'แนวคิดของนวัตกรรม หลักการจัดการนวัตกรรม ประเภทของนวัตกรรม ระบบนิเวศนวัตกรรม กระบวนการคิดเชิงออกแบบ ความคิดสร้างสรรค์และแรงกระตุ้นให้เกิดความคิดสร้างสรรค์ในการสร้างนวัตกรรม เครื่องมือในการคิดอย่างเป็นระบบ เครื่องมือสร้างต้นแบบ เทคโนโลยีสร้างต้นแบบอย่างรวดเร็ว การสร้างและนำเสนอโครงงานต้นแบบนวัตกรรม', 
                 clos: ['อธิบายแนวคิดและหลักการนวัตกรรม กระบวนการคิดเชิงออกแบบ การคิดอย่างเป็นระบบ หลักการจัดการนวัตกรรม เทคโนโลยีสร้างต้นแบบอย่างรวดเร็ว', 'เลือกเครื่องมือสร้างต้นแบบนวัตกรรมได้อย่างเหมาะสม', 'สร้างต้นแบบนวัตกรรมนำไปสู่การใช้งานจริงและเชิงพาณิชย์', 'ทำงานเป็นทีม รับฟังความคิดเห็นผู้อื่น เพื่อสรุปประเด็นในการพัฒนา นวัตกรรม', 'นำเสนอผลงานเชิงนวัตกรรมในหลากหลายรูปแบบ']
             },
             { 
@@ -330,7 +329,7 @@
             },
             { 
                 id: 'cc018', code: 'xx-xxx-xxx-xxx', name: 'จริยธรรมในการใช้ปัญญาประดิษฐ์', credits: 3, category: 'CoreComp', 
-                description: 'ยังไม่มีคำอธิยายรายวิชา', 
+                description: 'ยังไม่มีคำอธิบายรายวิชา', 
                 clos: ['ยังไม่มี CLOs']
             },
             { 
@@ -356,8 +355,8 @@
                 clos: ['พิสูจน์สมบัติพื้นฐานเกี่ยวกับการหารลงตัว จำนวนเฉพาะ และสมภาคได้', 'คำนวณหาคำตอบของสมภาคและระบบสมภาคเชิงเส้นโดยใช้ทฤษฎีบทเศษเหลือของจีนได้', 'หาผลเฉลยของสมการไดโอแฟนไทน์เชิงเส้นและไม่ใช่เชิงเส้นรูปแบบง่ายได้', 'วิเคราะห์และประยุกต์ใช้ทฤษฎีจำนวนเพื่ออธิบายหลักการทำงานของวิทยาการรหัสลับเบื้องต้นได้', 'มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ', 'มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย']
             },
             { 
-                id: 'ce002', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีของสมการ (Theory of Equations)', credits: 3, category: 'CoreElec', 
-                description: 'พหุนาม รากของสมการพหุนาม ขอบเขตของราก ความสัมพันธ์ระหว่างรากกับสัมประสิทธิ์ สมการกำลังสาม สมการกำลังสี่ การแยกกันได้ของราก การประเมินค่าประมาณของราก ฟังก์ชันสมมาตร \nPolynomials; roots of polynomial equations; bounds of roots;  relation between the roots and the coefficients; cubic equations; biquadratic equations; separation of roots; evaluation of approximated roots; symmetric functions', 
+                id: 'ce002', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีของสมการ (Theory of Equations)', credits: 3, category: 'CoreElec',
+                description: 'พหุนาม รากของสมการพหุนาม ขอบเขตของราก ความสัมพันธ์ระหว่างรากกับสัมประสิทธิ์ สมการกำลังสาม สมการกำลังสี่ การแยกกันได้ของราก การประเมินค่าประมาณของราก ฟังก์ชันสมมาตร \nPolynomials; roots of polynomial equations; bounds of roots;  relation between the roots and the coefficients; cubic equations; biquadratic equations; separation of roots; evaluation of approximated roots; symmetric functions', 
                 clos: ['อธิบายทฤษฎีบทเกี่ยวกับรากของพหุนามและความสัมพันธ์กับสัมประสิทธิ์ได้อย่างถูกต้อง', 'หาผลเฉลยของสมการพหุนามและระบบสมการรูปแบบต่าง ๆ โดยใช้วิธีตรงและวิธีประมาณค่าได้', 'วิเคราะห์ชนิดและจำนวนรากของสมการโดยใช้กฎเครื่องหมายของเดส์การ์ตส์หรือทฤษฎีบทอื่น ๆ ได้', 'ใช้ความรู้เรื่องทฤษฎีสมการในการแก้ปัญหาทางคณิตศาสตร์ประยุกต์', 'มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ', 'มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย']
             },
             { 
@@ -366,7 +365,7 @@
                 clos: ['ยังไม่มี CLOs']
             },
             { 
-                id: 'ce004', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีกราฟเชิงขั้นตอนวิธี (Algorithmic Graph Theory)', credits: 3, category: 'CoreElec', 
+                id: 'ce004', code: 'xx-xxx-xxx-xxx', name: 'ทฤษฎีกราฟเชิงขั้นตอนวิธี (Algorithmic Graph Theory)', credits: 3, category: 'CoreElec',
                 description: 'แนวคิดพื้นฐานของกราฟและไดกราฟ กราฟต้นไม้และการประยุกต์ ขั้นตอนวิธีการค้น การให้สีกราฟข่ายงานและการไหล ปัญหาระยะทาง \nBasic concepts of graphs and digraphs; trees and applications; search algorithms; graph coloring; networks and flows; distance problems', 
                 clos: ['อธิบายนิยาม ทฤษฎีบท และสมบัติพื้นฐานของกราฟ กราฟต้นไม้ และกราฟชนิดพิเศษต่าง ๆ ได้อย่างถูกต้อง', 'วิเคราะห์โครงสร้างของกราฟเพื่อตรวจสอบคุณสมบัติความเชื่อมโยง ความเป็นระนาบ และการระบายสีได้', 'ประยุกต์ใช้ขั้นตอนวิธีบนกราฟในการค้นหาเส้นทางหรือแก้ปัญหาเชิงคำนวณพื้นฐานได้', 'สร้างแบบจำลองเพื่อแก้ปัญหาการวางแผนเครือข่าย หรือการจัดตารางเวลา ให้เป็นปัญหากราฟและหาคำตอบได้', 'มีวินัย ตรงต่อเวลาและเคารพกฎระเบียบข้อบังคับต่าง ๆ', 'มีความรับผิดชอบในการทำงานตามที่ได้รับมอบหมาย']
             },
@@ -382,12 +381,12 @@
             },
             { 
                 id: 'ce007', code: 'xx-xxx-xxx-xxx', name: 'โทโพโลยีขั้นแนะนำ (Introduction to Topology)', credits: 3, category: 'CoreElec', 
-                description: 'ปริภูมิอิงระยะทาง แนวคิดพื้นฐานสำหรับทอพอโลยี ทอพอโลยีสำหรับเส้นจำนวนจริง ปริภูมิเชิง   ทอพอโลยี ฟังก์ชันต่อเนื่อง ฐานและฐานย่อย ทอพอโลยีสำหรับเซตย่อย ความกระชับ ความเชื่อมโยง \nMetric spaces; basic concepts for topology; topology of real line; topological spaces; continuous functions; bases and subbases; topology for a subset; compactness; connectedness', 
+                description: 'ปริภูมิอิงระยะทาง แนวคิดพื้นฐานสำหรับทอพอโลยี ทอพอโลยีสำหรับเส้นจำนวนจริง ปริภูมิเชิง   ทอพอโลยี ฟังก์ชันต่อเนื่อง ฐานและฐานย่อย ทอพอโลยีสำหรับเซตย่อย ความกระชับ ความเชื่อมโยง \nMetric spaces; basic concepts for topology; topology of real line; topological spaces; continuous functions; bases and subbases; topology for a subset; compactness; connectedness', 
                 clos: ['ยังไม่มี CLOs']
             },
             { 
                 id: 'ce008', code: 'xx-xxx-xxx-xxx', name: 'ตัวแปรเชิงซ้อน (Complex Variables)', credits: 3, category: 'CoreElec', 
-                description: 'ระบบจำนวนเชิงซ้อน ฟังก์ชันมูลฐาน การหาอนุพันธ์ การหาปริพันธ์ อนุกรมลอเรนต์ ทฤษฎีบทส่วนตกค้างและการประยุกต์ การส่งคงแบบ \nComplex number system; elementary functions; differentiation; integration; Laurent  series; residues theorem and applications; conformal mapping', 
+                description: 'ระบบจำนวนเชิงซ้อน ฟังก์ชันมูลฐาน การหาอนุพันธ์ การหาปริพันธ์ อนุกรมลอเรนต์ ทฤษฎีบทส่วนตกค้างและการประยุกต์ การส่งคงแบบ \nComplex number system; elementary functions; differentiation; integration; Laurent  series; residues theorem and applications; conformal mapping', 
                 clos: ['ยังไม่มี CLOs']
             },
             { 
@@ -468,17 +467,21 @@
             const [availableCourses, setAvailableCourses] = useState(INITIAL_COURSES);
             const [draggedItem, setDraggedItem] = useState(null);
             const [isExporting, setIsExporting] = useState(false);
+            
+            // New State for Modal
             const [viewingCourse, setViewingCourse] = useState(null);
 
+            // คำนวณยอดรวมรายหมวด
             const categoryTotals = useMemo(() => {
-                const totals = { 'GenEd': 0, 'CoreFund': 0, 'CoreComp': 0, 'CoreElec': 0, 'CoreExp': 0, 'FreeElec': 0 };
+                const totals = {
+                    'GenEd': 0, 'CoreFund': 0, 'CoreComp': 0, 'CoreElec': 0, 'CoreExp': 0, 'FreeElec': 0
+                };
                 Object.values(plan).flat().forEach(course => {
                     if (totals[course.category] !== undefined) totals[course.category] += course.credits;
                 });
                 return totals;
             }, [plan]);
 
-            // ... Drag & Drop Handlers (Keep existing logic) ...
             const handleDragStart = (e, course, source, index) => {
                 const item = { course, source, index };
                 setDraggedItem(item);
@@ -527,8 +530,14 @@
                         return { ...prev, [targetKey]: list };
                     });
                 } else {
-                    if (source === 'sidebar') setAvailableCourses(prev => prev.filter(c => c.id !== course.id));
-                    else setPlan(prev => ({ ...prev, [source]: (prev[source] || []).filter(c => c.id !== course.id) }));
+                    if (source === 'sidebar') {
+                        setAvailableCourses(prev => prev.filter(c => c.id !== course.id));
+                    } else {
+                        setPlan(prev => ({
+                            ...prev,
+                            [source]: (prev[source] || []).filter(c => c.id !== course.id)
+                        }));
+                    }
                     setPlan(prev => {
                         const list = [...(prev[targetKey] || [])];
                         list.splice(targetIndex, 0, course);
@@ -552,7 +561,7 @@
 
             const handleDragOver = (e) => { e.preventDefault(); e.currentTarget.classList.add('drag-over'); };
             const handleDragOverItem = (e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.add('drag-over-item'); };
-            const handleDragLeave = (e) => { e.currentTarget.classList.remove('drag-over'); };
+             const handleDragLeave = (e) => { e.currentTarget.classList.remove('drag-over'); };
             const handleDragLeaveItem = (e) => { e.currentTarget.classList.remove('drag-over-item'); };
 
             const removeCourse = (course, sourceKey) => {
@@ -563,7 +572,7 @@
             const calculateTotalCredits = (courses) => courses.reduce((sum, c) => sum + c.credits, 0);
             const calculateTotalAll = useMemo(() => Object.values(plan).flat().reduce((sum, c) => sum + c.credits, 0), [plan]);
 
-            // --- Export ---
+            // --- Export Functions ---
             const exportToPNG = async () => {
                 const element = document.getElementById('planner-grid-area');
                 if (!element) return;
@@ -789,7 +798,8 @@
                                                                         </div>
                                                                         <div className="flex flex-col gap-1 items-center absolute top-1 right-1">
                                                                             <button onClick={() => removeCourse(course, key)} className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-opacity" title="นำออก"><i className="ph ph-x-circle text-lg"></i></button>
-                                                                            <button onClick={(e) => { e.stopPropagation(); setViewingCourse(course); }} className="text-gray-300 hover:text-indigo-500 transition-colors" title="ดูคำอธิบาย"><i className="ph ph-info text-lg"></i></button>
+                                                                            {/* Info Button Added Here */}
+                                                                            <button onClick={(e) => { e.stopPropagation(); setViewingCourse(course); }} className="text-gray-300 hover:text-indigo-500 transition-colors" title="ดูคำอธิบายรายวิชา"><i className="ph ph-info text-lg"></i></button>
                                                                         </div>
                                                                     </div>
                                                                     <div className="flex justify-between items-center mt-1">
